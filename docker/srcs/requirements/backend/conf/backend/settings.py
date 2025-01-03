@@ -104,6 +104,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+
+    'elasticapm.contrib.django',
     
 ]
 
@@ -119,8 +121,20 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'backend.middleware.activeuser_middleware.ActiveUserMiddleware',
+    'elasticapm.contrib.django.middleware.TracingMiddleware',
     # 'backend.middleware.refer_middleware.FrontendOnlyMiddleware',
 ]
+
+ELASTIC_APM = {
+  'SERVICE_NAME': 'my-service-name',
+
+  'SECRET_TOKEN': '',
+
+  'SERVER_URL': 'http://localhost:8200',
+
+  'ENVIRONMENT': 'my-environment',
+}
+
 
 ROOT_URLCONF = 'backend.urls'
 

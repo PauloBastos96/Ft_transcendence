@@ -24,7 +24,7 @@ class LoginView(generics.GenericAPIView):
         user = serializer.validated_data['user']
         if user is not None:
             if user.tfa == True:
-                otp = str(random.randint(100000, 999999))
+                otp = str(random.randint(000000, 999999))
                 user.otp = hashlib.sha256(otp.encode()).hexdigest()
                 user.otp_expiration = timezone.now() + datetime.timedelta(minutes=5)
                 user.save()
@@ -71,7 +71,7 @@ class GetOTPView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         email = serializer.validated_data['email']
         try:
-            otp = str(random.randint(100000, 999999))
+            otp = str(random.randint(000000, 999999))
             user = User.objects.get(email=email)
             user.otp = hashlib.sha256(otp.encode()).hexdigest()
             user.otp_expiration = timezone.now() + datetime.timedelta(minutes=5)

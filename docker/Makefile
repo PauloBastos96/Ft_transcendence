@@ -5,6 +5,9 @@ up:
 	docker compose -f srcs/docker-compose.yml up
 	# docker compose -f srcs/docker-compose.yml up --detach
 
+elk:
+	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana metricbeat01 filebeat01 logstash01
+
 stop:
 	docker compose -f srcs/docker-compose.yml stop
 
