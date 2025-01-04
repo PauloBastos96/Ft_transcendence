@@ -105,7 +105,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 
-    'elasticapm.contrib.django',
+    # 'elasticapm.contrib.django',
     
 ]
 
@@ -121,7 +121,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'backend.middleware.activeuser_middleware.ActiveUserMiddleware',
-    'elasticapm.contrib.django.middleware.TracingMiddleware',
+    # 'elasticapm.contrib.django.middleware.TracingMiddleware',
     # 'backend.middleware.refer_middleware.FrontendOnlyMiddleware',
 ]
 

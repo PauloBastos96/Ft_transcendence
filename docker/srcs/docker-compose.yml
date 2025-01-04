@@ -1,77 +1,92 @@
 name: transcendence
 
 services:
-  # backend:
-  #   platform: "linux/amd64"
-  #   depends_on:
-  #     kibana:
-  #       condition: service_healthy
-  #     postgres:
-  #       condition: service_healthy
-  #   container_name: backend
-  #   build: requirements/backend
-  #   volumes:
-  #     - ./requirements/backend/conf:/transcendence/backend
-  #     - static-volume:/transcendence/backend/staticfiles
-  #     - ../avatars:/transcendence/backend/mediafiles
-  #   restart: on-failure
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     EMAIL_PASSWORD_FILE: /run/secrets/email_password
-  #     POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-  #     DJANGO_SUPERUSER_FILE: /run/secrets/django_superuser_password
-  #   networks:
-  #     - transcendence
-  #     - elk
-  #   # ports:
-  #   #   - "8080:8000"
-  #   secrets:
-  #     - django_superuser_password
-  #     - email_password
-  #     - postgres_password
+  backend:
+    platform: "linux/amd64"
+    depends_on:
+      kibana:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    container_name: backend
+    build: requirements/backend
+    volumes:
+      - ./requirements/backend/conf:/transcendence/backend
+      - static-volume:/transcendence/backend/staticfiles
+      - ../avatars:/transcendence/backend/mediafiles
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      EMAIL_PASSWORD_FILE: /run/secrets/email_password
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      DJANGO_SUPERUSER_FILE: /run/secrets/django_superuser_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - transcendence
+      - elk
+    # ports:
+    #   - "8080:8000"
+    secrets:
+      - django_superuser_password
+      - email_password
+      - postgres_password
     
-  # postgres:
-  #   depends_on:
-  #       kibana:
-  #         condition: service_healthy
-  #   container_name: postgres
-  #   image: postgres
-  #   shm_size: 128mb
-  #   restart: on-failure
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 5
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
-  #   networks:
-  #     - transcendence
-  #     - elk
-  #   secrets:
-  #     - postgres_password
+  postgres:
+    depends_on:
+        kibana:
+          condition: service_healthy
+    container_name: postgres
+    image: postgres
+    shm_size: 128mb
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    env_file:
+      - .env
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - transcendence
+      - elk
+    secrets:
+      - postgres_password
 
-  # nginx:
-  #   depends_on:
-  #     - backend
-  #   container_name: nginx
-  #   build: requirements/nginx
-  #   ports:
-  #     # - "8081:443"
-  #     - "443:443"
-  #     - "80:80"
-  #     # - "8080:8080"
-  #   volumes:
-  #     - ../../:/usr/share/nginx/frontend
-  #     - static-volume:/etc/nginx/html/static/
-  #     - ../avatars:/etc/nginx/html/media
-  #   restart: on-failure
-  #   networks:
-  #     - transcendence
-  #     - elk
+  nginx:
+    depends_on:
+      - backend
+    container_name: nginx
+    build: requirements/nginx
+    ports:
+      # - "8081:443"
+      - "443:443"
+      - "80:80"
+      # - "8080:8080"
+    volumes:
+      - ../../:/usr/share/nginx/frontend
+      - static-volume:/etc/nginx/html/static/
+      - ../avatars:/etc/nginx/html/media
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - transcendence
+      - elk
 
   setup:
     image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
@@ -121,6 +136,8 @@ services:
       interval: 1s
       timeout: 5s
       retries: 120
+    networks:
+      - elk
 
   es01:
     depends_on:
@@ -196,54 +213,54 @@ services:
     networks:
       - elk
   
-  metricbeat01:
-    depends_on:
-      es01:
-        condition: service_healthy
-      kibana:
-        condition: service_healthy
-    image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
-    user: root
-    volumes:
-      - certs:/usr/share/metricbeat/certs
-      - metricbeatdata01:/usr/share/metricbeat/data
-      - "./requirements/elk/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
-      - "/proc:/hostfs/proc:ro"
-      - "/:/hostfs:ro"
-    environment:
-      - ELASTIC_USER=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTIC_HOSTS=https://es01:9200
-      - KIBANA_HOSTS=http://kibana:5601
-      - LOGSTASH_HOSTS=http://logstash01:9600
-    networks:
-      - elk
+  # metricbeat01:
+  #   depends_on:
+  #     es01:
+  #       condition: service_healthy
+  #     kibana:
+  #       condition: service_healthy
+  #   image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
+  #   user: root
+  #   volumes:
+  #     - certs:/usr/share/metricbeat/certs
+  #     - metricbeatdata01:/usr/share/metricbeat/data
+  #     - "./requirements/elk/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #     - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
+  #     - "/proc:/hostfs/proc:ro"
+  #     - "/:/hostfs:ro"
+  #   environment:
+  #     - ELASTIC_USER=elastic
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #     - ELASTIC_HOSTS=https://es01:9200
+  #     - KIBANA_HOSTS=http://kibana:5601
+  #     - LOGSTASH_HOSTS=http://logstash01:9600
+  #   networks:
+  #     - elk
   
-  filebeat01:
-    depends_on:
-      es01:
-        condition: service_healthy
-      kibana:
-        condition: service_healthy
-    image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
-    user: root
-    volumes:
-      - certs:/usr/share/filebeat/certs
-      - filebeatdata01:/usr/share/filebeat/data
-      - "./requirements/elk/filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
-      - "./requirements/elk/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    environment:
-      - ELASTIC_USER=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-      - ELASTIC_HOSTS=https://es01:9200
-      - KIBANA_HOSTS=http://kibana:5601
-      - LOGSTASH_HOSTS=http://logstash01:9600
-    networks:
-      - elk
+  # filebeat01:
+  #   depends_on:
+  #     es01:
+  #       condition: service_healthy
+  #     kibana:
+  #       condition: service_healthy
+  #   image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
+  #   user: root
+  #   volumes:
+  #     - certs:/usr/share/filebeat/certs
+  #     - filebeatdata01:/usr/share/filebeat/data
+  #     - "./requirements/elk/filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
+  #     - "./requirements/elk/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
+  #     - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  #   environment:
+  #     - ELASTIC_USER=elastic
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #     - ELASTIC_HOSTS=https://es01:9200
+  #     - KIBANA_HOSTS=http://kibana:5601
+  #     - LOGSTASH_HOSTS=http://logstash01:9600
+  #   networks:
+  #     - elk
 
   logstash01:
     depends_on:
@@ -260,6 +277,8 @@ services:
       - logstashdata01:/usr/share/logstash/data
       - "./requirements/elk/logstash_ingest_data/:/usr/share/logstash/ingest_data/"
       - "./requirements/elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
+      - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
+      - "./requirements/elk/logstash.sh:/requirements/elk/logstash.sh:ro"
     environment:
       - xpack.monitoring.enabled=false
       - ELASTIC_USER=elastic
@@ -267,6 +286,7 @@ services:
       - ELASTIC_HOSTS=https://es01:9200
     networks:
       - elk
+    command: ["/bin/bash", "-c", "/requirements/elk/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf"]
 
       
 volumes:
