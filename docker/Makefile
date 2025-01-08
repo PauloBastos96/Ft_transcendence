@@ -1,12 +1,12 @@
 all:
-	docker compose -f srcs/docker-compose.yml up --build
+	docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
 
 up:
 	docker compose -f srcs/docker-compose.yml up
 	# docker compose -f srcs/docker-compose.yml up --detach
 
 elk:
-	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana metricbeat01 filebeat01 logstash01
+	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana logstash01
 
 stop:
 	docker compose -f srcs/docker-compose.yml stop
