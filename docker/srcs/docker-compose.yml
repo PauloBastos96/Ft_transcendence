@@ -3,11 +3,11 @@ name: transcendence
 services:
   backend:
     platform: "linux/amd64"
-    depends_on:
-      kibana:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
+    # depends_on:
+      # kibana:
+      #   condition: service_healthy
+      # postgres:
+      #   condition: service_healthy
     container_name: backend
     build: requirements/backend
     volumes:
@@ -38,9 +38,9 @@ services:
       - postgres_password
     
   postgres:
-    depends_on:
-        kibana:
-          condition: service_healthy
+    # depends_on:
+    #     kibana:
+    #       condition: service_healthy
     container_name: postgres
     image: postgres
     shm_size: 128mb
