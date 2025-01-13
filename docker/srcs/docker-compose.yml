@@ -26,11 +26,12 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+        tag: "{{.Name}}"
     networks:
       - transcendence
       - elk
-    # ports:
-    #   - "8080:8000"
+    ports:
+      - "8080:8000"
     secrets:
       - django_superuser_password
       - email_password
@@ -58,6 +59,7 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+        tag: "{{.Name}}"
     networks:
       - transcendence
       - elk
@@ -77,13 +79,17 @@ services:
     volumes:
       - ../../:/usr/share/nginx/frontend
       - static-volume:/etc/nginx/html/static/
+      # - postgres-log-volume:/var/log/postgres
       - ../avatars:/etc/nginx/html/media
+      - ./requirements/nginx/conf:/etc/nginx/conf.d
+      - nginx-log-volume:/var/log/postgres
     restart: on-failure
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
+        tag: "{{.Name}}"
     networks:
       - transcendence
       - elk
@@ -181,6 +187,9 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    logging:
+      options:
+        tag: "{{.Name}}"
     networks:
       - elk
 
@@ -210,58 +219,12 @@ services:
       interval: 10s
       timeout: 10s
       retries: 120
+    logging:
+      options:
+        tag: "{{.Name}}"
     networks:
       - elk
   
-  # metricbeat01:
-  #   depends_on:
-  #     es01:
-  #       condition: service_healthy
-  #     kibana:
-  #       condition: service_healthy
-  #   image: docker.elastic.co/beats/metricbeat:${STACK_VERSION}
-  #   user: root
-  #   volumes:
-  #     - certs:/usr/share/metricbeat/certs
-  #     - metricbeatdata01:/usr/share/metricbeat/data
-  #     - "./requirements/elk/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml:ro"
-  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  #     - "/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro"
-  #     - "/proc:/hostfs/proc:ro"
-  #     - "/:/hostfs:ro"
-  #   environment:
-  #     - ELASTIC_USER=elastic
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #     - ELASTIC_HOSTS=https://es01:9200
-  #     - KIBANA_HOSTS=http://kibana:5601
-  #     - LOGSTASH_HOSTS=http://logstash01:9600
-  #   networks:
-  #     - elk
-  
-  # filebeat01:
-  #   depends_on:
-  #     es01:
-  #       condition: service_healthy
-  #     kibana:
-  #       condition: service_healthy
-  #   image: docker.elastic.co/beats/filebeat:${STACK_VERSION}
-  #   user: root
-  #   volumes:
-  #     - certs:/usr/share/filebeat/certs
-  #     - filebeatdata01:/usr/share/filebeat/data
-  #     - "./requirements/elk/filebeat_ingest_data/:/usr/share/filebeat/ingest_data/"
-  #     - "./requirements/elk/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro"
-  #     - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
-  #     - "/var/run/docker.sock:/var/run/docker.sock:ro"
-  #   environment:
-  #     - ELASTIC_USER=elastic
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #     - ELASTIC_HOSTS=https://es01:9200
-  #     - KIBANA_HOSTS=http://kibana:5601
-  #     - LOGSTASH_HOSTS=http://logstash01:9600
-  #   networks:
-  #     - elk
-
   logstash01:
     depends_on:
       es01:
@@ -284,6 +247,9 @@ services:
       - ELASTIC_USER=elastic
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - ELASTIC_HOSTS=https://es01:9200
+    logging:
+      options:
+        tag: "{{.Name}}"
     networks:
       - elk
     command: ["/bin/bash", "-c", "/requirements/elk/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf"]
@@ -291,6 +257,10 @@ services:
       
 volumes:
   static-volume:
+  django-log-volume:
+  postgres-log-volume:
+  nginx-log-volume:
+
   certs:
     driver: local
   esdata01:

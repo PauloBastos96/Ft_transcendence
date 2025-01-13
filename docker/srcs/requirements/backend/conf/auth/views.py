@@ -17,6 +17,7 @@ from django.conf import settings
 
 class LoginView(generics.GenericAPIView):
     permission_classes = [AllowAny]
+    serializer_class = LoginSerializer
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -85,11 +86,10 @@ class GetOTPView(generics.GenericAPIView):
                     fail_silently=False,
                 )
             except Exception as e:
-                return Response({"error": "Failed to send email"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Failed to send email."}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"detail": "An email was sent if the email is valid."}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
-            pass
-        return Response({"detail": "An email was sent if the email is valid."}, status=status.HTTP_200_OK)
+            return Response({"error": "No such user."}, status=status.HTTP_400_BAD_REQUEST)
     
 
 class CheckOTPView(generics.GenericAPIView):

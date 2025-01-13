@@ -87,9 +87,9 @@ class UnblockUserView(generics.RetrieveUpdateAPIView):
 class GetImageView(APIView):
     def get(self, request, pk):
         user = generics.get_object_or_404(User, id=pk)
-        logger.debug(f"user.avatar: {user.avatar}")
+        # logger.debug(f"user.avatar: {user.avatar}")
         route = '/media/' + str(user.avatar)
-        logger.debug(f"route: {route}")
+        # logger.debug(f"route: {route}")
         response = HttpResponse()
         response["X-Accel-Redirect"] = route
         del response['Content-Type']

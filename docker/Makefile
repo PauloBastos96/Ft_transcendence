@@ -1,12 +1,12 @@
 all:
-	docker compose -f srcs/docker-compose.yml up --build
+	docker compose -f srcs/docker-compose.yml up --build --no-deps backend nginx postgres
 
 up:
-	docker compose -f srcs/docker-compose.yml up
+	docker compose -f srcs/docker-compose.yml up backend nginx postgres
 	# docker compose -f srcs/docker-compose.yml up --detach
 
 elk:
-	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana metricbeat01 filebeat01 logstash01
+	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana logstash01
 
 stop:
 	docker compose -f srcs/docker-compose.yml stop
@@ -17,7 +17,7 @@ down:
 restart: stop up
 
 clean:
-	docker compose -f srcs/docker-compose.yml down -v 
+	docker compose -f srcs/docker-compose.yml down -v
 
 fclean: clean
 	find avatars/ -mindepth 1 -type d -exec rm -rf {} +

@@ -39,6 +39,12 @@ logging.config.dictConfig({
             'class': 'logging.StreamHandler',
             'formatter': 'default',
         },
+        # write log to debug.log
+        # 'file': { #COMMENT
+        #     'level': 'DEBUG',
+        #     'class': 'logging.FileHandler',
+        #     'filename': 'debug.log',
+        # },
         'django.server': DEFAULT_LOGGING['handlers']['django.server'],
     },
     'loggers': {
@@ -47,6 +53,12 @@ logging.config.dictConfig({
             'level': 'WARNING',
             'handlers': ['console'],
         },
+        # write log to debug.log
+        # 'django': { #COMMENT
+        #     'handlers': ['file'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # },
         # Our application code
         'app': {
             'level': LOGLEVEL,
@@ -82,11 +94,11 @@ ALLOWED_HOSTS = [
     "localhost",
     ".127.0.0.1",
     'backend',
-    "ft-transcendence.com",
+    "192.168.20.111",
     ]
 
 ALLOWED_REFERERS = [
-    "https://ft-transcendence.com/",
+    "https://192.168.20.111/",
 ]
 
 # Application definition
@@ -243,14 +255,14 @@ REST_FRAMEWORK = {
     ],
 }
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = False
 # CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    'https://127.0.0.1',
-    'https://localhost',
-    'https://ft-transcendence.com',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     # 'http://127.0.0.1',
+#     # 'http://localhost',
+#     # 'https://192.168.20.111',
+# ]
 
 
 #TODO: JWT settings
