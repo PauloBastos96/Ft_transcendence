@@ -1,5 +1,5 @@
 all:
-	docker compose -f srcs/docker-compose.yml up --build --no-deps backend nginx postgres
+	docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
 
 up:
 	docker compose -f srcs/docker-compose.yml up backend nginx postgres

@@ -94,11 +94,11 @@ ALLOWED_HOSTS = [
     "localhost",
     ".127.0.0.1",
     'backend',
-    "192.168.20.111",
+    "10.0.2.15",
     ]
 
 ALLOWED_REFERERS = [
-    "https://192.168.20.111/",
+    "https://10.0.2.15/",
 ]
 
 # Application definition
@@ -261,7 +261,7 @@ REST_FRAMEWORK = {
 # CORS_ALLOWED_ORIGINS = [
 #     # 'http://127.0.0.1',
 #     # 'http://localhost',
-#     # 'https://192.168.20.111',
+#     # 'https://10.0.2.15',
 # ]
 
 
