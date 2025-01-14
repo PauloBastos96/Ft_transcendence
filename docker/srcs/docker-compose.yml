@@ -233,7 +233,7 @@ services:
     volumes:
       - certs:/usr/share/logstash/certs
       - logstashdata01:/usr/share/logstash/data
-      - "./requirements/elk/logstash_ingest_data/:/usr/share/logstash/ingest_data/"
+      # - "./requirements/elk/logstash_ingest_data/:/usr/share/logstash/ingest_data/"
       - "./requirements/elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
       - "./requirements/elk/logstash.sh:/requirements/elk/logstash.sh:ro"
@@ -262,10 +262,10 @@ volumes:
     driver: local
   kibanadata:
     driver: local
-  metricbeatdata01:
-    driver: local
-  filebeatdata01:
-    driver: local
+  # metricbeatdata01:
+  #   driver: local
+  # filebeatdata01:
+  #   driver: local
   logstashdata01:
     driver: local
 

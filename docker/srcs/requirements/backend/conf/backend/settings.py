@@ -95,6 +95,7 @@ ALLOWED_HOSTS = [
     ".127.0.0.1",
     'backend',
     "10.0.2.15",
+    "192.168.20.111",
     ]
 
 ALLOWED_REFERERS = [
