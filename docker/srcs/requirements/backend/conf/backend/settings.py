@@ -99,7 +99,7 @@ ALLOWED_HOSTS = [
     ]
 
 ALLOWED_REFERERS = [
-    "https://10.0.2.15/",
+    "https://10.12.244.21/",
 ]
 
 # Application definition

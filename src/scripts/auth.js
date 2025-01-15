@@ -10,7 +10,7 @@ async function login(event) {
     else
         localStorage.removeItem('keepLoggedIn');
 
-    const url = 'http://192.168.20.111/api/auth/login/';
+    const url = 'http://10.12.244.21/api/auth/login/';
     document.getElementById('loginLoading').classList.toggle('d-none');
     await fetch(url, {
         method: 'POST',
@@ -68,7 +68,7 @@ async function login(event) {
 
 //Logout the user
 async function logout() {
-    const url = 'http://192.168.20.111/api/auth/logout/';
+    const url = 'http://10.12.244.21/api/auth/logout/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -121,6 +121,7 @@ function signup(event) {
     let password = document.getElementById('signupPassword');
     let confirmPassword = document.getElementById('signupConfirmPassword');
 
+    document.getElementById('signupUsername').classList.remove('is-invalid');
     if (username.value === '' || email.value === '' || password.value === '' || confirmPassword.value === '')
         return;
     if (password.value !== confirmPassword.value) {
@@ -130,7 +131,7 @@ function signup(event) {
     else
         document.getElementById('signupConfirmPassword').classList.remove('is-invalid');
 
-    const url = 'http://192.168.20.111/api/auth/signup/';
+    const url = 'http://10.12.244.21/api/auth/signup/';
     fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -188,7 +189,7 @@ async function getUserData() {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/`;
+    const url = `http://10.12.244.21/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -228,7 +229,7 @@ async function getUserID() {
 async function refreshLogin() {
     if (sessionStorage.getItem('refresh') !== null) {
         const refreshToken = sessionStorage.getItem('refresh');
-        const url = 'http://192.168.20.111/api/auth/token/refresh/';
+        const url = 'http://10.12.244.21/api/auth/token/refresh/';
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -263,7 +264,7 @@ async function refreshLogin() {
 }
 
 async function verifyRefreshToken(refresh){
-    const url = 'http://192.168.20.111/api/auth/token/refresh/';
+    const url = 'http://10.12.244.21/api/auth/token/refresh/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -283,7 +284,7 @@ async function addFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/invite_friend/`;
+    const url = `http://10.12.244.21/api/users/${userID}/invite_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -302,7 +303,7 @@ async function addFriendAsync(friendName) {
 }
 
 async function getUserByID(userID) {
-    const url = `http://192.168.20.111/api/users/${userID}/`;
+    const url = `http://10.12.244.21/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -323,7 +324,7 @@ async function acceptFriendRequestAsync(friendID) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/accept_friend/`;
+    const url = `http://10.12.244.21/api/users/${userID}/accept_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -345,7 +346,7 @@ async function removeFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/remove_friend/`;
+    const url = `http://10.12.244.21/api/users/${userID}/remove_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -367,7 +368,7 @@ async function rejectFriendRequestAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/remove_friend_request/`;
+    const url = `http://10.12.244.21/api/users/${userID}/remove_friend_request/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -389,7 +390,7 @@ async function blockUserAsync(userName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/block/`;
+    const url = `http://10.12.244.21/api/users/${userID}/block/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -408,7 +409,7 @@ async function blockUserAsync(userName) {
 }
 
 async function getUserAvatar(userID) {
-    let url = `http://192.168.20.111/api/users/${userID}/get_avatar/`;
+    let url = `http://10.12.244.21/api/users/${userID}/get_avatar/`;
     try {
         const response = await fetch(url, {
             method: 'GET',

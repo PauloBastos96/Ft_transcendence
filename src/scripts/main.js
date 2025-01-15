@@ -2,7 +2,7 @@ let pageState = 'overview'
 let loggedIn = false;
 let _user = null;
 let _avatar = null;
-let _lang = 'en';
+let _lang = 'pt';
 
 //Handle back and forward navigation events
 window.onpopstate = function (event) {
@@ -15,6 +15,7 @@ window.onpopstate = function (event) {
 //Initliaze the page
 async function initialize() {
     applyColorScheme();
+    initTranslations();
 
     loggedIn = await checkLogin();
     if (!loggedIn) {
@@ -75,6 +76,25 @@ function applyColorScheme() {
     });
 }
 
+async function initTranslations(){
+    await i18next.use(i18nextHttpBackend).init({
+        lng: _lang,
+        fallbackLng: 'en',
+        debug: true,
+        backend: {
+            loadPath: '/src/locales/{{lng}}/{{ns}}.json'
+        }
+    });
+    translateAll();
+}
+
+function translateAll(){
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        let key = element.getAttribute('data-i18n');
+        element.innerText = i18next.t(key);
+    });
+}
+
 //Change the content of the page
 function changeContent(page, pushState = true) {
     var contentDiv = document.getElementById('content');
@@ -109,9 +129,11 @@ function changeContent(page, pushState = true) {
                 break;
             case 'login':
                 document.getElementById('loginForm').addEventListener('submit', login, true);
+                translateAll();
                 break;
             case 'signup':
                 document.getElementById('signupForm').addEventListener('submit', signup, true);
+                translateAll();
             default:
                 break;
         }
@@ -143,6 +165,7 @@ function updateHeaderButton(page) {
     }
 }
 
+//Get user notifications
 async function getNotifications(){
     if (_user === null) {
         _user = await getUserData();
@@ -152,14 +175,14 @@ async function getNotifications(){
     let notificationContainer = document.getElementById('notification-area');
     for (let request of _user.friend_requests) {
         let notification = notificationTemplate.content.cloneNode(true);
-        notification.querySelector('h6').innerText = 'Friend request';
+        notification.querySelector('h6').innerText = i18next.t('notifications.friendRequest');
         let user = await getUserByID(request);
-        notification.querySelector('p').innerText = `${user.username} wants to be your friend`;
+        notification.querySelector('p').innerText = `${user.username} ${i18next.t('notifications.friendRequestMessage')}`;
         notification.querySelector('a').addEventListener('click', () => {changeContent('livechat', true)});
         notificationContainer.appendChild(notification);
     }
     if (notificationContainer.children.length === 0) {
-        notificationContainer.innerHTML = '<p class="d-flex mx-3 gap-3">No notifications</p>';
+        notificationContainer.innerHTML = `<p class="d-flex mx-3 gap-3">${i18next.t('notifications.empty')}</p>`;
         document.getElementById('notification-icon').setAttribute('href', '#notification-empty');
     }
     if (notificationContainer.children.length > 0 && notificationContainer.getElementsByTagName('a').length > 0) {

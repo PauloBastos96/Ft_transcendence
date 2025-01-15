@@ -19,7 +19,7 @@ curl -X POST "http://kibana:5601/api/saved_objects/index-pattern" \
       -u "elastic:${ELASTIC_PASSWORD}" \
       -d '{
         "attributes": {
-          "title": "postgresql-*",
+          "title": "postgres-*",
           "timeFieldName": "@timestamp"
         }
       }'
