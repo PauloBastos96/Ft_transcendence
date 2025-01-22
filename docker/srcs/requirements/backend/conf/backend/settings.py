@@ -94,8 +94,8 @@ ALLOWED_HOSTS = [
     "localhost",
     ".127.0.0.1",
     'backend',
-    "10.0.2.15",
-    "10.12.244.21",
+    "ft-transcendence.com",
+    '192.168.20.111',
     ]
 
 ALLOWED_REFERERS = [

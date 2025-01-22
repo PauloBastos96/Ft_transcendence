@@ -1,4 +1,3 @@
-
 async function updateSettingsPage() {
     if (_user === null)
         _user = await getUserData();
@@ -20,7 +19,7 @@ function loadAccountSettings() {
         if (this.readyState !== 4)
             return;
         if (this.status !== 200) {
-            contentDiv.innerHTML = `<h2>Content not found!</h2>`
+            contentDiv.innerHTML = `<h2>${i18next.t('common.contentNotFound')}</h2>`;
             return;
         }
         contentDiv.innerHTML = this.responseText;
@@ -48,7 +47,7 @@ async function updateAccountDetails() {
     }
     let xhr = new XMLHttpRequest();
     const userId = getUserID();
-    const url = `http://10.12.244.21/api/users/${userId}/edit`;
+    const url = `http://192.168.20.111/api/users/${userId}/edit`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -151,7 +150,7 @@ async function updateAvatar() {
     formData.append('avatar', avatar.files[0]);
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `http://10.12.244.21/api/users/${userId}/add_avatar/`;
+    const url = `http://192.168.20.111/api/users/${userId}/add_avatar/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
     xhr.onreadystatechange = function () {
@@ -183,7 +182,7 @@ function loadSecuritySettings() {
         if (this.readyState !== 4)
             return;
         if (this.status !== 200) {
-            contentDiv.innerHTML = `<h2>Content not found!</h2>`
+            contentDiv.innerHTML = `<h2>${i18next.t('common.contentNotFound')}</h2>`;
             return;
         }
         contentDiv.innerHTML = this.responseText;
@@ -204,7 +203,7 @@ async function updateSecurityDetails() {
         return;
     let xhr = new XMLHttpRequest();
     const userId = getUserID();
-    const url = `http://10.12.244.21/api/users/${userId}/edit`;
+    const url = `http://192.168.20.111/api/users/${userId}/edit`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -299,13 +298,13 @@ async function deleteAccountConfirmed() {
     else {
         let xhr = new XMLHttpRequest();
         const userId = getUserID();
-        const url = `http://10.12.244.21/api/users/${userId}/edit/`;
+        const url = `http://192.168.20.111/api/users/${userId}/edit/`;
         xhr.open('DELETE', url, true);
         xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
         xhr.onreadystatechange = function () {
             if (this.readyState !== 4)
                 return;
-            if (this.status !== 204) {
+            if (this.status !== 200) {
                 document.getElementById('inputDelAccountPassword').classList.add('is-invalid');
                 console.log('Error deleting user', this);
                 //TODO: log error
@@ -323,7 +322,7 @@ async function deleteAccountConfirmed() {
 async function confirmPassword(password) {
     let xhr = new XMLHttpRequest();
     const userId = getUserID();
-    const url = `http://10.12.244.21/api/users/${userId}/edit/`;
+    const url = `http://192.168.20.111/api/users/${userId}/edit/`;
     xhr.open('PUT', url, false);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -348,11 +347,50 @@ function loadGeneralSettings(){
         if (this.readyState !== 4)
             return;
         if (this.status !== 200) {
-            contentDiv.innerHTML = `<h2>Content not found!</h2>`
+            contentDiv.innerHTML = `<h2>${i18next.t('common.contentNotFound')}</h2>`;
             return;
         }
         contentDiv.innerHTML = this.responseText;
         translateAll();
+        languageSelector();
     }
     xhr.send();
+}
+
+function languageSelector(){
+    let langSelector = document.getElementById('langSelector');
+    langSelector.value = _user.idiom;
+    langSelector?.addEventListener('change', function(){
+        _lang = langSelector.value;
+        _user.idiom = _lang;
+        i18next.changeLanguage(_lang);
+        translateAll();
+        updateUserLanguage();
+        localStorage.setItem('lang', _lang);
+    });
+}
+
+async function updateUserLanguage(){
+    let newUser = {
+        idiom: _lang
+    }
+    let userId = await getUserID();
+    const url = `https://ft-transcendence.com/api/users/${userId}/edit/`;
+    let xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
+    xhr.onreadystatechange = function () {
+        if (this.readyState !== 4)
+            return;
+        if (this.status === 400) {
+            console.log('Error updating user details', this);
+            return;
+        }
+        else if (this.status !== 200) {
+            console.log('Error updating user details', this);
+            return;
+        }
+    }
+    xhr.send(JSON.stringify(newUser));
 }
