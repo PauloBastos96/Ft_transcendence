@@ -7,12 +7,12 @@ let _lang = 'EN';
 //Handle back and forward navigation events
 window.onpopstate = function (event) {
     if (event.state !== null) {
-		// Prevent users that aren't logged in to go back into other pages.
+		/* // Prevent users that aren't logged in to go back into other pages.
 		if (!loggedIn) {
 			changeContent('login', false);
 			document.getElementById('header').style.display = 'none';
 			return;
-		}
+		} */
         pageState = event.state;
         changeContent(pageState, false);
     }

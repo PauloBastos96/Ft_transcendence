@@ -105,8 +105,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    
+    'daphne',
 ]
+
+ASGI_APPLICATION = "mysite.asgi.application"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
