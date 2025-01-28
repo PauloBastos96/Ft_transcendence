@@ -28,7 +28,7 @@ class LoginView(generics.GenericAPIView):
         user = serializer.validated_data['user']
         if user is not None and user.is_active:
             if user.tfa == True:
-                otp = str(random.randint(000000, 999999))
+                otp = str(random.randint(100000, 999999))
                 user.otp = hashlib.sha256(otp.encode()).hexdigest()
                 user.otp_expiration = timezone.now() + datetime.timedelta(minutes=5)
                 user.save()
@@ -71,7 +71,7 @@ class SignUpView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_data = serializer.validated_data
-        otp = str(random.randint(000000, 999999))
+        otp = str(random.randint(100000, 999999))
         otp_hash = hashlib.sha256(otp.encode()).hexdigest()
         otp_expiration = timezone.now() + datetime.timedelta(minutes=5)
         request.session['otp_hash'] = otp_hash
@@ -133,10 +133,10 @@ class CheckOTPView(generics.GenericAPIView):
         
         otp_hash = request.session.get('otp_hash')
         otp_expiration = request.session.get('otp_expiration')
-        user_data = request.session.get('user_data') if purpose == 'signup' else None
+        user_data = request.session.get('user_data') if purpose == 'tfa' else None
         email = user_data['email'] if user_data else request.session.get('email')
 
-        if not otp_hash or not otp_expiration or (purpose == 'signup' and not user_data):
+        if not otp_hash or not otp_expiration or (purpose == 'tfa' and not user_data):
             return Response({"detail": "OTP session data not found."}, status=status.HTTP_400_BAD_REQUEST)
 
         if purpose == 'signup':

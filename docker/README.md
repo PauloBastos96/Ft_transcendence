@@ -4,7 +4,7 @@
 
 2.  make
 
-3.  Browser: https://10.12.244.21
+3.  Browser: https://192.168.20.111
 
 # Endpoints
 
