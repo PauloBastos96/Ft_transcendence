@@ -19,6 +19,7 @@ services:
       EMAIL_PASSWORD_FILE: /run/secrets/email_password
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
       DJANGO_SUPERUSER_FILE: /run/secrets/django_superuser_password
+      DJANGO_SECRET_KEY: /run/secrets/django_secret_key
     logging:
       driver: "json-file"
       options:
@@ -34,6 +35,7 @@ services:
       - django_superuser_password
       - email_password
       - postgres_password
+      - django_secret_key
     
   postgres:
     container_name: postgres
@@ -303,6 +305,8 @@ secrets:
     file: ../secrets/postgres_password.txt
   email_password:
     file: ../secrets/email_host_password.txt
+  django_secret_key:
+    file: ../secrets/django_secret_key.txt
   elasticsearch_password:
     file: ../secrets/elasticsearch_password.txt
   kibana_password:

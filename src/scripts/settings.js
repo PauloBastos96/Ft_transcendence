@@ -46,8 +46,8 @@ async function updateAccountDetails() {
         return;
     }
     let xhr = new XMLHttpRequest();
-    const userId = getUserID();
-    const url = `http://192.168.20.111/api/users/${userId}/edit`;
+    const userId = await getUserID();
+    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -150,7 +150,7 @@ async function updateAvatar() {
     formData.append('avatar', avatar.files[0]);
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `http://192.168.20.111/api/users/${userId}/add_avatar/`;
+    const url = `https://192.168.20.111/api/users/${userId}/add_avatar/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
     xhr.onreadystatechange = function () {
@@ -161,8 +161,7 @@ async function updateAvatar() {
             //TODO: log error
             return;
         }
-        else
-        {
+        else {
             getUserAvatar(userId).then(avatar => {
                 _avatar = avatar;
                 document.getElementById('user-avatar').src = _avatar;
@@ -192,8 +191,40 @@ function loadSecuritySettings() {
             updateSecurityDetails();
         });
         translateAll();
+        let f2aSwitch = document.getElementById('enable2FA');
+        f2aSwitch.checked = _user.tfa;
+        f2aSwitch.addEventListener('change', function () {
+            update2FA(f2aSwitch);
+        });
     }
     xhr.send();
+}
+
+//Update 2FA status
+async function update2FA(f2aSwitch) {
+    let tfa = f2aSwitch.checked;
+    let newUser = {
+        tfa: tfa
+    }
+    let userId = await getUserID();
+    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    let xhr = new XMLHttpRequest();
+    xhr.open('PUT', url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
+    xhr.onreadystatechange = function () {
+        if (this.readyState !== 4)
+            return;
+        if (this.status === 400) {
+            console.log('Error updating user details', this);
+            return;
+        }
+        else if (this.status !== 200) {
+            console.log('Error updating user details', this);
+            return;
+        }
+    }
+    xhr.send(JSON.stringify(newUser));
 }
 
 //Update password
@@ -202,8 +233,8 @@ async function updateSecurityDetails() {
     if (newPassword === undefined)
         return;
     let xhr = new XMLHttpRequest();
-    const userId = getUserID();
-    const url = `http://192.168.20.111/api/users/${userId}/edit`;
+    const userId = await getUserID();
+    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -297,8 +328,8 @@ async function deleteAccountConfirmed() {
     }
     else {
         let xhr = new XMLHttpRequest();
-        const userId = getUserID();
-        const url = `http://192.168.20.111/api/users/${userId}/edit/`;
+        const userId = await getUserID();
+        const url = `https://192.168.20.111/api/users/${userId}/edit/`;
         xhr.open('DELETE', url, true);
         xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
         xhr.onreadystatechange = function () {
@@ -321,8 +352,8 @@ async function deleteAccountConfirmed() {
 //Confirm password before deleting account
 async function confirmPassword(password) {
     let xhr = new XMLHttpRequest();
-    const userId = getUserID();
-    const url = `http://192.168.20.111/api/users/${userId}/edit/`;
+    const userId = await getUserID();
+    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
     xhr.open('PUT', url, false);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -339,7 +370,7 @@ async function confirmPassword(password) {
 }
 
 //Load the widget for site settings
-function loadGeneralSettings(){
+function loadGeneralSettings() {
     var contentDiv = document.getElementById('settings-container');
     var xhr = new XMLHttpRequest();
     xhr.open('GET', `/src/components/settings-general.html`, true);
@@ -357,10 +388,11 @@ function loadGeneralSettings(){
     xhr.send();
 }
 
-function languageSelector(){
+//Language selector
+function languageSelector() {
     let langSelector = document.getElementById('langSelector');
     langSelector.value = _user.idiom;
-    langSelector?.addEventListener('change', function(){
+    langSelector?.addEventListener('change', function () {
         _lang = langSelector.value;
         _user.idiom = _lang;
         i18next.changeLanguage(_lang);
@@ -370,12 +402,13 @@ function languageSelector(){
     });
 }
 
-async function updateUserLanguage(){
+//Update user language
+async function updateUserLanguage() {
     let newUser = {
         idiom: _lang
     }
     let userId = await getUserID();
-    const url = `https://ft-transcendence.com/api/users/${userId}/edit/`;
+    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
     let xhr = new XMLHttpRequest();
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
