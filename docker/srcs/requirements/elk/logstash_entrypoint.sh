@@ -4,4 +4,4 @@
 export ELASTIC_PASSWORD=$(cat $ELASTIC_PASSWORD_FILE)
 
 # Run Logstash
-# /requirements/elk/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf
+/requirements/elk/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf
