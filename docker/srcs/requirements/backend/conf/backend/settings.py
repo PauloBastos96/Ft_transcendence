@@ -184,7 +184,7 @@ if DEBUG:
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
 
-print(f'INTERNAL_IPS: {INTERNAL_IPS}')
+# print(f'INTERNAL_IPS: {INTERNAL_IPS}')
 
 # this is the main reason for not showing up the toolbar
 import mimetypes
@@ -265,8 +265,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
-
-# TODO: activate default permission class
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

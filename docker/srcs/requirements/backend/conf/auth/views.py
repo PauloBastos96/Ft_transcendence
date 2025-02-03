@@ -96,7 +96,7 @@ class SignUpView(generics.CreateAPIView):
                 fail_silently=False,
             )
         except Exception as e:
-            logger.error(f"Failed to send email: str{e}")
+            logger.debug(f"Failed to send email: str{e}")
             return Response({"error": f"Failled to send email: str{e}"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"detail": "Email sent."}, status=status.HTTP_200_OK)
 

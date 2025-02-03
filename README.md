@@ -59,3 +59,11 @@ On signup, a 6-digit one time password is sent to the user email. That password 
 ### TFA instructions
 
 If the user's tfa option is active, when the user logs in, a 6-digit one time password is sent to the user email. That password must be then sent to https://192.168.20.111/api/auth/check_otp/ as 'otp'. If the OTP is valid, the page will return the JWT tokens.
+
+
+#ELK
+
+## Download dashboard:
+
+`curl -X GET "http://localhost:5601/api/kibana/dashboards/export?dashboard=<dashboard_id>" -H "kbn-xsrf: true" -u {elastic_user}:{elastic_password} -o srcs/requirements/elk/kibana/dashboard.json`
+

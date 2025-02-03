@@ -36,17 +36,17 @@ curl -X POST "http://kibana:5601/api/saved_objects/index-pattern" \
         }
       }'
 
-# Create index pattern for general logstash logs
-curl -X POST "http://kibana:5601/api/saved_objects/index-pattern" \
-      -H "kbn-xsrf: true" \
-      -H "Content-Type: application/json" \
-      -u "${ELASTIC_USER}:${ELASTIC_PASSWORD}" \
-      -d '{
-        "attributes": {
-          "title": "elk-*",
-          "timeFieldName": "@timestamp"
-        }
-      }'
+# # Create index pattern for general logstash logs
+# curl -X POST "http://kibana:5601/api/saved_objects/index-pattern" \
+#       -H "kbn-xsrf: true" \
+#       -H "Content-Type: application/json" \
+#       -u "${ELASTIC_USER}:${ELASTIC_PASSWORD}" \
+#       -d '{
+#         "attributes": {
+#           "title": "elk-*",
+#           "timeFieldName": "@timestamp"
+#         }
+#       }'
 
 # # CREATE backup repository
 

@@ -1,6 +1,7 @@
 all:
 	sudo sysctl -w vm.max_map_count=262144
-	docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
+	# docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
+	docker compose -f srcs/docker-compose.yml up --build -d
 
 up:
 	docker compose -f srcs/docker-compose.yml up backend nginx postgres
@@ -25,7 +26,7 @@ fclean: clean
 	docker image rm transcendence-backend
 	docker image rm postgres
 	docker image rm transcendence-nginx
-	docker image prune
+	# docker image prune
 
 re: fclean all
 

@@ -29,8 +29,6 @@ services:
     networks:
       - transcendence
       - elk
-    ports:
-      - "8080:8000"
     secrets:
       - django_superuser_password
       - email_password
@@ -69,14 +67,11 @@ services:
     container_name: nginx
     build: requirements/nginx
     ports:
-      # - "8081:443"
       - "443:443"
       - "80:80"
-      # - "8080:8080"
     volumes:
       - ../../:/usr/share/nginx/frontend
       - static-volume:/etc/nginx/html/static/
-      # - postgres-log-volume:/var/log/postgres
       - ../avatars:/etc/nginx/html/media
       - ./requirements/nginx/conf:/etc/nginx/conf.d
       - nginx-log-volume:/var/log/postgres
@@ -123,6 +118,7 @@ services:
       - ./esbackup:/usr/share/elasticsearch/backup/my_backup
     ports:
       - ${ES_PORT}:9200
+      # only access on localhost
       # - 127.0.0.1:9200:9200
     environment:
       - node.name=es01
@@ -173,7 +169,7 @@ services:
     volumes:
       - certs:/usr/share/kibana/config/certs
       - kibanadata:/usr/share/kibana/data
-      - ./requirements/elk/kibana_entrypoint.sh:/usr/local/bin/kibana_entrypoint.sh:ro
+      - ./requirements/elk/kibana/kibana_entrypoint.sh:/usr/local/bin/kibana_entrypoint.sh:ro
     ports:
       - ${KIBANA_PORT}:5601
     environment:
@@ -214,26 +210,27 @@ services:
     volumes:
       - certs:/usr/share/logstash/certs
       - logstashdata01:/usr/share/logstash/data
-      - "./requirements/elk/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
+      - "./requirements/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
-      - "./requirements/elk/logstash.sh:/requirements/elk/logstash.sh:ro"
-      - ./requirements/elk/logstash_entrypoint.sh:/usr/local/bin/logstash_entrypoint.sh:ro
+      - "./requirements/elk/logstash/logstash.sh:/requirements/elk/logstash/logstash.sh:ro"
+      - ./requirements/elk/logstash/logstash_entrypoint.sh:/usr/local/bin/docker-entrypoint
+      - ./requirements/elk/kibana/dashboard.json:/usr/share/kibana/config/dashboards/dashboard.json:ro
     environment:
       - xpack.monitoring.enabled=false
       - ELASTIC_USER=elastic
       - ELASTIC_PASSWORD_FILE=/run/secrets/elasticsearch_password
       #TODO: password
-      - ELASTIC_PASSWORD=changeme
+      # - ELASTIC_PASSWORD=changeme
       - ELASTIC_HOSTS=https://es01:9200
     secrets:
       - elasticsearch_password
-    entrypoint: ["/usr/local/bin/logstash_entrypoint.sh"]
+    # entrypoint: ["/usr/local/bin/logstash_entrypoint.sh"]
     logging:
       options:
         tag: "{{.Name}}"
     networks:
       - elk
-    command: ["/bin/bash", "-c", "/requirements/elk/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf"]
+    command: ["/bin/bash", "-c", "/requirements/elk/logstash/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf"]
 
       
 volumes:
