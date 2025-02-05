@@ -93,6 +93,7 @@ ALLOWED_REFERERS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -101,14 +102,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'users',
+    'channels',
     'games',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'daphne',
 ]
 
-ASGI_APPLICATION = "mysite.asgi.application"
+ASGI_APPLICATION = "backend.asgi.application"
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

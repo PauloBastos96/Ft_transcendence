@@ -1,5 +1,5 @@
 all:
-	docker compose -f srcs/docker-compose.yml up --build
+	sudo docker compose -f srcs/docker-compose.yml up --build
 
 up:
 	docker compose -f srcs/docker-compose.yml up
