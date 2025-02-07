@@ -88,9 +88,15 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY') or "django-insecure-change-me"
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = [
-	h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',')
-	if h.strip()
+    h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',')
+    if h.strip()
 ]
+
+ip_host = os.environ.get('IP_HOST')
+if ip_host:
+    ALLOWED_HOSTS.append(os.environ.get('IP_HOST'))
+
+print(f'ALLOWED_HOSTS: {ALLOWED_HOSTS}')
 
 ALLOWED_REFERERS = [
     "https://192.168.20.111/",
@@ -161,19 +167,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Configuring Django Debug Toolbar
-
-# INTERNAL_IPS = [
-#     '172.18.0.3',
-#     '192.168.1.235',
-#     '127.0.0.1',
-#     '172.17.0.1',
-#     'localhost',
-#     'ft-transcendence.com', 
-#     'backend',
-#     '10.0.2.2',
-# ] 
-
-
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2",]
 
 if DEBUG:
@@ -191,7 +184,7 @@ import mimetypes
 mimetypes.add_type("application/javascript", ".js", True)
 
 DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
+    "SHOW_TOOLBAR_CALLBACK": lambda request: True,
 }
 
 # Database

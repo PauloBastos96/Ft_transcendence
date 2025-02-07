@@ -4,7 +4,7 @@
 export ELASTIC_PASSWORD=$(cat $ELASTIC_PASSWORD_FILE)
 
 #Import kibana Dashboard
-curl -X POST "http://kibana:5601/api/kibana/dashboards/import" -H "kbn-xsrf: true" -H "Content-Type: application/json" -u "${ELASTIC_USER}:$(cat $ELASTIC_PASSWORD_FILE)" -d @/usr/share/kibana/config/dashboards/dashboard.json
+curl -X POST kibana:5601/api/saved_objects/_import?createNewCopies=true -H "kbn-xsrf: true" -u "${ELASTIC_USER}:$(cat $ELASTIC_PASSWORD_FILE)" --form file=@/usr/share/kibana/config/dashboards/dashboard.ndjson
 
 # Map environment variables to entries in logstash.yml.
 # Note that this will mutate logstash.yml in place if any such settings are found.
