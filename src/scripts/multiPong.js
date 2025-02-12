@@ -9,9 +9,11 @@ function main() {
 
 	const chatSocket = new WebSocket('wss://'+ window.location.host + '/ws/chat/' + "test" + '/');
 
+	console.log(chatSocket)
 	chatSocket.onmessage = function (e) {
 		const data = JSON.parse(e.data);
-		document.querySelector('#chat-log').value += (data.message + '\n');
+		console.log(data);
+		//document.querySelector('#chat-log').value += (data.message + '\n');
 	};
 
 	chatSocket.onclose = function (e) {
