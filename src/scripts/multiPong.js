@@ -12,7 +12,19 @@ function main() {
 	console.log(chatSocket)
 	chatSocket.onmessage = function (e) {
 		const data = JSON.parse(e.data);
-		console.log(data);
+		const content = data.content;
+		const type = data.typeContent;
+		switch (type) {
+			case "log":
+				console.log(content);
+			break;
+			default:
+				console.error("Something went wrong!");
+				chatSocket.close();
+				changeContent("overview");
+				break;
+		}
+		//console.log(content);
 		//document.querySelector('#chat-log').value += (data.message + '\n');
 	};
 

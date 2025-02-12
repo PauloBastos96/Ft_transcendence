@@ -15,6 +15,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 		await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 		await self.accept()
+		await self.sendAll("log", "yoyoyooyoyoyohoikaeuyfdgack	esjhgwdfvluqweygdo<uaygfoUISYREGFOW       SAHJIEGFDVSAIDUYTFGVWOuyfv\\\\\\\\\\\\nnnnnnnnnn \t\t\n\n")
 
 	async def disconnect(self, close_code):
 		await self.channel_layer.group_discard(
@@ -23,9 +24,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
 	async def receive(self, text_data):
 		text_data_json = json.loads(text_data)
-		message = text_data_json["message"]
+		content = text_data_json["content"]
+		typeContent = text_data_json["typeContent"]
+		await self.sendAll(typeContent, content);
 
+	async def chat_message(self, event):
+		content = event["content"]
+		typeContent = event["typeContent"]
+
+		# Send message to WebSocket
+		await self.send(text_data=json.dumps({"typeContent": typeContent,"content": content}))
+
+	async def sendAll(self, typeContent, content):
 		# Send message to room group
 		await self.channel_layer.group_send(
-			self.room_group_name, {"type": "chat.message", "message": message}
+			self.room_group_name, {"type": "chat.message", "typeContent": typeContent, "content": content}
 		)
