@@ -19,7 +19,7 @@ from games.consumers import ChatConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 
-django.setup()
+#django.setup()
 
 django_asgi_app = get_asgi_application()
 

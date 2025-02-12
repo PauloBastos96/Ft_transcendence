@@ -80,10 +80,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    ".127.0.0.1",
+    "127.0.0.1",
     'backend',
     "ft-transcendence.com",
     '192.168.20.111',
+	'games',
     ]
 
 ALLOWED_REFERERS = [

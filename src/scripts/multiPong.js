@@ -1,11 +1,13 @@
-async function main() {
+function main() {
 	//const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 	// meter na window o roomName
 	// este e primeiro adicionado quando se cria o lobby e fica a espera da outro user
 	// quando se clica para inicar o jogo abre o roomName
 
-	const chatSocket = new WebSocket('ws://'+ window.location.host + '/ws/chat/' + roomName + '/');
+	// window.roomName
+
+	const chatSocket = new WebSocket('wss://'+ window.location.host + '/ws/chat/' + "test" + '/');
 
 	chatSocket.onmessage = function (e) {
 		const data = JSON.parse(e.data);
@@ -16,7 +18,7 @@ async function main() {
 		console.error('Chat socket closed unexpectedly');
 	};
 
-	document.querySelector('#chat-message-input').focus();
+	/* document.querySelector('#chat-message-input').focus();
 	document.querySelector('#chat-message-input').onkeyup = function (e) {
 		if (e.key === 'Enter') {  // enter, return
 			document.querySelector('#chat-message-submit').click();
@@ -30,5 +32,6 @@ async function main() {
 			'message': message
 		}));
 		messageInputDom.value = '';
-	};
+	}; */
 }
+main();
