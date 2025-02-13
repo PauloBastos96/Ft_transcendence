@@ -76,7 +76,7 @@ services:
       - ./requirements/nginx/conf:/etc/nginx/conf.d
       - nginx-log-volume:/var/log/postgres
     environment:
-      - IP_HOST={IP_HOST}
+      - IP_HOST=${IP_HOST}
     restart: on-failure
     logging:
       driver: "json-file"
@@ -97,6 +97,7 @@ services:
     environment:
       ELASTIC_PASSWORD_FILE: /run/secrets/elasticsearch_password
       KIBANA_PASSWORD_FILE: /run/secrets/kibana_password
+      server.ssl.enabled: true
     secrets:
       - elasticsearch_password
       - kibana_password
@@ -119,9 +120,8 @@ services:
       - esdata01:/usr/share/elasticsearch/data
       - ./requirements/elk/esbackup:/usr/share/elasticsearch/backup/my_backup
     ports:
-      - ${ES_PORT}:9200
       # only access on localhost
-      # - 127.0.0.1:9200:9200
+      - 127.0.0.1:9200:9200
     environment:
       - node.name=es01
       - cluster.name=${CLUSTER_NAME}
@@ -163,6 +163,8 @@ services:
     networks:
       - elk
 
+
+
   kibana:
     depends_on:
       es01:
@@ -174,21 +176,29 @@ services:
       - ./requirements/elk/kibana/kibana_entrypoint.sh:/usr/local/bin/kibana_entrypoint.sh:ro
     ports:
       - ${KIBANA_PORT}:5601
+      # IF PRODUCTION
+      # - 127.0.0.1:5601:5601
     environment:
       - SERVERNAME=kibana
       - ELASTICSEARCH_HOSTS=https://es01:9200
       - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD_FILE=/run/secrets/kibana_password
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=config/certs/ca/ca.crt
+      - ENCRYPTED_SAVED_OBJECTS_KEY_FILE=/run/secrets/kibana_encryption_key
+      - REPORTING_KEY_FILE=/run/secrets/kibana_reporting_key
+      - SECURITY_KEY_FILE=/run/secrets/kibana_security_key
     secrets:
       - kibana_password
+      - kibana_encryption_key
+      - kibana_reporting_key
+      - kibana_security_key
     entrypoint: ["/usr/local/bin/kibana_entrypoint.sh"]
     mem_limit: ${KB_MEM_LIMIT}
     healthcheck:
       test:
         [
           "CMD-SHELL",
-          "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
+          "curl -s -I --cacert /usr/share/kibana/config/certs/kibana/kibana.crt https://localhost:5601 | grep -q 'HTTP/1.1 302 Found'",
         ]
       interval: 10s
       timeout: 10s
@@ -211,6 +221,7 @@ services:
     user: root
     volumes:
       - certs:/usr/share/logstash/certs
+      - certs_kibana:/usr/share/kibana/certs
       - logstashdata01:/usr/share/logstash/data
       - "./requirements/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
@@ -240,6 +251,8 @@ volumes:
 
   certs:
     driver: local
+  certs_kibana:
+    driver: local
   esdata01:
     driver: local
   kibanadata:
@@ -266,3 +279,9 @@ secrets:
     file: ../secrets/elasticsearch_password.txt
   kibana_password:
     file: ../secrets/kibana_password.txt
+  kibana_encryption_key:
+    file: ../secrets/kibana_encryption_key.txt
+  kibana_reporting_key:
+    file: ../secrets/kibana_reporting_key.txt
+  kibana_security_key:
+    file: ../secrets/kibana_security_key.txt

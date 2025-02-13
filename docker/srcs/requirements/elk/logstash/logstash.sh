@@ -56,7 +56,7 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["nginx-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "nginx"
@@ -70,7 +70,7 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["postgres-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "postgres"
@@ -84,7 +84,7 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["backend-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "backend"
@@ -98,7 +98,7 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["elasticsearch-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "elasticsearch"
@@ -112,7 +112,7 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["kibana-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "kibana"
@@ -126,13 +126,42 @@ curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_tem
      -d '{
        "index_patterns": ["logstash-*"],
        "settings": {
-         "number_of_shards": 3,
+         "number_of_shards": 1,
          "number_of_replicas": 1,
          "index.lifecycle.name": "logs_policy",
          "index.lifecycle.rollover_alias": "logstash"
        }
      }'
 
+
+# curl -X PUT --cacert /usr/share/logstash/certs/ca/ca.crt "https://es01:9200/_index_template/template" -H 'Content-Type: application/json' -u "${ELASTIC_USER}:${ELASTIC_PASSWORD}" -d '
+# {
+#   "index_patterns": ["nginx-*","postgres-*","backend-*","elasticsearch-*","kibana-*","logstash-*"],
+#   "template": {
+#     "settings": {
+#       "number_of_shards": 1,
+#       "number_of_replicas": 1
+#     },
+#     "mappings": {
+#       "properties": {
+#         "field1": {
+#           "type": "text"
+#         },
+#         "field2": {
+#           "type": "keyword"
+#         }
+#       }
+#     },
+#     "aliases": {
+#       "your-alias": {}
+#     }
+#   },
+#   "priority": 500,
+#   "version": 1,
+#   "_meta": {
+#     "description": "Index templates"
+#   }
+# }'
 
 # # Create index pattern for nginx logs
 # curl -X POST "http://kibana:5601/api/saved_objects/index-pattern/${INDEX_PATTERN_NGINX_ID}" \

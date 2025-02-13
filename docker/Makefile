@@ -1,4 +1,4 @@
-all: ip-host
+all:
 	sudo sysctl -w vm.max_map_count=262144
 	# docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
 	docker compose -f srcs/docker-compose.yml up --build -d
@@ -8,7 +8,7 @@ up:
 	# docker compose -f srcs/docker-compose.yml up --detach
 
 elk:
-	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana logstash01
+	docker compose -f srcs/docker-compose.yml up --build -d setup es01 kibana logstash01
 
 stop:
 	docker compose -f srcs/docker-compose.yml stop
