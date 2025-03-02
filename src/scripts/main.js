@@ -34,7 +34,7 @@ async function initialize() {
     else {
         history.replaceState(pageState, null, "");
         _user = await getUserData();
-        _lang = _user.idiom;
+        //_lang = _user.idiom; // fix this later idk
         await getNotifications();
         await getUserAvatar(_user.id).then(avatar => { _avatar = avatar;});
         changeContent(pageState, false);
@@ -204,14 +204,14 @@ async function getNotifications(){
 
     let notificationTemplate = document.getElementById('notification-template');
     let notificationContainer = document.getElementById('notification-area');
-    for (let request of _user.friend_requests) {
+    /* for (let request of _user.friend_requests) {
         let notification = notificationTemplate.content.cloneNode(true);
         notification.querySelector('h6').innerText = i18next.t('notifications.friendRequest');
         let user = await getUserByID(request);
         notification.querySelector('p').innerText = `${user.username} ${i18next.t('notifications.friendRequestMessage')}`;
         notification.querySelector('a').addEventListener('click', () => {changeContent('livechat', true)});
         notificationContainer.appendChild(notification);
-    }
+    } */
     if (notificationContainer.children.length === 0) {
         notificationContainer.innerHTML = `<p class="d-flex mx-3 gap-3">${i18next.t('notifications.empty')}</p>`;
         document.getElementById('notification-icon').setAttribute('href', '#notification-empty');
