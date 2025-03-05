@@ -70,12 +70,12 @@ function GChat() {
 	};
 
 	messageSubmit.onclick = function (e) {
+		console.log("btn pressed!")
 		const message = messageInput.value.trim();
 		if (message.length <= 0) return; // ignore Enter presses that dont have any content in it
-		console.log("btn pressed!")
 		if (message) {
 			GchatSocket.send(JSON.stringify({
-				'type': 'message',
+				'typeContent': 'message',
 				'content': message
 			}));
 			messageInput.value = '';
@@ -86,13 +86,12 @@ function GChat() {
 	GchatSocket.onmessage = function (e) {
 		const data = JSON.parse(e.data);
 		const content = data.content;
-		const type = data.type;
+		const type = data.typeContent;
 		switch (type) {
 			case "log":
 				console.log(content);
 				break;
 			case "message":
-				console.log(content);
 				const messageDisplayArea = document.getElementById('messageDisplayArea');
 				messageDisplayArea.appendChild(content);
 				messageDisplayArea.scrollTop = messageDisplayArea.scrollHeight; // Auto-scroll to the bottom
