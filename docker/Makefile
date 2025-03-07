@@ -1,13 +1,15 @@
+# TODO: re-make all to include elk etc
+
 all:
 	sudo sysctl -w vm.max_map_count=262144
 	# docker compose -f srcs/docker-compose.yml up --build backend nginx postgres
-	docker compose -f srcs/docker-compose.yml up --build -d
+	docker compose -f srcs/docker-compose.yml up --build -d backend nginx postgres
 
 up:
-	docker compose -f srcs/docker-compose.yml up backend nginx postgres
-	# docker compose -f srcs/docker-compose.yml up --detach
+	# docker compose -f srcs/docker-compose.yml up
+	docker compose -f srcs/docker-compose.yml up --detach
 
-elk:
+elk: all
 	docker compose -f srcs/docker-compose.yml up --build -d setup es01 kibana logstash01
 
 stop:

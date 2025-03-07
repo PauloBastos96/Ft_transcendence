@@ -221,7 +221,6 @@ services:
     user: root
     volumes:
       - certs:/usr/share/logstash/certs
-      - certs_kibana:/usr/share/kibana/certs
       - logstashdata01:/usr/share/logstash/data
       - "./requirements/elk/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro"
       - "/var/lib/docker/containers:/var/lib/docker/containers:ro"
@@ -241,6 +240,8 @@ services:
     networks:
       - elk
     command: ["/bin/bash", "-c", "/requirements/elk/logstash/logstash.sh && logstash -f /usr/share/logstash/pipeline/logstash.conf"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9600/_node/stats || exit 1"]
 
       
 volumes:
@@ -250,8 +251,6 @@ volumes:
   nginx-log-volume:
 
   certs:
-    driver: local
-  certs_kibana:
     driver: local
   esdata01:
     driver: local

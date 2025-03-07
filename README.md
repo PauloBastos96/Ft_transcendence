@@ -70,3 +70,15 @@ If the user's tfa option is active, when the user logs in, a 6-digit one time pa
 ## Export dashboard from Kibana:
 
 `curl --request POST "http://kibana:5601/api/saved_objects/_export" --header "Content-Type: application/json; Elastic-Api-Version=2023-10-31" --header "kbn-xsrf: string" -u "${ELASTIC_USER}:$(cat $ELASTIC_PASSWORD_FILE)" -d '{ "objects": [ { "type": "dashboard", "id": "c9c34bef-c32f-4870-95d3-288c00170cea" } ] }' -o /usr/share/kibana/config/dashboards/dashboard.ndjson`
+
+## Secrets
+
+-   django_secret_key.txt
+-   elasticsearch_password.txt
+-   kibana_password.txt
+-   kibana_security_key.txt
+-   django_superuser_password.txt
+-   email_host_password.txt
+-   kibana_encryption_key.txt
+-   kibana_reporting_key.txt
+-   postgres_password.txt
