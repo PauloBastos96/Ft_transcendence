@@ -30,9 +30,55 @@ function sendMessage() {
 	}
 }
 
+//Get the user ID from the access token
+async function getUserID() {
+	try {
+		if (sessionStorage.getItem('jwt') === null) 
+			await refreshLogin();
+		const payload = sessionStorage.getItem('jwt').split('.')[1];
+		return JSON.parse(atob(payload))?.user_id;
+	}
+	catch (e) {
+		return null;
+	}
+}
+
+//Get user data
+//TODO change to be able to get any user instead of just the logged in user
+async function getUserData() {
+	const userID = await getUserID();
+	if (userID === null)
+		return;
+	const url = `/api/users/${userID}/`;
+	const response = await fetch(url, {
+		method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			"Content-Type": "application/json",
+			Authorization: `Bearer ${sessionStorage.getItem('jwt')}`
+		}
+	});
+	if (response.status === 401) {
+		let data = await refreshLogin();
+		return data;
+	}
+	if (response.status !== 200) {
+		console.error('Error fetching user data');
+		logout();
+		return;
+	};
+	const data = await response.json();
+	return data;
+}
+
 var GchatSocket = null; // Declare the WebSocket outside to maintain a single instance
 
-function GChat() {
+async function GChat() {
+
+	//const userId = await getUserID();
+	const _user = await getUserData();
+	window.user = _user;
+	console.log(_user);
 	//const roomName = JSON.parse(document.getElementById('room-name').textContent);
 
 	// meter na window o roomName
@@ -93,8 +139,15 @@ function GChat() {
 				break;
 			case "message":
 				const messageDisplayArea = document.getElementById('messageDisplayArea');
-				messageDisplayArea.appendChild(content);
-				messageDisplayArea.scrollTop = messageDisplayArea.scrollHeight; // Auto-scroll to the bottom
+				const messageElement = document.createElement("div");
+				messageElement.innerHTML = `<strong>${window.user.username}:</strong> ${content}`;
+				messageElement.style.padding = "5px";
+				messageElement.style.borderRadius = "5px";
+				messageElement.style.backgroundColor = "#f0f0f0";
+				messageElement.style.marginBottom = "5px";
+				messageElement.style.color = "black";
+				messageDisplayArea.appendChild(messageElement);
+				//messageDisplayArea.scrollTop = messageDisplayArea.scrollHeight; // Auto-scroll to the bottom
 				break;
 			default:
 				console.error("Something went wrong!");
