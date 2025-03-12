@@ -12,12 +12,20 @@
         "no": "No",
         "serverConnectionError": "Couldn't connect to server. Please try again later.",
         "connectionFailed": "Connection failed",
-        "contentNotFound": "Content not found"
+        "contentNotFound": "Content not found",
+        "otp": "Confirmation code",
+        "invalidOTP": "Invalid confirmation code",
+        "tic-tac-toe": "Tic Tac Toe"
     },
     "login":{
         "rememberMe": "Remember me",
         "invalidCredentials": "Invalid credentials",
-        "accountCreated": "Account created sucessfully. You may login now."
+        "accountCreated": "Account created sucessfully. You may login now.",
+        "signupOTP": "Enter confirmation code",
+        "signupOTPSent": "A confirmation code has been sent to your email",
+        "42login": "Login with 42",
+        "42error": "Error logging in with 42",
+        "alreadyLoggedIn": "You are already logged in somewhere else"
     },
     "header":{
         "overview": "Overview",
@@ -40,6 +48,7 @@
         "draws": "Draws",
         "friendsOnline": "Friends Online",
         "playPong": "Play Pong",
+        "playTicTacToe": "Play Tic Tac Toe",
         "playersPlaying": "people playing"
     },
     "profile":{
@@ -78,7 +87,10 @@
         "deleteAccount": "Delete Account",
         "deleteAccountQuestion": "Are you sure you want to delete your account?",
         "deleteAccountWarning": "This action is irreversible!",
-        "deleteAccountConfirm": "Please enter your password to confirm"
+        "deleteAccountConfirm": "Please enter your password to confirm",
+        "twoFactorAuth": "Two Factor Authentication",
+        "enable2FA": "Use Two Factor Authentication",
+        "avatarTooLarge": "Avatar is too large. Maximum size is 1MB"
     },
     "livechat": {
         "friends": "Friends",

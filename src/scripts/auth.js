@@ -4,13 +4,11 @@ async function login(event) {
     const username = document.getElementById('loginUsername').value;
     const password = document.getElementById('loginPassword').value;
     const keepLoggedIn = document.getElementById('keepLogin').checked;
-
     if (keepLoggedIn)
         localStorage.setItem('keepLoggedIn', true);
     else
         localStorage.removeItem('keepLoggedIn');
-
-    const url = 'https://ft-transcendence.com/api/auth/login/';
+    const url = '/api/auth/login/';
     document.getElementById('loginLoading').classList.toggle('d-none');
     await fetch(url, {
         method: 'POST',
@@ -30,23 +28,34 @@ async function login(event) {
         else if (response.status === 502) {
             throw new Error('Server error');
         }
+        else if (response.json().then(data => data?.error === 'User already logged in.')) {
+            alert(i18next.t('login.alreadyLoggedIn'));
+            return null;
+        }
         else {
             document.getElementById('loginUsername').classList.add('is-invalid');
             document.getElementById('loginPassword').classList.add('is-invalid');
             return null;
         }
     }).then(data => {
+        if (data == null){
+            document.getElementById('loginLoading').classList.toggle('d-none');
+            return;
+        }
+        if (data.detail === 'Email sent.')
+        {
+            let modal = new bootstrap.Modal(document.getElementById('f2aModal'));
+            modal.show();
+            return;
+        }
         if (data !== null) {
             sessionStorage.setItem('jwt', data.access);
             sessionStorage.setItem('refresh', data.refresh);
             if (keepLoggedIn)
                 localStorage.setItem('refresh', data.refresh);
             loggedIn = true;
+            window.localStorage.setItem('loggedIn', loggedIn);
             document.getElementById('loginLoading').classList.toggle('d-none');
-        }
-        else {
-            document.getElementById('loginLoading').classList.toggle('d-none');
-            return;
         }
     }).catch(error => {
         let modal = new bootstrap.Modal(document.getElementById('loginFailModal'));
@@ -56,20 +65,161 @@ async function login(event) {
         //TODO: log error
     });
 
+    postLogin();
+}
+
+// INIT TEST LOGIN WITH 42
+
+//Handle the OAuth return
+async function handleOAuthReturn() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const access = urlParams.get('access');
+    const refresh = urlParams.get('refresh');
+    
+    if (access && refresh) {
+        sessionStorage.setItem('jwt', access);
+        sessionStorage.setItem('refresh', refresh);
+        
+        if (localStorage.getItem('keepLoggedIn') === 'true') {
+            localStorage.setItem('refresh', refresh);
+        }
+        loggedIn = true;
+        window.localStorage.setItem('loggedIn', loggedIn);
+        
+        history.replaceState({}, document.title, window.location.pathname);
+        
+        postLogin();
+    }
+    else{
+        const error = urlParams.get('error');
+        await i18next.use(i18nextHttpBackend).init({
+            lng: _lang,
+            fallbackLng: 'EN',
+            debug: true,
+            backend: {
+                loadPath: '/src/locales/{{lng}}/{{ns}}.json'
+            }
+        });
+        await i18next.changeLanguage(_lang);
+        if (error) {
+            window.location.href = '/';
+            window.localStorage.setItem('loggedIn', false);
+            window.localStorage.removeItem('jwt');
+            window.localStorage.removeItem('refresh');
+            window.sessionStorage.setItem('42error', error);
+        }
+    }
+}
+
+async function loginWith42(){
+    window.location.href = '/api/oauth/login';
+}
+
+// On page load
+document.addEventListener('DOMContentLoaded', async function() {
+    
+    loggedIn = window.localStorage.getItem('loggedIn') === 'true';
+    if (!loggedIn)
+        await handleOAuthReturn();
+    else
+        return;
+
+    // Check for a stored refresh token (previous login)
+    if (!loggedIn && (localStorage.getItem('refresh') || sessionStorage.getItem('refresh'))) {
+        const storedRefresh = localStorage.getItem('refresh') || sessionStorage.getItem('refresh');
+        sessionStorage.setItem('refresh', storedRefresh);
+        
+        // Attempt to renew the token using the refresh token
+        refreshLogin().then(() => {
+            if (sessionStorage.getItem('jwt')) {
+                loggedIn = true;
+                window.localStorage.setItem('loggedIn', loggedIn);
+                postLogin();
+            }
+        });
+    }
+});
+
+// END TEST LOGIN WITH 42
+
+//Initialize main page after login
+async function postLogin(){
     if (loggedIn) {
         document.getElementById('header').style.display = 'block';
         _user = await getUserData();
         await getNotifications();
-        await getUserAvatar(_user.id).then(avatar => { _avatar = avatar;});
+        await getUserAvatar(_user.id).then(avatar => { _avatar = avatar; });
         document.getElementById('header-avatar').src = _avatar;
         changeContent('overview', true);
         history.replaceState(pageState, null, "");
     }
 }
 
+//Confirm the 2FA code
+async function confirmF2A() {
+    const keepLoggedIn = document.getElementById('keepLogin').checked;
+    if (keepLoggedIn)
+        localStorage.setItem('keepLoggedIn', true);
+    else
+        localStorage.removeItem('keepLoggedIn');
+    let input = document.getElementById('login2FA');
+    let f2a = input?.value;
+    if (f2a === '' || f2a == undefined) {
+        input.classList.add('is-invalid');
+        return;
+    }
+    input.classList.remove('is-invalid');
+    const url = '/api/auth/check_otp/';
+    await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            otp: f2a,
+            purpose: 'tfa'
+        }),
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    }).then(response => {
+        if (response.status === 200) {
+            let r = response.json();
+            return r;
+        }
+        else {
+            return null;
+        }
+    }).then(data => {
+        if (data !== null) {
+            let modelElm = document.getElementById('f2aModal');
+            let modal = bootstrap.Modal.getInstance(modelElm);
+            input.classList.remove('is-invalid');
+            input.value = '';
+            modal.hide();
+
+            sessionStorage.setItem('jwt', data.access);
+            sessionStorage.setItem('refresh', data.refresh);
+            if (keepLoggedIn)
+                localStorage.setItem('refresh', data.refresh);
+            loggedIn = true;
+            window.localStorage.setItem('loggedIn', loggedIn);
+            document.getElementById('loginLoading').classList.toggle('d-none');
+
+            postLogin();
+        }
+        else {
+            let input = document.getElementById('login2FA');
+            input.classList.add('is-invalid');
+        }
+    }).catch(error => {
+        let modal = new bootstrap.Modal(document.getElementById('loginFailModal'));
+        modal.show();
+        //log error
+        console.error(error);
+    });
+}
+
 //Logout the user
 async function logout() {
-    const url = 'https://ft-transcendence.com/api/auth/logout/';
+    const url = '/api/auth/logout/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -103,11 +253,13 @@ async function logout() {
     clearSession();
 }
 
+//Clear the session
 function clearSession() {
     sessionStorage.removeItem('jwt');
     sessionStorage.removeItem('refresh');
     localStorage.removeItem('refresh');
     loggedIn = false;
+    window.localStorage.setItem('loggedIn', loggedIn);
     _user = null;
     document.getElementById('header').style.display = 'none';
     document.getElementById('notification-area').innerHTML = '';
@@ -131,8 +283,7 @@ function signup(event) {
     }
     else
         document.getElementById('signupConfirmPassword').classList.remove('is-invalid');
-
-    const url = 'https://ft-transcendence.com/api/auth/signup/';
+    const url = '/api/auth/signup/';
     fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -146,12 +297,12 @@ function signup(event) {
         }
     }).then(response => {
         if (response.status === 400) {
-            //TODO: check if username or email is already taken
+            //TODO: make message more generic
             document.getElementById('signupUsername').classList.add('is-invalid');
             console.warn(response);
             return;
         }
-        else if (response.status === 201) {
+        else if (response.status === 201 || response.status === 200) {
             return response.json();
         }
         else {
@@ -159,7 +310,57 @@ function signup(event) {
         }
     }).then(data => {
         if (data !== undefined) {
-            const alertPlaceholder = document.getElementById('signupSuccessAlert');
+            showOTPModal();
+        }
+    }).catch(error => {
+        let modal = new bootstrap.Modal(document.getElementById('signupFailModal'));
+        modal.show();
+        translateAll();
+        //log error
+        console.error(error);
+    });
+}
+
+function showOTPModal() {
+    let modal = new bootstrap.Modal(document.getElementById('signupSuccessModal'));
+    modal.show();
+    document.getElementById('signupOTP').focus();
+}
+
+//Confirm the OTP
+async function confirmSignup() {
+    let input = document.getElementById('signupOTP');
+    let otp = input?.value;
+    if (otp === '' || otp == undefined) {
+        input.classList.add('is-invalid');
+        return;
+    }
+    input.classList.remove('is-invalid');
+    const url = '/api/auth/check_otp/';
+    await fetch(url, {
+        method: 'POST',
+        body: JSON.stringify({
+            otp: otp,
+            purpose: 'signup'
+        }),
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        }
+    }).then(response => {
+        if (response.status === 201) {
+            let r = response.json();
+            return r;
+        }
+        else {
+            return null;
+        }
+    }).then(data => {
+        if (data !== null) {
+            let modelElm = document.getElementById('signupSuccessModal');
+            let modal = bootstrap.Modal.getInstance(modelElm);
+            input.classList.remove('is-invalid');
+            input.value = '';
+            modal.hide();
             const appendAlert = (message, type) => {
                 const wrapper = document.createElement('div')
                 wrapper.innerHTML = [
@@ -168,20 +369,20 @@ function signup(event) {
                     '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
                     '</div>'
                 ].join('')
-
+                const alertPlaceholder = document.getElementById('signupSuccessAlert');
                 alertPlaceholder.append(wrapper)
             }
             appendAlert(i18next.t('login.accountCreated'), 'success');
-            email.value = '';
-            username.value = '';
-            password.value = '';
-            confirmPassword.value = '';
+        }
+        else {
+            let input = document.getElementById('signupOTP');
+            input.classList.add('is-invalid');
         }
     }).catch(error => {
         let modal = new bootstrap.Modal(document.getElementById('signupFailModal'));
         modal.show();
-        translateAll();
         //log error
+        console.error(error);
     });
 }
 
@@ -191,7 +392,7 @@ async function getUserData() {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/`;
+    const url = `/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -216,7 +417,7 @@ async function getUserData() {
 //Get the user ID from the access token
 async function getUserID() {
     try {
-        if (sessionStorage.getItem('jwt') === null) 
+        if (sessionStorage.getItem('jwt') === null)
             await refreshLogin();
         const payload = sessionStorage.getItem('jwt').split('.')[1];
         return JSON.parse(atob(payload))?.user_id;
@@ -230,7 +431,7 @@ async function getUserID() {
 async function refreshLogin() {
     if (sessionStorage.getItem('refresh') !== null) {
         const refreshToken = sessionStorage.getItem('refresh');
-        const url = 'https://ft-transcendence.com/api/auth/token/refresh/';
+        const url = '/api/auth/token/refresh/';
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -256,6 +457,7 @@ async function refreshLogin() {
                 return getUserData();
             }
             else {
+                clearSession();
                 return;
             }
         });
@@ -264,8 +466,9 @@ async function refreshLogin() {
     return null;
 }
 
-async function verifyRefreshToken(refresh){
-    const url = 'https://ft-transcendence.com/api/auth/token/refresh/';
+//Verify the refresh token
+async function verifyRefreshToken(refresh) {
+    const url = '/api/auth/token/refresh/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -281,11 +484,12 @@ async function verifyRefreshToken(refresh){
     });
 }
 
+//Add a friend
 async function addFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/invite_friend/`;
+    const url = `/api/users/${userID}/invite_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -303,8 +507,9 @@ async function addFriendAsync(friendName) {
     return response;
 }
 
+//Get a user by ID
 async function getUserByID(userID) {
-    const url = `https://ft-transcendence.com/api/users/${userID}/`;
+    const url = `/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -321,11 +526,12 @@ async function getUserByID(userID) {
     return data;
 }
 
+//Accept a friend request
 async function acceptFriendRequestAsync(friendID) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/accept_friend/`;
+    const url = `/api/users/${userID}/accept_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -343,11 +549,12 @@ async function acceptFriendRequestAsync(friendID) {
     return response;
 }
 
+//Remove a friend
 async function removeFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/remove_friend/`;
+    const url = `/api/users/${userID}/remove_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -365,11 +572,12 @@ async function removeFriendAsync(friendName) {
     return response;
 }
 
+//Reject a friend request
 async function rejectFriendRequestAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/remove_friend_request/`;
+    const url = `/api/users/${userID}/remove_friend_request/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -387,11 +595,12 @@ async function rejectFriendRequestAsync(friendName) {
     return response;
 }
 
+//Block a user
 async function blockUserAsync(userName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `https://ft-transcendence.com/api/users/${userID}/block/`;
+    const url = `/api/users/${userID}/block/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -409,8 +618,9 @@ async function blockUserAsync(userName) {
     return response;
 }
 
+//Get the user avatar
 async function getUserAvatar(userID) {
-    let url = `https://ft-transcendence.com/api/users/${userID}/get_avatar/`;
+    let url = `/api/users/${userID}/get_avatar/`;
     try {
         const response = await fetch(url, {
             method: 'GET',
