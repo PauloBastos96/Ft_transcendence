@@ -1,4 +1,5 @@
 # TODO: re-make all to include elk etc
+#in case of emergency: sudo systemctl restart docker.socket docker.service
 
 all:
 	sudo sysctl -w vm.max_map_count=262144
@@ -10,7 +11,7 @@ up:
 	docker compose -f srcs/docker-compose.yml up --detach
 
 elk: all
-	docker compose -f srcs/docker-compose.yml up --build -d setup es01 kibana logstash01
+	docker compose -f srcs/docker-compose.yml up --build setup es01 kibana logstash01
 
 stop:
 	docker compose -f srcs/docker-compose.yml stop
