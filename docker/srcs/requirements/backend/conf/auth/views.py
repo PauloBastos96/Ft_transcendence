@@ -18,6 +18,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 import logging
 from django.core.cache import cache
+from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +31,7 @@ class LoginView(generics.GenericAPIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
-
+    
         if user.is_active is False:
             logger.warning(f"Rejected login attempt for inactive user: {user.username}")
             return Response({"error": "User is deactivated."}, status=status.HTTP_400_BAD_REQUEST)
