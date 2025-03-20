@@ -25,6 +25,12 @@ function loadAccountSettings() {
         contentDiv.innerHTML = this.responseText;
         document.getElementById('InputUsername')?.setAttribute('placeholder', _user?.username);
         document.getElementById('InputEmail')?.setAttribute('placeholder', _user?.email);
+        if (_user.intra42_id !== null) {
+            document.getElementById('InputUsername').setAttribute('disabled', true);
+            document.getElementById('InputEmail').setAttribute('disabled', true);
+            document.getElementById('InputUsername').setAttribute('title', i18next.t('settings.intra42Disabled'));
+            document.getElementById('InputEmail').setAttribute('title', i18next.t('settings.intra42Disabled'));
+        }
         var form = document.getElementById('accountDetailsForm');
         form.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -47,7 +53,7 @@ async function updateAccountDetails() {
     }
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    const url = `/api/users/${userId}/edit/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -150,7 +156,7 @@ async function updateAvatar() {
     formData.append('avatar', avatar.files[0]);
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/add_avatar/`;
+    const url = `/api/users/${userId}/add_avatar/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
     xhr.onreadystatechange = function () {
@@ -194,8 +200,20 @@ function loadSecuritySettings() {
             e.preventDefault();
             updateSecurityDetails();
         });
+        if (_user.intra42_id !== null) {
+            document.getElementById('InputCurrentPassword').setAttribute('disabled', true);
+            document.getElementById('InputPassword').setAttribute('disabled', true);
+            document.getElementById('InputPasswordConfirm').setAttribute('disabled', true);
+            document.getElementById('InputCurrentPassword').setAttribute('title', i18next.t('settings.intra42Disabled'));
+            document.getElementById('InputPassword').setAttribute('title', i18next.t('settings.intra42Disabled'));
+            document.getElementById('InputPasswordConfirm').setAttribute('title', i18next.t('settings.intra42Disabled'));
+        }
         translateAll();
         let f2aSwitch = document.getElementById('enable2FA');
+        if (_user.intra42_id !== null) {
+            f2aSwitch.setAttribute('disabled', true);
+            return;
+        }
         f2aSwitch.checked = _user.tfa;
         f2aSwitch.addEventListener('change', function () {
             update2FA(f2aSwitch);
@@ -211,7 +229,7 @@ async function update2FA(f2aSwitch) {
         tfa: tfa
     }
     let userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    const url = `/api/users/${userId}/edit/`;
     let xhr = new XMLHttpRequest();
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -238,7 +256,7 @@ async function updateSecurityDetails() {
         return;
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    const url = `/api/users/${userId}/edit/`;
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -309,23 +327,38 @@ function getUpdatedSecuriyDetails() {
 
 //Show confirmation modal for deleting account
 function deleteAccount() {
-    let modal = new bootstrap.Modal(document.getElementById('deleteAccountModal'));
+    const modalElement = document.getElementById('deleteAccountModal');
+    if (_user.intra42_id !== null) {
+        modalElement.querySelector('#deleteAccountConfirmLabel').innerText = i18next.t('settings.intra42Delete');
+        modalElement.querySelector('#deleteAccountConfirmLabel').parentNode.appendChild(document.createElement('p')).innerText = i18next.t('settings.intra42Delete2');
+        modalElement.querySelector('#inputDelAccountPassword').setAttribute('required', false);
+        modalElement.querySelector('#inputDelAccountPassword').classList.add('d-none');
+    }
+    else
+    {
+        modalElement.querySelector('#deleteAccountConfirmLabel').innerText = i18next.t('settings.deleteAccountConfirm');
+        modalElement.querySelector('#inputDelAccountPassword').setAttribute('placeholder', i18next.t('common.password'));
+    }
+    let modal = new bootstrap.Modal(modalElement);
     modal.show();
     translateAll();
-    document.getElementById('inputDelAccountPassword').setAttribute('placeholder', i18next.t('common.password'));
 }
 
 //Delete account
 async function deleteAccountConfirmed() {
     let password = document.getElementById('inputDelAccountPassword').value;
-    if (password === '') {
+    if (password === '' && _user.intra42_id === null) {
         document.getElementById('inputDelAccountPassword').classList.add('is-invalid');
         return;
     }
     else
         document.getElementById('inputDelAccountPassword').classList.remove('is-invalid');
 
-    let isPasswordCorrect = await confirmPassword(password);
+    if (_user.intra42_id === null)
+        var isPasswordCorrect = await confirmPassword(password);
+    else
+        var isPasswordCorrect = true;
+
     if (!isPasswordCorrect) {
         document.getElementById('inputDelAccountPassword').classList.add('is-invalid');
         return;
@@ -333,7 +366,7 @@ async function deleteAccountConfirmed() {
     else {
         let xhr = new XMLHttpRequest();
         const userId = await getUserID();
-        const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+        const url = `/api/users/${userId}/edit/`;
         xhr.open('DELETE', url, true);
         xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
         xhr.onreadystatechange = function () {
@@ -357,7 +390,7 @@ async function deleteAccountConfirmed() {
 async function confirmPassword(password) {
     let xhr = new XMLHttpRequest();
     const userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    const url = `/api/users/${userId}/edit/`;
     xhr.open('PUT', url, false);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', `Bearer ${sessionStorage.getItem('jwt')}`);
@@ -412,7 +445,7 @@ async function updateUserLanguage() {
         idiom: _lang
     }
     let userId = await getUserID();
-    const url = `https://192.168.20.111/api/users/${userId}/edit/`;
+    const url = `/api/users/${userId}/edit/`;
     let xhr = new XMLHttpRequest();
     xhr.open('PUT', url, true);
     xhr.setRequestHeader('Content-Type', 'application/json');

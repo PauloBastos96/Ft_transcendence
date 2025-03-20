@@ -8,7 +8,7 @@ async function login(event) {
         localStorage.setItem('keepLoggedIn', true);
     else
         localStorage.removeItem('keepLoggedIn');
-    const url = 'https://192.168.20.111/api/auth/login/';
+    const url = '/api/auth/login/';
     document.getElementById('loginLoading').classList.toggle('d-none');
     await fetch(url, {
         method: 'POST',
@@ -27,6 +27,10 @@ async function login(event) {
         }
         else if (response.status === 502) {
             throw new Error('Server error');
+        }
+        else if (response.json().then(data => data?.error === 'User already logged in.')) {
+            alert(i18next.t('login.alreadyLoggedIn'));
+            return null;
         }
         else {
             document.getElementById('loginUsername').classList.add('is-invalid');
@@ -50,6 +54,7 @@ async function login(event) {
             if (keepLoggedIn)
                 localStorage.setItem('refresh', data.refresh);
             loggedIn = true;
+            window.localStorage.setItem('loggedIn', loggedIn);
             document.getElementById('loginLoading').classList.toggle('d-none');
         }
     }).catch(error => {
@@ -62,6 +67,80 @@ async function login(event) {
 
     postLogin();
 }
+
+// INIT TEST LOGIN WITH 42
+
+//Handle the OAuth return
+async function handleOAuthReturn() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const access = urlParams.get('access');
+    const refresh = urlParams.get('refresh');
+    
+    if (access && refresh) {
+        sessionStorage.setItem('jwt', access);
+        sessionStorage.setItem('refresh', refresh);
+        
+        if (localStorage.getItem('keepLoggedIn') === 'true') {
+            localStorage.setItem('refresh', refresh);
+        }
+        loggedIn = true;
+        window.localStorage.setItem('loggedIn', loggedIn);
+        
+        history.replaceState({}, document.title, window.location.pathname);
+        
+        postLogin();
+    }
+    else{
+        const error = urlParams.get('error');
+        await i18next.use(i18nextHttpBackend).init({
+            lng: _lang,
+            fallbackLng: 'EN',
+            debug: true,
+            backend: {
+                loadPath: '/src/locales/{{lng}}/{{ns}}.json'
+            }
+        });
+        await i18next.changeLanguage(_lang);
+        if (error) {
+            window.location.href = '/';
+            window.localStorage.setItem('loggedIn', false);
+            window.localStorage.removeItem('jwt');
+            window.localStorage.removeItem('refresh');
+            window.sessionStorage.setItem('42error', error);
+        }
+    }
+}
+
+async function loginWith42(){
+    window.location.href = '/api/oauth/login';
+}
+
+// On page load
+document.addEventListener('DOMContentLoaded', async function() {
+    
+    loggedIn = window.localStorage.getItem('loggedIn') === 'true';
+    if (!loggedIn)
+        await handleOAuthReturn();
+    else
+        return;
+
+    // Check for a stored refresh token (previous login)
+    if (!loggedIn && (localStorage.getItem('refresh') || sessionStorage.getItem('refresh'))) {
+        const storedRefresh = localStorage.getItem('refresh') || sessionStorage.getItem('refresh');
+        sessionStorage.setItem('refresh', storedRefresh);
+        
+        // Attempt to renew the token using the refresh token
+        refreshLogin().then(() => {
+            if (sessionStorage.getItem('jwt')) {
+                loggedIn = true;
+                window.localStorage.setItem('loggedIn', loggedIn);
+                postLogin();
+            }
+        });
+    }
+});
+
+// END TEST LOGIN WITH 42
 
 //Initialize main page after login
 async function postLogin(){
@@ -90,7 +169,7 @@ async function confirmF2A() {
         return;
     }
     input.classList.remove('is-invalid');
-    const url = 'https://192.168.20.111/api/auth/check_otp/';
+    const url = '/api/auth/check_otp/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -121,6 +200,7 @@ async function confirmF2A() {
             if (keepLoggedIn)
                 localStorage.setItem('refresh', data.refresh);
             loggedIn = true;
+            window.localStorage.setItem('loggedIn', loggedIn);
             document.getElementById('loginLoading').classList.toggle('d-none');
 
             postLogin();
@@ -139,7 +219,7 @@ async function confirmF2A() {
 
 //Logout the user
 async function logout() {
-    const url = 'http://192.168.20.111/api/auth/logout/';
+    const url = '/api/auth/logout/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -179,6 +259,7 @@ function clearSession() {
     sessionStorage.removeItem('refresh');
     localStorage.removeItem('refresh');
     loggedIn = false;
+    window.localStorage.setItem('loggedIn', loggedIn);
     _user = null;
     document.getElementById('header').style.display = 'none';
     document.getElementById('notification-area').innerHTML = '';
@@ -202,7 +283,7 @@ function signup(event) {
     }
     else
         document.getElementById('signupConfirmPassword').classList.remove('is-invalid');
-    const url = 'https://192.168.20.111/api/auth/signup/';
+    const url = '/api/auth/signup/';
     fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -216,7 +297,7 @@ function signup(event) {
         }
     }).then(response => {
         if (response.status === 400) {
-            //TODO: check if username or email is already taken
+            //TODO: make message more generic
             document.getElementById('signupUsername').classList.add('is-invalid');
             console.warn(response);
             return;
@@ -255,7 +336,7 @@ async function confirmSignup() {
         return;
     }
     input.classList.remove('is-invalid');
-    const url = 'https://192.168.20.111/api/auth/check_otp/';
+    const url = '/api/auth/check_otp/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -311,7 +392,7 @@ async function getUserData() {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/`;
+    const url = `/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -350,7 +431,7 @@ async function getUserID() {
 async function refreshLogin() {
     if (sessionStorage.getItem('refresh') !== null) {
         const refreshToken = sessionStorage.getItem('refresh');
-        const url = 'http://192.168.20.111/api/auth/token/refresh/';
+        const url = '/api/auth/token/refresh/';
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -387,7 +468,7 @@ async function refreshLogin() {
 
 //Verify the refresh token
 async function verifyRefreshToken(refresh) {
-    const url = 'https://192.168.20.111/api/auth/token/refresh/';
+    const url = '/api/auth/token/refresh/';
     await fetch(url, {
         method: 'POST',
         body: JSON.stringify({
@@ -408,7 +489,7 @@ async function addFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/invite_friend/`;
+    const url = `/api/users/${userID}/invite_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -428,7 +509,7 @@ async function addFriendAsync(friendName) {
 
 //Get a user by ID
 async function getUserByID(userID) {
-    const url = `http://192.168.20.111/api/users/${userID}/`;
+    const url = `/api/users/${userID}/`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -450,7 +531,7 @@ async function acceptFriendRequestAsync(friendID) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/accept_friend/`;
+    const url = `/api/users/${userID}/accept_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -473,7 +554,7 @@ async function removeFriendAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/remove_friend/`;
+    const url = `/api/users/${userID}/remove_friend/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -496,7 +577,7 @@ async function rejectFriendRequestAsync(friendName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/remove_friend_request/`;
+    const url = `/api/users/${userID}/remove_friend_request/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -519,7 +600,7 @@ async function blockUserAsync(userName) {
     const userID = await getUserID();
     if (userID === null)
         return;
-    const url = `http://192.168.20.111/api/users/${userID}/block/`;
+    const url = `/api/users/${userID}/block/`;
     const response = await fetch(url, {
         method: 'PUT',
         body: JSON.stringify({
@@ -539,7 +620,7 @@ async function blockUserAsync(userName) {
 
 //Get the user avatar
 async function getUserAvatar(userID) {
-    let url = `http://192.168.20.111/api/users/${userID}/get_avatar/`;
+    let url = `/api/users/${userID}/get_avatar/`;
     try {
         const response = await fetch(url, {
             method: 'GET',

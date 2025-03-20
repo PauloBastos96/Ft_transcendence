@@ -17,6 +17,7 @@ from users.models import User
 from django.core.mail import send_mail
 from django.conf import settings
 import logging
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,15 @@ class LoginView(generics.GenericAPIView):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
+
+        if user.is_active is False:
+            logger.warning(f"Rejected login attempt for inactive user: {user.username}")
+            return Response({"error": "User is deactivated."}, status=status.HTTP_400_BAD_REQUEST)
+
         if user is not None and user.is_active:
+            if cache.get(f'user_online_{user.id}'):
+                return Response({"error": "User already logged in."}, status=status.HTTP_400_BAD_REQUEST)
+            
             if user.tfa:
                 otp = str(random.randint(100000, 999999))
                 user.otp = hashlib.sha256(otp.encode()).hexdigest()
@@ -49,6 +58,9 @@ class LoginView(generics.GenericAPIView):
                     return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({"detail": "Email sent."}, status=status.HTTP_200_OK)
             login(request, user)
+            cache.set(f'user_online_{user.id}', True, timeout=3600)
+            user.is_online = True
+            user.save()
             refresh = RefreshToken.for_user(user)
             return Response(
                 {
@@ -62,12 +74,14 @@ class LoginView(generics.GenericAPIView):
 class LogoutView(APIView):
     def post(self, request):
         user = request.user
+        cache.delete(f'user_online_{user.id}')
         user.is_online = False
         user.save()
         logout(request)
         request.session.flush()
         response = Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
         response.delete_cookie("sessionid")
+        response.delete_cookie("csrftoken")
         return response
 
 
@@ -162,6 +176,9 @@ class CheckOTPView(generics.GenericAPIView):
                 return Response({"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
                 
             if hashlib.sha256(otp.encode()).hexdigest() == user.otp and user.otp_expiration > timezone.now():
+                cache.set(f'user_online_{user.id}', True, timeout=3600)
+                user.is_online = True
+                user.save()
                 refresh = RefreshToken.for_user(user)
                 login(request, user)
                 return Response(
