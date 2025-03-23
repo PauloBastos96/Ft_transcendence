@@ -99,6 +99,7 @@ AUTHENTICATION_BACKENDS = [
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -107,12 +108,21 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'users',
+    'channels',
     'games',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'oauth.apps.OauthConfig',
 ]
+
+ASGI_APPLICATION = "backend.asgi.application"
+
+CHANNEL_LAYERS = {
+	'default': {
+		'BACKEND': 'channels.layers.InMemoryChannelLayer',
+	},
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
