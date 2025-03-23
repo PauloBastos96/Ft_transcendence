@@ -183,11 +183,13 @@ function updateHeaderButton(page) {
     let overviewButton = document.getElementById('header-overview');
     let pongButton = document.getElementById('header-pong');
     let game2Button = document.getElementById('header-game2');
+	let tournamentsBtn = document.getElementById('header-tournaments');
     let livechatButton = document.getElementById('header-livechat');
     let buttons = {
         'overview': overviewButton,
         'pong': pongButton,
         'game2': game2Button,
+		'tournaments': tournamentsBtn,
         'livechat': livechatButton
     };
     for (let key in buttons) {
