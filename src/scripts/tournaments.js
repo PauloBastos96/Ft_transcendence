@@ -56,6 +56,8 @@ function checkFinal() {
 	TourBtn.onclick = function (e) {
 		console.log('Tournament Started!');
 		console.log(TourName.value.trim());
+		// i made REQUIRED the tournament name cuz im thinking of make it the name to connect all the players in the socket
+		// dont forget to check if the tournament name already exists, is being used etc...
 		if (TourName.value.trim() == '') return alert("Please add a name to the tournament before starting it!");
 		startTournament(TourName.value.trim());
 	}
