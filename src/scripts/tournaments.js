@@ -9,8 +9,10 @@ function startTournament(tourName) {
 
 	let ws = new WebSocket('wss://' + window.location.host + '/ws/chat/' + tourName + '/');
 
-	ws.onopen = function () {
+	ws.onopen = async function () {
 		console.log('WebSocket connection established.');
+		const userInfo = await getUserData();
+		window.user = userInfo;
 		ws.send(JSON.stringify({
 			'typeContent': 'log',
 			'content': ` Joined the WS/Tournament`
