@@ -13,9 +13,10 @@ function startTournament(tourName) {
 		console.log('WebSocket connection established.');
 		const userInfo = await getUserData();
 		window.user = userInfo;
+		const user = window.user;
 		ws.send(JSON.stringify({
 			'typeContent': 'log',
-			'content': ` Joined the WS/Tournament`
+			'content': `${user.username} Joined the WS/Tournament`
 		}));
 	};
 
