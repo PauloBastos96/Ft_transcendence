@@ -13,6 +13,10 @@
 		const TourName = document.getElementById('tournamentName');
 		if (TourName.value.trim() == '') return alert("Please add a name to the tournament before starting it!");
 
+		// make some logic to check if this tournament name is available
+
+		// make the game request to the players to join the websocket (tournament/1v1 game)
+
 		// Show the canvas and winner popup
 		document.getElementById('playersInfos').style.display = 'none'; // hide players infos and just show the game
 		document.getElementById('pong').style.display = 'block';
