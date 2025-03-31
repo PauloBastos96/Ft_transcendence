@@ -14,6 +14,8 @@
 		if (TourName.value.trim() == '') return alert("Please add a name to the tournament before starting it!");
 
 		// make some logic to check if this tournament name is available
+		// since this is just a normal 1v1 maybe the tournament name can the the 2 ids of the users like 
+		// (ws/chat/player1ID:player2ID) player1 being the player that created the room and is inviting the other one
 
 		// make the game request to the players to join the websocket (tournament/1v1 game)
 
