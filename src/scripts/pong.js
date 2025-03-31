@@ -196,5 +196,13 @@
 		if (e.key === 'ArrowDown') player2.down = false;
 	});
 
+	const multiBtn = document.getElementById('PongMultiBtn'); // Assuming you're using getElementById
+	if (multiBtn) {
+		multiBtn.addEventListener('click', () => {
+			console.log("multi pressed!");
+			changeContent('pongMulti', 0);
+		});
+	}
+
 	gameLoop();
 })();
