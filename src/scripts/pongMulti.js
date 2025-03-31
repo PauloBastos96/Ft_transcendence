@@ -1,5 +1,5 @@
 (function () {
-	document.getElementById('initTournamentBtn').addEventListener('click', function () {
+	document.getElementById('initTournamentBtn').addEventListener('click', async function () {
 
 		// check if all the input fields for the users are filled (later check for actual user names and wait until they accepted before starting the tournament)
 		// maybe input the users and press start tournament and everyone has 10 sec to accept the tournament invite
@@ -17,15 +17,47 @@
 		// since this is just a normal 1v1 maybe the tournament name can the the 2 ids of the users like 
 		// (ws/chat/player1ID:player2ID) player1 being the player that created the room and is inviting the other one
 
+
+		// Show loading indicator or some feedback that we're waiting for players
+		// Add a waiting indicator to the UI
+		const waitingElement = document.createElement('div');
+		waitingElement.id = 'waitingIndicator';
+		waitingElement.innerHTML = `<p>Waiting for ${player2.value.trim()} to join... (10s)</p>`;
+		document.body.appendChild(waitingElement);
+		//document.getElementById('waitingForPlayers').style.display = 'block';
 		// make the game request to the players to join the websocket (tournament/1v1 game)
+		try {
+			// Wait for both players to connect
+			// Wait for the other player to connect
+			const connection = await waitForPlayerConnection(
+				player2.value.trim(),
+				`${player1.value.trim()}:${player2.value.trim()}` // tournament name
+			);
 
-		// Show the canvas and winner popup
-		document.getElementById('playersInfos').style.display = 'none'; // hide players infos and just show the game
-		document.getElementById('pong').style.display = 'block';
-		document.getElementById('winnerPopup').style.display = 'none'; // Keep it hidden until needed, i show it later during the game
+			// If we get here, the other player connected successfully
+			if (waitingElement) waitingElement.remove();
 
-		// Start the Pong Game
-		game();
+			// Store the websocket for game communication
+			window.gameWebSocket = connection.websocket;
+			//await waitForPlayerConnection(player2.value.trim());
+
+			// If we get here, the other player connected successfully
+			document.getElementById('waitingForPlayers').style.display = 'none';
+
+			// Show the canvas and proceed with the game
+			document.getElementById('playersInfos').style.display = 'none';
+			document.getElementById('pong').style.display = 'block';
+			document.getElementById('winnerPopup').style.display = 'none';
+
+			// Start the Pong Game
+			game();
+		} catch (error) {
+			// Handle the case where a player didn't connect in time
+			// Remove the waiting indicator
+			if (waitingElement) waitingElement.remove();
+			console.error(error);
+			changeContent("pongMulti", 0);
+		}
 	});
 
 })();
@@ -230,3 +262,67 @@ function game() {
 
 	gameLoop();
 };
+
+function waitForPlayerConnection(playerName, tourName, timeoutSeconds = 10) {
+	return new Promise((resolve, reject) => {
+		// Create WebSocket connection using your pattern
+		let ws = new WebSocket('wss://' + window.location.host + '/ws/chat/' + tourName + '/');
+
+		// Set up a timer for the timeout
+		const timeoutId = setTimeout(() => {
+			// Close the websocket connection if it's still open
+			if (ws.readyState === WebSocket.OPEN) {
+				ws.close();
+			}
+
+			// Show an alert that the player didn't connect in time
+			alert(`${playerName} didn't accept the game invitation within ${timeoutSeconds} seconds.`);
+
+			// Reject the promise
+			reject(new Error(`${playerName} connection timeout`));
+		}, timeoutSeconds * 1000);
+
+		// Handler for when the WebSocket connection is established
+		ws.onopen = function (e) {
+			console.log("WebSocket connection established for tournament: " + tourName);
+
+			// Send a message to notify the server that we're waiting for a specific player
+			ws.send(JSON.stringify({
+				'type': 'waiting_for_player',
+				'player_name': playerName
+			}));
+		};
+
+		// Handler for WebSocket messages
+		ws.onmessage = function (e) {
+			const data = JSON.parse(e.data);
+
+			// Check if this message indicates the player we're waiting for has connected
+			if (data.type === 'player_joined' && data.player_name === playerName) {
+				// Clear the timeout since the player connected
+				clearTimeout(timeoutId);
+
+				// Resolve the promise with the connected player data
+				resolve({
+					playerName: data.player_name,
+					websocket: ws
+				});
+			}
+		};
+
+		// Handler for WebSocket errors
+		ws.onerror = function (e) {
+			clearTimeout(timeoutId);
+			reject(new Error("WebSocket connection error"));
+		};
+
+		// Handler for WebSocket connection close
+		ws.onclose = function (e) {
+			// Only reject if we haven't already resolved or rejected
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+				reject(new Error("WebSocket connection closed unexpectedly"));
+			}
+		};
+	});
+}
