@@ -33,6 +33,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
 			case "message":
 				await self.sendAll(typeContent, content, flush=True);
 			case "waiting_for_player":
+				# after this make it check if bought joined then start the function to start the game
+				# as well as some kind of infinite loop to send all the game data to the 2 users/players
 				print(f"WS waiting_for_player ", content, flush=True);
 				#await self.sendAll(typeContent, content);
 			case _:
