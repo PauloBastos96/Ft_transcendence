@@ -26,7 +26,7 @@ application = ProtocolTypeRouter(
 		"http": django_asgi_app,
 		"websocket": AllowedHostsOriginValidator(
 			AuthMiddlewareStack(URLRouter([
-				re_path(r"ws/chat/(?P<room_name>[\w_]+)/$", ChatConsumer.as_asgi())
+				re_path(r"ws/chat/(?P<room_name>[\w_-]+)/$", ChatConsumer.as_asgi())
 			]))
 		),
 	}
