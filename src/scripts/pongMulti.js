@@ -9,7 +9,7 @@
 		// maybe input the users and press start tournament and everyone has 10 sec to accept the tournament invite
 		// im using tournament but the same applies for here in multiplayer
 		const player2 = document.getElementById('player2');
-		if (player1.value.trim() != '') window.user.tourUsername = player1.value.trim();
+		window.user.tourUsername = player1.value.trim();
 		if (player2.value.trim() == '') return alert("Player2 name is missing!");
 		if (player2.value.trim() === player1.value.trim() ) return alert("You cannot invite yourself to play!");
 		console.log(`Tournament Uername`, window.user.tourUsername);
