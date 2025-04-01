@@ -29,11 +29,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		print("content:", content, typeContent, flush=True)
 		match typeContent:
 			case "log":
-				print(f'WS Consumers Logging:', content);
+				print(f'WS Consumers Logging:', content, flush=True);
 			case "message":
-				await self.sendAll(typeContent, content);
+				await self.sendAll(typeContent, content, flush=True);
 			case "waiting_for_player":
-				print(f"WS waiting_for_player ", content);
+				print(f"WS waiting_for_player ", content, flush=True);
 				#await self.sendAll(typeContent, content);
 			case _:
 				print("WS Consumers something else.")
