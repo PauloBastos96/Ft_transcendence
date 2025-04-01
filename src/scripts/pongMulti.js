@@ -11,6 +11,7 @@
 		const player2 = document.getElementById('player2');
 		if (player1.value.trim() != '') window.user.tourUsername = player1.value.trim();
 		if (player2.value.trim() == '') return alert("Player2 name is missing!");
+		if (player2.value.trim() === player1.value.trim() ) return alert("You cannot invite yourself to play!");
 		console.log(`Tournament Uername`, window.user.tourUsername);
 
 		// gets all users to check if the player 2 exists or not
