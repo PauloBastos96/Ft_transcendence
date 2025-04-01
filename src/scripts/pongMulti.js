@@ -13,6 +13,19 @@
 		if (player2.value.trim() == '') return alert("Player2 name is missing!");
 		console.log(`Tournament Uername`, window.user.tourUsername);
 
+		// gets all users to check if the player 2 exists or not
+		const resJson = await fetch("/api/users", {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json; charset=utf-8',
+				Authorization: `Bearer ${sessionStorage.getItem('jwt')}`
+			}
+		}).catch(console.error);
+		const res = await resJson.json();
+		const exists = res.find(user => user.username === player2.value.trim()) || null;
+		if (!exists) return alert(`There is no user with the name: ${player2.value.trim()}`);
+
+		console.log(res, exists, exists.id);
 		// this can only be made into tournament here we will use the playersIDs to connect them
 		//const TourName = document.getElementById('tournamentName');
 		//if (TourName.value.trim() == '') return alert("Please add a name to the tournament before starting it!");
@@ -36,7 +49,7 @@
 			// Wait for the other player to connect
 			const connection = await waitForPlayerConnection(
 				player2.value.trim(),
-				`${window.user.id}:${player2.value.trim()}` // tournament name
+				`${window.user.id}_${exists.id}` // tournament name
 			);
 
 			// If we get here, the other player connected successfully
@@ -92,8 +105,8 @@ function waitForPlayerConnection(playerName, tourName, timeoutSeconds = 10) {
 
 			// Send a message to notify the server that we're waiting for a specific player
 			ws.send(JSON.stringify({
-				'type': 'waiting_for_player',
-				'player_name': playerName
+				'typeContent': 'waiting_for_player',
+				'content': playerName
 			}));
 		};
 
@@ -123,6 +136,7 @@ function waitForPlayerConnection(playerName, tourName, timeoutSeconds = 10) {
 		// Handler for WebSocket connection close
 		ws.onclose = function (e) {
 			// Only reject if we haven't already resolved or rejected
+			console.log("WebSocket closed unexpectedly:", e.code, e.reason);
 			if (timeoutId) {
 				clearTimeout(timeoutId);
 				reject(new Error("WebSocket connection closed unexpectedly"));
