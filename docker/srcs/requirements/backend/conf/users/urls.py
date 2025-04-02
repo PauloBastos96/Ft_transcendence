@@ -10,7 +10,7 @@ from .views import (
     RemoveFriendRequestView,
     BlockUserView,
     UnblockUserView,
-    InviteUserView
+    InviteUserView,
     AddAvatarView,
     GetImageView,
 )
