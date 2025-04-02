@@ -29,13 +29,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
 		print("content:", content, typeContent, flush=True)
 		match typeContent:
 			case "log":
-				print(f'WS Consumers Logging:', content, flush=True);
+				print(f'WS Consumers Logging:', content, flush=True)
 			case "message":
-				await self.sendAll(typeContent, content, flush=True);
+				await self.sendAll(typeContent, content, flush=True)
 			case "waiting_for_player":
-				# after this make it check if bought joined then start the function to start the game
+				# after this make it check if both joined then start the function to start the game
 				# as well as some kind of infinite loop to send all the game data to the 2 users/players
-				print(f"WS waiting_for_player ", content, flush=True);
+				print(f"WS waiting_for_player ", content, flush=True)
 				#await self.sendAll(typeContent, content);
 			case _:
 				print("WS Consumers something else.")
