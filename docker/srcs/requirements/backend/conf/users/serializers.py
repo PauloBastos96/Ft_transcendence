@@ -249,3 +249,25 @@ class UnblockUserSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("User not found.")
         return instance
+
+# idk what this does but ig its something like this idk
+class InviteUserSerializer(serializers.ModelSerializer):
+    add_friend = serializers.CharField(max_length=126, write_only=True)
+
+    class Meta:
+        model = User
+        fields = ("id", "username", "friends", "friend_requests", "add_friend")
+        extra_kwargs = {
+            "username": {"read_only": True},
+            "friends": {"read_only": True},
+            "friend_requests": {"read_only": True},
+        }
+
+    def update(self, instance, validated_data):
+        friend = get_object_or_404(User, username=validated_data.get("add_friend"))
+
+        if friend != instance:
+            if friend not in instance.friends.all() and friend not in instance.friend_requests.all():
+                friend.friend_requests.add(instance)
+                friend.save()
+        return instance

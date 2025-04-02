@@ -11,7 +11,7 @@
 		const player2 = document.getElementById('player2');
 		window.user.tourUsername = player1.value.trim();
 		if (player2.value.trim() == '') return alert("Player2 name is missing!");
-		if (player2.value.trim() === player1.value.trim() ) return alert("You cannot invite yourself to play!");
+		if (player2.value.trim() === player1.value.trim()) return alert("You cannot invite yourself to play!");
 		console.log(`Tournament Uername`, window.user.tourUsername);
 
 		// gets all users to check if the player 2 exists or not
@@ -346,3 +346,26 @@ function game() {
 
 	gameLoop();
 };
+
+// this does not work and is not complete yet
+// Invite user to the game
+async function inviteUser(friendName) {
+	const userID = window.user.id;
+	if (userID === null) return;
+	const url = `/api/users/${userID}/game_invite/`;
+	const response = await fetch(url, {
+		method: 'PUT',
+		body: JSON.stringify({
+			add_friend: friendName
+		}),
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+			Authorization: `Bearer ${sessionStorage.getItem('jwt')}`
+		}
+	});
+	if (response.status === 401) {
+		await refreshLogin();
+		return await addFriendAsync(friendName);
+	}
+	return response;
+}

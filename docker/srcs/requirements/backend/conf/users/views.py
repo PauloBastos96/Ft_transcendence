@@ -9,6 +9,7 @@ from .serializers import (
     RemoveFriendRequestSerializer,
     BlockUserSerializer,
     UnblockUserSerializer,
+    InviteUserSerializer,
     AddAvatarSerializer,
 )
 from rest_framework import generics
@@ -131,6 +132,12 @@ class UnblockUserView(generics.RetrieveUpdateAPIView):
 
     queryset = User.objects.all()
     serializer_class = UnblockUserSerializer
+
+class InviteUserView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsSelf]
+
+    queryset = User.objects.all()
+    serializer_class = InviteUserSerializer
 
 class GetImageView(APIView):
     def get(self, request, pk):

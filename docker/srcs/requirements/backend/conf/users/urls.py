@@ -10,6 +10,7 @@ from .views import (
     RemoveFriendRequestView,
     BlockUserView,
     UnblockUserView,
+    InviteUserView
     AddAvatarView,
     GetImageView,
 )
@@ -23,6 +24,7 @@ urlpatterns = [
     path("<uuid:pk>/remove_friend_request/", RemoveFriendRequestView.as_view(), name="remove_friend_request"),
     path("<uuid:pk>/block/", BlockUserView.as_view(), name="block_user"),
     path("<uuid:pk>/unblock/", UnblockUserView.as_view(), name="unblock_user"),
+    path("<uuid:pk>/inv_user/", InviteUserView.as_view(), name="inv_user"),
     path("<uuid:pk>/add_avatar/", AddAvatarView.as_view(), name="add_avatar"),
     path("<uuid:pk>/get_avatar/", GetImageView.as_view(), name="get_avatar"),
     path("<uuid:pk>/", UserDetailsView.as_view(), name="user_details"),
