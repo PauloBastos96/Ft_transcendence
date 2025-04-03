@@ -9,7 +9,6 @@ from .serializers import (
     RemoveFriendRequestSerializer,
     BlockUserSerializer,
     UnblockUserSerializer,
-    InviteUserSerializer,
     AddAvatarSerializer,
     InviteToPongSerializer,
     AcceptPongSerializer,
