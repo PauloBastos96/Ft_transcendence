@@ -11,6 +11,10 @@ from .serializers import (
     UnblockUserSerializer,
     InviteUserSerializer,
     AddAvatarSerializer,
+    InviteToPongSerializer,
+    AcceptPongSerializer,
+    InviteToTTTSerializer,
+    AcceptTTTSerializer,
 )
 from rest_framework import generics
 from rest_framework.views import APIView
@@ -133,11 +137,31 @@ class UnblockUserView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UnblockUserSerializer
 
-class InviteUserView(generics.RetrieveUpdateAPIView):
+class InvitePongView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsSelf]
 
     queryset = User.objects.all()
-    serializer_class = InviteUserSerializer
+    serializer_class = InviteToPongSerializer
+
+
+class AcceptPongView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsSelf]
+
+    queryset = User.objects.all()
+    serializer_class = AcceptPongSerializer
+
+class InviteTTTView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsSelf]
+
+    queryset = User.objects.all()
+    serializer_class = InviteToTTTSerializer
+
+
+class AcceptTTTView(generics.RetrieveUpdateAPIView):
+    permission_classes = [IsSelf]
+
+    queryset = User.objects.all()
+    serializer_class = AcceptTTTSerializer
 
 class GetImageView(APIView):
     def get(self, request, pk):

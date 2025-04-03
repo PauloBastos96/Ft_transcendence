@@ -13,6 +13,10 @@ from .views import (
     InviteUserView,
     AddAvatarView,
     GetImageView,
+    InvitePongView,
+    AcceptPongView,
+    InviteTTTView,
+    AcceptTTTView,
 )
 
 urlpatterns = [
@@ -22,6 +26,10 @@ urlpatterns = [
     path("<uuid:pk>/accept_friend/", AcceptFriendView.as_view(), name="accept_friend"),
     path("<uuid:pk>/remove_friend/", RemoveFriendView.as_view(), name="remove_friend"),
     path("<uuid:pk>/remove_friend_request/", RemoveFriendRequestView.as_view(), name="remove_friend_request"),
+    path("<uuid:pk>/invite_to_pong/", InvitePongView.as_view(), name="invite_pong"),
+    path("<uuid:pk>/accept_pong_invite/", AcceptPongView.as_view(), name="accept_pong"),
+    path("<uuid:pk>/invite_to_ttt/", InviteTTTView.as_view(), name="invite_ttt"),
+    path("<uuid:pk>/accept_ttt_invite/", AcceptTTTView.as_view(), name="accept_ttt"),
     path("<uuid:pk>/block/", BlockUserView.as_view(), name="block_user"),
     path("<uuid:pk>/unblock/", UnblockUserView.as_view(), name="unblock_user"),
     path("<uuid:pk>/inv_user/", InviteUserView.as_view(), name="inv_user"),
