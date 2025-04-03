@@ -34,7 +34,8 @@
         "notifications": "Notifications",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "tournament": "Tournament"
     },
     "notifications":{
         "empty": "No notifications",
@@ -114,5 +115,10 @@
         "blockUserQuestion": "Are you sure you want to block",
         "chatPlaceholder": "Type your message here",
         "send": "Send"
+    },
+    "tournament": {
+        "addPlayers": "Add Participants:",
+        "newTournament": "Create New Tournament",
+        "createTournament": "Create Tournament"
     }
 }

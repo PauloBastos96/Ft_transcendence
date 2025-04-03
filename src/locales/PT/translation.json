@@ -34,7 +34,8 @@
         "notifications": "Notificações",
         "profile": "Perfil",
         "settings": "Definições",
-        "logout": "Sair"
+        "logout": "Sair",
+        "tournament": "Torneio"
     },
     "notifications":{
         "empty": "Sem notificações",
@@ -115,5 +116,10 @@
         "blockUserQuestion": "Tens a certeza que queres bloquear",
         "chatPlaceholder": "Escreve a tua mensagem aqui",
         "send": "Enviar"
+    },
+    "tournament": {
+        "addPlayers": "Adiciona Jogadores:",
+        "newTournament": "Criar Novo Torneio",
+        "createTournament": "Criar Torneio"
     }
 }

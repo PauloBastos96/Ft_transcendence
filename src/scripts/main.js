@@ -171,6 +171,9 @@ function changeContent(page, pushState = true) {
             case 'signup':
                 document.getElementById('signupForm').addEventListener('submit', signup, true);
                 translateAll();
+                break;
+            case 'tournament':
+                initTournament();
             default:
                 break;
         }
