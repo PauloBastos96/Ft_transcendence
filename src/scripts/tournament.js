@@ -65,6 +65,7 @@ function addBubble(username) {
 	const bubble = document.createElement('div');
 
 	bubble.style.backgroundColor = BUBBLE_COLORS[colorIndex];
+	bubble.id = `bubble_${username}`
 	bubble.className = 'bubble';
 	bubble.innerHTML = `<span onclick="removeBubble('${username}')">${username}</span>`;
 	playerBubbles.appendChild(bubble);
@@ -85,10 +86,11 @@ window.createTournament = function() {
 	console.log('players:', players);
 };
 
+// TODO: update player colors after a player is removed
 window.removeBubble = function(username) {
 	players.delete(username);
-	playerBubbles.innerHTML = '';
-	players.forEach(user => addBubble(user));
+	const tmp = document.getElementById(`bubble_${username}`);
+	playerBubbles.removeChild(tmp);
 	updateCreateButton();
 };
 
@@ -96,8 +98,8 @@ window.removeBubble = function(username) {
 
 	* Should the bracket be fully drawn from the beginning or is it ok to just add to it per round?
 
-	* Randomize players into a different set, adding one `null` at the end if the number of players is odd
-		(random so that matchmaking is not determined by the order in which players are added)
+	* Shuffle players into a different set, adding one `null` at the end if the number of players is odd
+		(shuffle so that matchmaking is not determined by the order in which players are added)
 
 	* Pair players into matches
 
