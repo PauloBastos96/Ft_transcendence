@@ -47,7 +47,7 @@ function handleKeyPress(e) {
 				alert('Max players reached(16)');
 			} else if (!players.has(username)) {
 				players.add(username);
-				addBubble(username);
+				playerBubbles.appendChild(newBubble(username));
 				textInput.value = '';
 				updateCreateButton();
 			} else {
@@ -58,17 +58,17 @@ function handleKeyPress(e) {
 	}
 }
 
-// Add player bubble
-function addBubble(username) {
-	// Colors will be in order
-	const colorIndex = (players.size - 1) % (BUBBLE_COLORS.length);
+// Creates and returns a new player bubble element
+function newBubble(username) {
 	const bubble = document.createElement('div');
-
-	bubble.style.backgroundColor = BUBBLE_COLORS[colorIndex];
-	bubble.id = `bubble_${username}`
+	
+	// Colors will be in order
+	bubble.style.backgroundColor = BUBBLE_COLORS[(players.size - 1) % (BUBBLE_COLORS.length)];
 	bubble.className = 'bubble';
-	bubble.innerHTML = `<span onclick="removeBubble('${username}')">${username}</span>`;
-	playerBubbles.appendChild(bubble);
+	bubble.textContent = `${username}`;
+	bubble.onclick = function() { removeBubble(`${username}`) };
+
+	return bubble;
 }
 
 function updateCreateButton() {
@@ -76,25 +76,33 @@ function updateCreateButton() {
 	createButton.disabled = players.size < 3;
 }
 
+// TODO: Actually create a tournament
 window.createTournament = function() {
 	if (players.size < 3) {
 		alert('Please add at least 3 players');
 		return;
 	}
-	const participantList = Array.from(players);
 	alert(`Tournament created with ${players.size} players!`);
 	console.log('players:', players);
 };
 
-// TODO: update player colors after a player is removed
 window.removeBubble = function(username) {
 	players.delete(username);
-	const tmp = document.getElementById(`bubble_${username}`);
-	playerBubbles.removeChild(tmp);
+	playerBubbles.innerHTML = '';
+
+	// Update the colors of other players
+	let i = 0;
+	players.forEach(user => {
+		let tmp = newBubble(user);
+		tmp.style.backgroundColor = BUBBLE_COLORS[i % BUBBLE_COLORS.length];
+		playerBubbles.appendChild(tmp);
+		i++;
+	})
+
 	updateCreateButton();
 };
 
-/* Bracket generation
+/* TODO: Bracket generation
 
 	* Should the bracket be fully drawn from the beginning or is it ok to just add to it per round?
 
