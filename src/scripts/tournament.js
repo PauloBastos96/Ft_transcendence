@@ -82,7 +82,7 @@ window.createTournament = function() {
 	}
 	const participantList = Array.from(players);
 	alert(`Tournament created with ${players.size} players!`);
-	console.log('players:', participantList);
+	console.log('players:', players);
 };
 
 window.removeBubble = function(username) {
@@ -91,3 +91,17 @@ window.removeBubble = function(username) {
 	players.forEach(user => addBubble(user));
 	updateCreateButton();
 };
+
+/* Bracket generation
+
+	* Should the bracket be fully drawn from the beginning or is it ok to just add to it per round?
+
+	* Randomize players into a different set, adding one `null` at the end if the number of players is odd
+		(random so that matchmaking is not determined by the order in which players are added)
+
+	* Pair players into matches
+
+	* Draw the bracket
+
+	* Play matches and update bracket with the winners
+*/

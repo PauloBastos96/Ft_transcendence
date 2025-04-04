@@ -120,6 +120,6 @@
     "tournament": {
         "addPlayers": "Adiciona Jogadores:",
         "newTournament": "Criar Novo Torneio",
-        "createTournament": "Criar Torneio"
+        "createButton": "Criar Torneio"
     }
 }

@@ -119,6 +119,6 @@
     "tournament": {
         "addPlayers": "Add Participants:",
         "newTournament": "Create New Tournament",
-        "createTournament": "Create Tournament"
+        "createButton": "Create Tournament"
     }
 }
