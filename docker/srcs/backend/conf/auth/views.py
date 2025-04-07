@@ -10,7 +10,6 @@ from rest_framework import status
 from django.contrib.auth import login, logout
 from django.shortcuts import get_object_or_404
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.hashers import make_password
 from rest_framework.permissions import AllowAny
 from django.contrib.auth.models import update_last_login
 from users.models import User
@@ -58,7 +57,7 @@ class LoginView(generics.GenericAPIView):
                 except Exception as e:
                     return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({"detail": "Email sent."}, status=status.HTTP_200_OK)
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             cache.set(f'user_online_{user.id}', True, timeout=3600)
             user.is_online = True
             user.save()
@@ -181,7 +180,7 @@ class CheckOTPView(generics.GenericAPIView):
                 user.is_online = True
                 user.save()
                 refresh = RefreshToken.for_user(user)
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return Response(
                     {
                         "refresh": str(refresh),
