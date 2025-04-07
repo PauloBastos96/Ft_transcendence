@@ -68,6 +68,55 @@
 		background-color: #979797;
 		cursor: not-allowed;
 	}
+	.bracket {
+		display: flex;
+		gap: 20px;
+		overflow-x: auto;
+		padding: 20px;
+		background: #f9f9f9;
+		border-radius: 8px;
+		margin-top: 20px;
+	}
+
+	.round {
+		display: flex;
+		flex-direction: column;
+		gap: 30px;
+		min-width: 200px;
+	}
+
+	.match {
+		border: 1px solid #ddd;
+		border-radius: 5px;
+		padding: 10px;
+		background: white;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+
+	.player {
+		padding: 8px;
+		margin: 4px;
+		background: #f5f5f5;
+		border-radius: 3px;
+		cursor: pointer;
+		transition: all 0.2s;
+	}
+
+	.player:hover {
+		background: #e0e0e0;
+	}
+
+	.player.winner {
+		background: #4CAF50;
+		color: white;
+		font-weight: bold;
+	}
+
+	.round h3 {
+		text-align: center;
+		margin-bottom: 15px;
+		color: #333;
+	}
 </style>
 
 <div class="page">
@@ -89,8 +138,5 @@
 		<button class="tournament.createButton" onclick="createTournament()" id="createButton" disabled>
 			Create Tournament
 		</button>
-	</div>
-	<div class="bracket">
-		<!-- The bracket should go here -->
 	</div>
 </div>
