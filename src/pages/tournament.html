@@ -3,119 +3,43 @@
 		padding: 20px;
 		border-radius: 8px;
 	}
+	.tournament-creation {
+		margin: 5%;
+	}
 	h1 {
 		/* TODO: figure out better color */
 		color: #60b96c;
 		text-align: center;
+		font-size: 400%;
+		margin-bottom: 5%;
 	}
-	.input-section {
+	.player-buttons {
 		padding-left: 15%;
 		padding-right: 15%;
-		display: block;
-	}
-	label {
-		display: block;
-		margin-bottom: 8px;
-		font-weight: bold;
-	}
-	.playerInput {
-		width: 100%;
-		padding: 10px;
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		font-size: 16px;
-	}
-	.max-players {
-		text-align: right;
-		color: #ffffff60;
-	}
-	.player-bubbles {
-		margin-left: 10%;
-		margin-right: 10%;
 		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		margin-top: 10px;
-	}
-	.bubble {
-		color: white;
-		padding: 5px 10px;
-		border-radius: 15px;
-		display: flex;
+		justify-content: center;
 		align-items: center;
-		gap: 5px;
-	}
-	.bubble:hover {
-		background-color: #307032;
-		cursor: pointer;
-		font-weight: bold;
 	}
 	button {
-		background-color: #4CAF50;
 		color: white;
-		padding: 12px 24px;
+		padding: 8%;
 		border: none;
-		border-radius: 4px;
+		border-radius: 8%;
 		cursor: pointer;
-		font-size: 16px;
-		display: block;
-		margin: 20px auto 0;
+		font-size: 200%;
+		margin: 3%;
 	}
-	button:hover {
-		background-color: #3e8f42;
+	/* .player-section {
+		
+	} */
+	input {
+		margin: 2%;
+		border: none;
+		border-radius: 10%;
+		padding: 2%;
 	}
-	button:disabled {
-		background-color: #979797;
-		cursor: not-allowed;
-	}
-	.bracket {
-		display: flex;
-		gap: 20px;
-		overflow-x: auto;
-		padding: 20px;
-		background: #f9f9f9;
-		border-radius: 8px;
-		margin-top: 20px;
-	}
-
-	.round {
-		display: flex;
-		flex-direction: column;
-		gap: 30px;
-		min-width: 200px;
-	}
-
-	.match {
-		border: 1px solid #ddd;
-		border-radius: 5px;
-		padding: 10px;
-		background: white;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-	}
-
-	.player {
-		padding: 8px;
-		margin: 4px;
-		background: #f5f5f5;
-		border-radius: 3px;
-		cursor: pointer;
-		transition: all 0.2s;
-	}
-
-	.player:hover {
-		background: #e0e0e0;
-	}
-
-	.player.winner {
-		background: #4CAF50;
+	input::placeholder {
 		color: white;
-		font-weight: bold;
-	}
-
-	.round h3 {
-		text-align: center;
-		margin-bottom: 15px;
-		color: #333;
 	}
 </style>
 
@@ -123,20 +47,38 @@
 	<!-- TODO: maybe allow tournament to have a name -->
 	<div class="tournament-creation">
 		<h1 class="tournament.newTournament">Create New Tournament</h1>
-		<div class="input-section">
-			<label class="tournament.addPlayers">Add Players:</label>
-			<!-- TODO: figure out how to add translation to placeholder -->
-			<input
-			type="text"
-			class="playerInput"
-			placeholder="Enter username and press Enter..."
-			id="usernameInput"
-			>
-			<div class="max-players">Max players: 16</div>
+		<!-- TODO: this `player-buttons` div should collapse after they click the button -->
+		<div class="player-buttons">
+			<button class="tournament.4Players" onClick="initTournament(4)" id="4PButton" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
+			<button class="tournament.8Players" onClick="initTournament(8)" id="8PButton" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
+			<button class="tournament.16Players" onClick="initTournament(16)" id="16PButton" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
 		</div>
-		<div class="player-bubbles" id="playerBubbles"></div>
-		<button class="tournament.createButton" onclick="createTournament()" id="createButton" disabled>
-			Create Tournament
-		</button>
+		<div class="player-section">
+			<div class="player-list" id="playerList">
+
+			</div>
+		</div>
+		<!-- TODO
+		<players section>
+			<div class="playerList" id="playerList">
+				List players, the values being overridable
+			</div>
+			Go back button
+			<button class="tournament.createButton" onclick="createTournament()" id="createButton" disabled>
+				Start Tournament
+			</button> Generates the bracket and displays it
+		</players section>
+		<bracket>
+			- Display the bracket
+			- click a match to play it
+			- highlight the winner of each match
+			- update as matches go along
+		</bracket>
+		<games>
+			- Before match show a "play" button
+			- "play" button should trigger a 3 second countdown
+			- after countdown game starts
+		</games>
+		-->
 	</div>
 </div>

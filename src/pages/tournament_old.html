@@ -1,0 +1,93 @@
+<style>
+	.page {
+		padding: 20px;
+		border-radius: 8px;
+	}
+	h1 {
+		/* TODO: figure out better color */
+		color: #60b96c;
+		text-align: center;
+	}
+	.input-section {
+		padding-left: 15%;
+		padding-right: 15%;
+		display: block;
+	}
+	label {
+		display: block;
+		margin-bottom: 8px;
+		font-weight: bold;
+	}
+	.playerInput {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		font-size: 16px;
+	}
+	.max-players {
+		text-align: right;
+		color: #ffffff60;
+	}
+	.player-bubbles {
+		margin-left: 10%;
+		margin-right: 10%;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 10px;
+	}
+	.bubble {
+		color: white;
+		padding: 5px 10px;
+		border-radius: 15px;
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+	.bubble:hover {
+		background-color: #307032;
+		cursor: pointer;
+		font-weight: bold;
+	}
+	button {
+		background-color: #4CAF50;
+		color: white;
+		padding: 12px 24px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 16px;
+		display: block;
+		margin: 20px auto 0;
+	}
+	button:hover {
+		background-color: #3e8f42;
+	}
+	button:disabled {
+		background-color: #979797;
+		cursor: not-allowed;
+	}
+</style>
+
+<div class="page">
+	<!-- TODO: maybe allow tournament to have a name -->
+	<div class="tournament-creation">
+		<h1 class="tournament.newTournament">Create New Tournament</h1>
+		<div class="input-section">
+			<label class="tournament.addPlayers">Add Players:</label>
+			<!-- TODO: figure out how to add translation to placeholder -->
+			<input
+			type="text"
+			class="playerInput"
+			placeholder="Enter username and press Enter..."
+			id="usernameInput"
+			>
+			<div class="max-players">Max players: 16</div>
+		</div>
+		<div class="player-bubbles" id="playerBubbles"></div>
+		<button class="tournament.createButton" onclick="createTournament()" id="createButton" disabled>
+			Create Tournament
+		</button>
+	</div>
+</div>
