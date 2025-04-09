@@ -15,6 +15,8 @@ let players = new Set();
 let playerList, optionSection, playerSection, createButton;
 
 function initTournament(playerNum) {
+	if (!playerNum)
+		return;
 	// TODO: force Player1 to have the users username. It shouldn't be an <input>
 	playerList = document.getElementById('playerList');
 	optionSection = document.getElementById('option-section');
@@ -43,9 +45,7 @@ function goBack() {
 	playerSection.style.display = 'none';
 }
 
-function createTournament(playerNum) {
-	players.clear();
-	// This loop gets the player names, and forbids repeated names. It also uses the placeholder if no name has been set
+function checkNames(playerNum) {
 	for (let i = 1; i <= playerNum; i++) {
 		let username = document.getElementById(`player${i}`).value;
 		if (!username)
@@ -53,10 +53,76 @@ function createTournament(playerNum) {
 		if (players.has(username)) {
 			alert(`No repeated names allowed: ${username}`);
 			players.clear();
-			return;
+			return false;
 		}
 		players.add(username);
 	}
-	alert("W");
 	console.log("players: ", players);
+	return true;
 }
+
+function createTournament(playerNum) {
+	players.clear();
+	if (!playerNum || !checkNames(playerNum))
+		return;
+	playerSection.style.display = 'none';
+
+	// TODO: Shuffle players
+
+	const bracket = document.getElementById('bracket');
+	bracket.innerHTML = '';
+		
+	const rounds = Math.log2(playerNum) + 1;
+	let matches = playerNum / 2;
+	let participants = Array.from(players);
+
+	const spacer = document.createElement('li');
+	spacer.className = 'spacer';
+	spacer.innerHTML = '&nbsp;';
+
+	const matchSpacer = document.createElement('li');
+	matchSpacer.className = 'match match-spacer';
+	matchSpacer.innerHTML = '&nbsp;';
+
+	// Add all rounds to the bracket
+	for (let round = 1; round <= rounds; round++) {
+		const roundElem = document.createElement('ul');
+		roundElem.className = 'round';
+		
+
+		roundElem.appendChild(spacer.cloneNode(true));
+		for (let match = 0; round < rounds && match < matches; match++) {
+			const player1 = document.createElement('li');
+			const player2 = document.createElement('li');
+
+			player1.className = 'match player1';
+			player2.className = 'match player2';
+			if (round == 1) {
+				player1.textContent = participants[match * 2];
+				player2.textContent = participants[match * 2 + 1];
+			} else {
+				player1.innerHTML = '<i>TBD</i>';
+				player2.innerHTML = '<i>TBD</i>';
+			}
+
+			roundElem.appendChild(player1);
+			roundElem.appendChild(matchSpacer.cloneNode(true));
+			roundElem.appendChild(player2);
+			roundElem.appendChild(spacer.cloneNode(true));
+		}
+		// This puts the winner section to the bracket
+		if (round == rounds) {
+			const winner = document.createElement('li');
+			winner.className = 'match player1';
+			winner.innerHTML = '<i>TBD</i>';
+
+			roundElem.appendChild(winner);
+			roundElem.appendChild(spacer.cloneNode(true));
+		}
+		bracket.appendChild(roundElem);
+		matches /= 2;
+	}
+}
+
+// const rounds = Math.log2(playerNum);
+// let matches = playerNum / 2;

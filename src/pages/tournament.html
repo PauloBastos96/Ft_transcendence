@@ -25,27 +25,14 @@
 		display: flex;
 		color: white;
 		font-size: 200%;
-	}
-	.tournament\.4Players {
-		padding: 8%;
-		border: none;
-		border-radius: 8%;
-		cursor: pointer;
-		margin: 3%;
-	}
-	.tournament\.8Players {
-		padding: 8%;
-		border: none;
-		border-radius: 8%;
-		cursor: pointer;
-		margin: 3%;
-	}
-	.tournament\.16Players {
-		padding: 8%;
-		border: none;
-		border-radius: 8%;
-		cursor: pointer;
-		margin: 3%;
+
+		button {
+			padding: 8%;
+			border: none;
+			border-radius: 8%;
+			cursor: pointer;
+			margin: 3%;
+		}
 	}
 	.player-section {
 		display: none;
@@ -68,28 +55,46 @@
 		border-radius: 10px;
 		padding: 20px;
 	}
+	.bracket {
+		display: flex;
+		flex-direction: row;
+	}
+	.round{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 200px;
+		list-style: none;
+		padding: 0;
+
+		.spacer { flex-grow: 1; }
+		/* First and last spacer of each round are half as thick */
+		.spacer:first-child, .spacer:last-child { flex-grow: .5; }
+		.game-spacer{ flex-grow: 1;}
+	}
 </style>
 
 <div class="page">
 	<!-- TODO: maybe allow tournament to have a name -->
 	<div class="tournament-creation">
 		<h1 class="tournament.newTournament">New Tournament</h1>
-		<div class="option-section" id="option-section">
+		<div id="option-section" class="option-section">
 			<label class="tournament.chooseOption">Choose an option:</label>
-			<div class="player-buttons" id="player-buttons">
-				<button class="tournament.4Players" onClick="initTournament(4)" id="4PButton" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
-				<button class="tournament.8Players" onClick="initTournament(8)" id="8PButton" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
-				<button class="tournament.16Players" onClick="initTournament(16)" id="16PButton" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
+			<div id="player-buttons" class="player-buttons">
+				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
+				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
+				<button id="16PButton" class="tournament.16Players" onClick="initTournament(16)" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
 			</div>
 		</div>
-		<div class="player-section" id="player-section">
-			<div class="player-list" id="playerList"></div>
+		<div id="player-section" class="player-section">
+			<div id="playerList" class="player-list"></div>
 			<div class="button-section"> 	
-				<button class="tournament.backButton" id="backButton" onclick="goBack()">Back</button>
-				<!-- TODO: Actually create bracket and tournament -->
-				<button class="tournament.createButton" id="createButton">Create Tournament</button>
+				<button id="backButton" class="tournament.backButton" onclick="goBack()">Back</button>
+				<button id="createButton" class="tournament.createButton">Create Tournament</button>
 			</div>
 		</div>
+		<!-- TODO: Finish adding the bracket's CSS -->
+		<div id="bracket" class="bracket"> </div>
 		<!-- TODO
 		<bracket>
 			- Display the bracket
