@@ -17,7 +17,6 @@
 		margin-left: 17%;
 		font-size: 22px;
 		color: #ffffff60;
-		/* margin-top: 70px; */
 	}
 	.player-buttons {
 		padding-left: 15%;
@@ -58,6 +57,8 @@
 	.bracket {
 		display: flex;
 		flex-direction: row;
+		font-size: large;
+  		padding: 10px;
 	}
 	.round{
 		display: flex;
@@ -70,8 +71,28 @@
 		.spacer { flex-grow: 1; }
 		/* First and last spacer of each round are half as thick */
 		.spacer:first-child, .spacer:last-child { flex-grow: .5; }
-		.game-spacer{ flex-grow: 1;}
+		.match-spacer { flex-grow: 1; }
 	}
+	li.match {
+		padding-left:20px;
+
+		.winner {
+			/* TODO: pick better color */
+			font-weight: bold;
+			color: green;
+		}
+	}
+	li.player1 {
+		border-bottom: 1px solid #aaa;
+	}
+	li.match-spacer { 
+		border-right: 1px solid #aaa;
+		min-height: 40px;
+	}
+	li.player2 { 
+		border-top: 1px solid #aaa;
+	}
+
 </style>
 
 <div class="page">

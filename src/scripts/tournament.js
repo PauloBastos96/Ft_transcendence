@@ -63,7 +63,7 @@ function checkNames(playerNum) {
 
 function createTournament(playerNum) {
 	players.clear();
-	if (!playerNum || !checkNames(playerNum))
+	if (!checkNames(playerNum))
 		return;
 	playerSection.style.display = 'none';
 
