@@ -4,70 +4,93 @@
 		border-radius: 8px;
 	}
 	.tournament-creation {
-		margin: 5%;
+		margin: 60px 180px;
 	}
 	h1 {
 		/* TODO: figure out better color */
 		color: #60b96c;
 		text-align: center;
 		font-size: 400%;
-		margin-bottom: 5%;
+		margin-bottom: 80px;
+	}
+	.tournament\.chooseOption {
+		margin-left: 17%;
+		font-size: 22px;
+		color: #ffffff60;
+		/* margin-top: 70px; */
 	}
 	.player-buttons {
 		padding-left: 15%;
 		padding-right: 15%;
 		display: flex;
-		justify-content: center;
-		align-items: center;
-	}
-	button {
 		color: white;
+		font-size: 200%;
+	}
+	.tournament\.4Players {
 		padding: 8%;
 		border: none;
 		border-radius: 8%;
 		cursor: pointer;
-		font-size: 200%;
 		margin: 3%;
 	}
-	/* .player-section {
-		
-	} */
-	input {
-		margin: 2%;
+	.tournament\.8Players {
+		padding: 8%;
 		border: none;
-		border-radius: 10%;
-		padding: 2%;
+		border-radius: 8%;
+		cursor: pointer;
+		margin: 3%;
+	}
+	.tournament\.16Players {
+		padding: 8%;
+		border: none;
+		border-radius: 8%;
+		cursor: pointer;
+		margin: 3%;
+	}
+	.player-section {
+		display: none;
+	}
+	input {
+		margin: 8px;
+		border: none;
+		border-radius: 10px;
+		padding: 6px;
+		padding-left: 8px;
 	}
 	input::placeholder {
 		color: white;
+	}
+	.button-section {
+		margin-top: 10%;
+	}
+	.tournament\.backButton {
+		color: white;
+		border-radius: 10px;
+		padding: 20px;
 	}
 </style>
 
 <div class="page">
 	<!-- TODO: maybe allow tournament to have a name -->
 	<div class="tournament-creation">
-		<h1 class="tournament.newTournament">Create New Tournament</h1>
-		<!-- TODO: this `player-buttons` div should collapse after they click the button -->
-		<div class="player-buttons">
-			<button class="tournament.4Players" onClick="initTournament(4)" id="4PButton" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
-			<button class="tournament.8Players" onClick="initTournament(8)" id="8PButton" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
-			<button class="tournament.16Players" onClick="initTournament(16)" id="16PButton" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
+		<h1 class="tournament.newTournament">New Tournament</h1>
+		<div class="option-section" id="option-section">
+			<label class="tournament.chooseOption">Choose an option:</label>
+			<div class="player-buttons" id="player-buttons">
+				<button class="tournament.4Players" onClick="initTournament(4)" id="4PButton" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
+				<button class="tournament.8Players" onClick="initTournament(8)" id="8PButton" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
+				<button class="tournament.16Players" onClick="initTournament(16)" id="16PButton" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
+			</div>
 		</div>
-		<div class="player-section">
-			<div class="player-list" id="playerList">
-
+		<div class="player-section" id="player-section">
+			<div class="player-list" id="playerList"></div>
+			<div class="button-section"> 	
+				<button class="tournament.backButton" id="backButton" onclick="goBack()">Back</button>
+				<!-- TODO: Actually create bracket and tournament -->
+				<button class="tournament.createButton" id="createButton">Create Tournament</button>
 			</div>
 		</div>
 		<!-- TODO
-		<players section>
-			<div class="playerList" id="playerList">
-				List players, the values being overridable
-			</div>
-			Go back button
-			<button class="tournament.createButton" onclick="createTournament()" id="createButton" disabled>
-				Start Tournament
-			</button> Generates the bracket and displays it
-		</players section>
 		<bracket>
 			- Display the bracket
 			- click a match to play it
