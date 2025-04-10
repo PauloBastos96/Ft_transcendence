@@ -75,12 +75,14 @@
 	}
 	li.match {
 		padding-left:20px;
-
-		.winner {
-			/* TODO: pick better color */
-			font-weight: bold;
-			color: green;
-		}
+	}
+	li.match.winner {
+		font-weight: bold;
+		color: #1ca11c;
+	}
+	li.match.decided {
+		pointer-events: none;
+		opacity: 0.6;
 	}
 	li.player1 {
 		border-bottom: 1px solid #aaa;
@@ -92,15 +94,13 @@
 	li.player2 { 
 		border-top: 1px solid #aaa;
 	}
-
 </style>
 
 <div class="page">
-	<!-- TODO: maybe allow tournament to have a name -->
 	<div class="tournament-creation">
-		<h1 class="tournament.newTournament">New Tournament</h1>
+		<h1 class="tournament.newTournament" id="newTournament">New Tournament</h1>
 		<div id="option-section" class="option-section">
-			<label class="tournament.chooseOption">Choose an option:</label>
+			<label class="tournament.chooseOption"">Choose an option:</label>
 			<div id="player-buttons" class="player-buttons">
 				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
 				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
@@ -114,17 +114,12 @@
 				<button id="createButton" class="tournament.createButton">Create Tournament</button>
 			</div>
 		</div>
-		<!-- TODO: Finish adding the bracket's CSS -->
+		<!-- TODO: Improve the bracket's CSS -->
 		<div id="bracket" class="bracket"> </div>
 		<!-- TODO
-		<bracket>
-			- Display the bracket
-			- click a match to play it
-			- highlight the winner of each match
-			- update as matches go along
-		</bracket>
 		<games>
 			- Before match show a "play" button
+			- maybe replace 
 			- "play" button should trigger a 3 second countdown
 			- after countdown game starts
 		</games>

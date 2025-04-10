@@ -12,7 +12,7 @@ const BUBBLE_COLORS = [
 ];
 
 let players = new Set();
-let playerList, optionSection, playerSection, createButton;
+let playerList, optionSection, playerSection, createButton, newTournament;
 
 function initTournament(playerNum) {
 	if (!playerNum)
@@ -65,16 +65,17 @@ function createTournament(playerNum) {
 	players.clear();
 	if (!checkNames(playerNum))
 		return;
+	newTournament = document.getElementById('newTournament');
+	newTournament.style.display = 'none';
 	playerSection.style.display = 'none';
 
-	// TODO: Shuffle players
-
 	const bracket = document.getElementById('bracket');
-	bracket.innerHTML = '';
-		
+	
 	const rounds = Math.log2(playerNum) + 1;
 	let matches = playerNum / 2;
 	let participants = Array.from(players);
+	
+	// TODO: Shuffle players
 
 	const spacer = document.createElement('li');
 	spacer.className = 'spacer';
@@ -88,22 +89,31 @@ function createTournament(playerNum) {
 	for (let round = 1; round <= rounds; round++) {
 		const roundElem = document.createElement('ul');
 		roundElem.className = 'round';
-		
 
 		roundElem.appendChild(spacer.cloneNode(true));
 		for (let match = 0; round < rounds && match < matches; match++) {
 			const player1 = document.createElement('li');
-			const player2 = document.createElement('li');
-
 			player1.className = 'match player1';
+			player1.dataset.round = round;
+			player1.dataset.matchIndex = match;
+			player1.dataset.position = 0;
+			
+			const player2 = document.createElement('li');
 			player2.className = 'match player2';
+			player2.dataset.round = round;
+			player2.dataset.matchIndex = match;
+			player2.dataset.position = 1;
+
 			if (round == 1) {
 				player1.textContent = participants[match * 2];
 				player2.textContent = participants[match * 2 + 1];
 			} else {
-				player1.innerHTML = '<i>TBD</i>';
-				player2.innerHTML = '<i>TBD</i>';
+				player1.innerHTML = '<i class="tbd">TBD</i>';
+				player2.innerHTML = '<i class="tbd">TBD</i>';
 			}
+
+			player1.addEventListener('click', function() { selectWinner(this); });
+			player2.addEventListener('click', function() { selectWinner(this); });
 
 			roundElem.appendChild(player1);
 			roundElem.appendChild(matchSpacer.cloneNode(true));
@@ -114,7 +124,10 @@ function createTournament(playerNum) {
 		if (round == rounds) {
 			const winner = document.createElement('li');
 			winner.className = 'match player1';
-			winner.innerHTML = '<i>TBD</i>';
+			winner.innerHTML = '<i class="tbd">TBD</i>';
+			winner.dataset.round = round;
+			winner.dataset.matchIndex = 0;
+			winner.dataset.position = 0;
 
 			roundElem.appendChild(winner);
 			roundElem.appendChild(spacer.cloneNode(true));
@@ -122,6 +135,55 @@ function createTournament(playerNum) {
 		bracket.appendChild(roundElem);
 		matches /= 2;
 	}
+}
+
+function selectWinner(element) {
+    // Prevent selection if clicked element is TBD
+    if (element.querySelector('i.tbd')) return;
+
+    const currentRound = parseInt(element.dataset.round);
+    const currentMatchIndex = parseInt(element.dataset.matchIndex);
+    
+    // Get both players in the current match
+    const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
+
+    // Check if match is already decided
+    if ([...currentMatchPlayers].some(p => p.classList.contains('decided'))) {
+        alert("This match is already decided!");
+        return;
+    }
+
+    // Check if opponent is still TBD
+    const opponent = [...currentMatchPlayers].find(p => p !== element);
+    if (opponent.querySelector('i.tbd')) {
+        alert("Opponent is still TBD!");
+        return;
+    }
+
+    element.classList.add('winner');
+
+    const nextRound = currentRound + 1;
+    const nextMatchIndex = Math.floor(currentMatchIndex / 2);
+    const nextPosition = currentMatchIndex % 2;
+
+    // Find next round element
+    const nextRoundElement = document.querySelector(`.round:nth-child(${nextRound})`);
+    if (!nextRoundElement) return;
+
+    const nextPlayer = nextRoundElement.querySelector(`li[data-round="${nextRound}"][data-match-index="${nextMatchIndex}"][data-position="${nextPosition}"]`);
+    
+    // Update next instance of the player
+    if (nextPlayer) {
+        nextPlayer.textContent = element.textContent;
+        nextPlayer.innerHTML = element.textContent; // Remove TBD
+		if (nextPlayer.dataset.round == Math.log2(players.size) + 1)
+			nextPlayer.classList.add("winner");
+    }
+
+    currentMatchPlayers.forEach(p => {
+        p.classList.add('decided');
+        p.style.pointerEvents = 'none';
+    });
 }
 
 // const rounds = Math.log2(playerNum);
