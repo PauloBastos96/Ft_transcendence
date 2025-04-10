@@ -83,9 +83,9 @@ function createTournament(playerNum) {
 
 	const rounds = Math.log2(playerNum) + 1;
 	let matches = playerNum / 2;
-	let participants = Array.from(players);
+	let playerArr = Array.from(players);
 
-	// TODO: Shuffle players
+	arrayShuffle(playerArr);
 
 	const spacer = document.createElement('li');
 	spacer.className = 'spacer';
@@ -115,8 +115,8 @@ function createTournament(playerNum) {
 			player2.dataset.position = 1;
 
 			if (round == 1) {
-				player1.textContent = participants[match * 2];
-				player2.textContent = participants[match * 2 + 1];
+				player1.textContent = playerArr[match * 2];
+				player2.textContent = playerArr[match * 2 + 1];
 			} else {
 				player1.innerHTML = '<i class="tbd">TBD</i>';
 				player2.innerHTML = '<i class="tbd">TBD</i>';
@@ -196,3 +196,11 @@ function selectWinner(element) {
 		p.style.pointerEvents = 'none';
 	});
 }
+
+function arrayShuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+	  const j = Math.floor(Math.random() * (i + 1));
+	  [array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
+  }
