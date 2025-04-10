@@ -17,14 +17,23 @@ let playerList, optionSection, playerSection, createButton, newTournament;
 function initTournament(playerNum) {
 	if (!playerNum)
 		return;
-	// TODO: force Player1 to have the users username. It shouldn't be an <input>
 	playerList = document.getElementById('playerList');
 	optionSection = document.getElementById('option-section');
 	playerSection = document.getElementById('player-section');
 	createButton = document.getElementById('createButton');
 
 	playerList.textContent = '';
-	for (let i = 1; i <= playerNum; i++) {
+
+	// Set Player 1 to be the user
+	const player1 = document.createElement('input');
+	player1.id = 'player1';
+	player1.className = 'player-name';
+	getUserData().then(data => { player1.value = data.username; });
+	player1.readOnly = true;
+	player1.style.backgroundColor = BUBBLE_COLORS[0];
+	playerList.appendChild(player1);
+
+	for (let i = 2; i <= playerNum; i++) {
 		const player = document.createElement('input');
 		player.id = `player${i}`;
 		player.className = 'player-name';
