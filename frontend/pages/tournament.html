@@ -1,0 +1,142 @@
+<style>
+	.page {
+		padding: 20px;
+		border-radius: 8px;
+	}
+	.tournament-creation {
+		margin: 60px 180px;
+	}
+	h1 {
+		color: #47c44d;
+		text-align: center;
+		font-size: 400%;
+		margin-bottom: 80px;
+	}
+	.tournament\.chooseOption {
+		margin-left: 17%;
+		font-size: 22px;
+		color: #ffffff60;
+	}
+	.player-buttons {
+		padding-left: 15%;
+		padding-right: 15%;
+		display: flex;
+		color: white;
+		font-size: 200%;
+
+		button {
+			padding: 8%;
+			border: none;
+			border-radius: 8%;
+			cursor: pointer;
+			margin: 3%;
+		}
+	}
+	.player-section {
+		display: none;
+	}
+	.player-name {
+		margin: 8px;
+		border: none;
+		border-radius: 10px;
+		padding: 6px;
+		padding-left: 8px;
+	}
+	.player-name::placeholder {
+		color: white;
+	}
+	.button-section {
+		margin-top: 10%;
+	}
+	.tournament\.backButton {
+		color: white;
+		border-radius: 10px;
+		padding: 20px;
+	}
+	.bracket {
+		display: flex;
+		flex-direction: row;
+		font-size: large;
+  		padding: 10px;
+	}
+	.round{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		width: 200px;
+		list-style: none;
+		padding: 0;
+
+		.spacer { flex-grow: 1; }
+		/* First and last spacer of each round are half as thick */
+		.spacer:first-child, .spacer:last-child { flex-grow: .5; }
+		.match-spacer { flex-grow: 1; }
+	}
+	li.match {
+		padding-left:20px;
+	}
+	li.match.winner {
+		font-weight: bold;
+		background-color: #1ca11c;
+		color: white;
+	}
+	li.match.decided {
+		pointer-events: none;
+		opacity: 0.6;
+	}
+	li.player1 {
+		border-bottom: 1px solid #aaa;
+	}
+	li.match-spacer { 
+		border-right: 1px solid #aaa;
+		min-height: 40px;
+	}
+	li.player2 { 
+		border-top: 1px solid #aaa;
+	}
+	li.final-winner {
+		font-weight: bolder;
+		background-image: linear-gradient(90deg, #983eff, #fe3afe);
+		animation: hue 10s infinite linear;
+		/* TODO: Decide if I want the color to be in the text or the background */
+		/* background-clip: text; */
+		/* -webkit-text-fill-color: transparent; */
+		color: white;
+	}
+	@keyframes hue {
+		from { filter: hue-rotate(0deg); }
+
+		to { filter: hue-rotate(360deg); }
+	}
+</style>
+
+<div class="page">
+	<div class="tournament-creation">
+		<h1 class="tournament.newTournament" id="newTournament">New Tournament</h1>
+		<div id="option-section" class="option-section">
+			<label class="tournament.chooseOption"">Choose an option:</label>
+			<div id="player-buttons" class="player-buttons">
+				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
+				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
+				<button id="16PButton" class="tournament.16Players" onClick="initTournament(16)" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
+			</div>
+		</div>
+		<div id="player-section" class="player-section">
+			<div id="playerList" class="player-list"></div>
+			<div class="button-section"> 	
+				<button id="backButton" class="tournament.backButton" onclick="goBack()">Back</button>
+				<button id="createButton" class="tournament.createButton">Create Tournament</button>
+			</div>
+		</div>
+		<!-- TODO: Improve the bracket's CSS -->
+		<div id="bracket" class="bracket"> </div>
+		<!-- TODO
+		<games>
+			- Before match show a "play" button
+			- maybe replace 
+			- "play" button should trigger a 3 second countdown
+			- after countdown game starts
+		</games>
+		-->
+	</div>
+</div>
