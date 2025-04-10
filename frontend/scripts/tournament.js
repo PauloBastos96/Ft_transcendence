@@ -41,6 +41,7 @@ function initTournament(playerNum) {
 		player.style.backgroundColor = BUBBLE_COLORS[(i - 1) % BUBBLE_COLORS.length];
 		playerList.appendChild(player);
 	}
+
 	// Prevent automatic activation
 	if (playerNum) {
 		optionSection.style.display = 'none';
@@ -79,11 +80,11 @@ function createTournament(playerNum) {
 	playerSection.style.display = 'none';
 
 	const bracket = document.getElementById('bracket');
-	
+
 	const rounds = Math.log2(playerNum) + 1;
 	let matches = playerNum / 2;
 	let participants = Array.from(players);
-	
+
 	// TODO: Shuffle players
 
 	const spacer = document.createElement('li');
@@ -106,7 +107,7 @@ function createTournament(playerNum) {
 			player1.dataset.round = round;
 			player1.dataset.matchIndex = match;
 			player1.dataset.position = 0;
-			
+
 			const player2 = document.createElement('li');
 			player2.className = 'match player2';
 			player2.dataset.round = round;
@@ -129,6 +130,7 @@ function createTournament(playerNum) {
 			roundElem.appendChild(player2);
 			roundElem.appendChild(spacer.cloneNode(true));
 		}
+
 		// This puts the winner section to the bracket
 		if (round == rounds) {
 			const winner = document.createElement('li');
@@ -147,53 +149,50 @@ function createTournament(playerNum) {
 }
 
 function selectWinner(element) {
-    // Prevent selection if clicked element is TBD
-    if (element.querySelector('i.tbd')) return;
+	// Prevent selection if clicked element is TBD
+	if (element.querySelector('i.tbd')) return;
 
-    const currentRound = parseInt(element.dataset.round);
-    const currentMatchIndex = parseInt(element.dataset.matchIndex);
-    
-    // Get both players in the current match
-    const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
+	const currentRound = parseInt(element.dataset.round);
+	const currentMatchIndex = parseInt(element.dataset.matchIndex);
 
-    // Check if match is already decided
-    if ([...currentMatchPlayers].some(p => p.classList.contains('decided'))) {
-        alert("This match is already decided!");
-        return;
-    }
+	// Get both players in the current match
+	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
 
-    // Check if opponent is still TBD
-    const opponent = [...currentMatchPlayers].find(p => p !== element);
-    if (opponent.querySelector('i.tbd')) {
-        alert("Opponent is still TBD!");
-        return;
-    }
+	// Check if match is already decided
+	if ([...currentMatchPlayers].some(p => p.classList.contains('decided'))) {
+		alert("This match is already decided!");
+		return;
+	}
 
-    element.classList.add('winner');
+	// Check if opponent is still TBD
+	const opponent = [...currentMatchPlayers].find(p => p !== element);
+	if (opponent.querySelector('i.tbd')) {
+		alert("Opponent is still TBD!");
+		return;
+	}
 
-    const nextRound = currentRound + 1;
-    const nextMatchIndex = Math.floor(currentMatchIndex / 2);
-    const nextPosition = currentMatchIndex % 2;
+	element.classList.add('winner');
 
-    // Find next round element
-    const nextRoundElement = document.querySelector(`.round:nth-child(${nextRound})`);
-    if (!nextRoundElement) return;
+	const nextRound = currentRound + 1;
+	const nextMatchIndex = Math.floor(currentMatchIndex / 2);
+	const nextPosition = currentMatchIndex % 2;
 
-    const nextPlayer = nextRoundElement.querySelector(`li[data-round="${nextRound}"][data-match-index="${nextMatchIndex}"][data-position="${nextPosition}"]`);
-    
-    // Update next instance of the player
-    if (nextPlayer) {
-        nextPlayer.textContent = element.textContent;
-        nextPlayer.innerHTML = element.textContent; // Remove TBD
+	// Find next round element
+	const nextRoundElement = document.querySelector(`.round:nth-child(${nextRound})`);
+	if (!nextRoundElement) return;
+
+	const nextPlayer = nextRoundElement.querySelector(`li[data-round="${nextRound}"][data-match-index="${nextMatchIndex}"][data-position="${nextPosition}"]`);
+
+	// Update next instance of the player
+	if (nextPlayer) {
+		nextPlayer.textContent = element.textContent;
+		nextPlayer.innerHTML = element.textContent; // Remove TBD
 		if (nextPlayer.dataset.round == Math.log2(players.size) + 1)
-			nextPlayer.classList.add("winner");
-    }
+			nextPlayer.classList.add("final-winner");
+	}
 
-    currentMatchPlayers.forEach(p => {
-        p.classList.add('decided');
-        p.style.pointerEvents = 'none';
-    });
+	currentMatchPlayers.forEach(p => {
+		p.classList.add('decided');
+		p.style.pointerEvents = 'none';
+	});
 }
-
-// const rounds = Math.log2(playerNum);
-// let matches = playerNum / 2;
