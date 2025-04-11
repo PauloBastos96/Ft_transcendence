@@ -133,6 +133,15 @@
 	#game {
 		display: none;
 	}
+	#confirmPopup {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #202020;
+		color: white;
+		display: none;
+	}
 	#canvasWrapper {
 		display: flex;
 		justify-content: center;
@@ -203,11 +212,19 @@
 		</div>
 		<!-- TODO: Improve the bracket's CSS -->
 	</div>
+	<!-- TODO: Add hint so the user knows to click a player to start the match -->
 	<div id="bracket"> </div>
 	<!-- TODO: player-titles CSS -->
 	<div id="player-titles">
 		<div id="player1-title"></div>
 		<div id="player2-title"></div>
+	</div>
+	<!-- TODO: Add CSS to confirm.Popup -->
+	<div id="confirmPopup">
+		<p id="confirmMessage"></p>
+		<button id="cancelButton" class="tournament.cancelButton">Cancel</button>
+		<!-- TODO: Add countdown after confirmation -->
+		<button id="playButton" class="tournament.playButton">Play</button>
 	</div>
 	<div id="game">
 		<div id="canvasWrapper">
@@ -218,12 +235,5 @@
 			<button id="goBracket">Tournament</button>
 		</div>
 	</div>
-		<!-- TODO
-		<games>
-			- Before match show a "play" button
-			- "play" button should trigger a 3 second countdown
-			- after countdown game starts
-		</games>
-		-->
 </div>
 <script src="/frontend/scripts/pong_tournament.js"></script>

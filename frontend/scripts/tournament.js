@@ -12,15 +12,15 @@ const BUBBLE_COLORS = [
 ];
 
 let players = new Set();
-let playerList, optionSection, playerSection, createButton, newTournament, bracket, playerTitles, game;
+let optionSection, playerSection, bracket, playerTitles, game, confirmPopup;
 
 function initTournament(playerNum) {
 	if (!playerNum)
 		return;
-	playerList = document.getElementById('playerList');
+	let playerList = document.getElementById('playerList');
+	let createButton = document.getElementById('createButton');
 	optionSection = document.getElementById('option-section');
 	playerSection = document.getElementById('player-section');
-	createButton = document.getElementById('createButton');
 
 	playerList.textContent = '';
 
@@ -76,7 +76,7 @@ function createTournament(playerNum) {
 	players.clear();
 	if (!checkNames(playerNum))
 		return;
-	newTournament = document.getElementById('newTournament');
+	let newTournament = document.getElementById('newTournament');
 	newTournament.style.display = 'none';
 	playerSection.style.display = 'none';
 
@@ -158,7 +158,7 @@ function arrayShuffle(array) {
 	return array;
 }
 
-// Starts the game of pong
+// Starts the game of pong if possible
 function startGame(element) {
 	// Prevent selection if clicked element is TBD
 	if (element.querySelector('i.tbd')) return;
@@ -175,23 +175,49 @@ function startGame(element) {
 		alert("Opponent is still TBD!");
 		return;
 	}
-	game = document.getElementById('game');
-	game.style.display = 'block';
-	playerTitles = document.getElementById('player-titles');
-	playerTitles.style.display = 'block';
 
-	bracket.style.display = 'none';
 	let player1 = document.getElementById('player1-title');
 	let player2 = document.getElementById('player2-title');
 	if (element.dataset.position == 0) {
 		player1.innerText = element.innerText;
 		player2.innerText = opponent.innerText;
-		playPong(element, opponent);
+		confirmMatch(element, opponent);
 	} else if (element.dataset.position == 1) {
 		player1.innerText = opponent.innerText;
 		player2.innerText = element.innerText;
-		playPong(opponent, element);
+		confirmMatch(opponent, element);
 	}
+}
+
+function confirmMatch(player1, player2) {
+	let confirmMessage = document.getElementById('confirmMessage');
+	let playButton = document.getElementById('playButton');
+	let cancelButton = document.getElementById('cancelButton');
+
+	confirmPopup = document.getElementById('confirmPopup');
+	
+	confirmPopup.style.display = 'block';
+	
+	confirmMessage.innerHTML = `${player1.innerText} <b><i>VS</i></b> ${player2.innerText}`;
+
+	// Remove other event listeners
+	playButton.replaceWith(playButton.cloneNode(true));
+	playButton = document.getElementById('playButton');
+
+	playButton.addEventListener('click', function() {
+		confirmPopup.style.display = 'none';
+		game = document.getElementById('game');
+		game.style.display = 'block';
+		playerTitles = document.getElementById('player-titles');
+		playerTitles.style.display = 'block';
+
+		bracket.style.display = 'none';
+		playPong(player1, player2);
+	});
+
+	cancelButton.addEventListener('click', function() {
+		confirmPopup.style.display = 'none';
+	});
 }
 
 // Receives an element of the bracket and sets it to the winner of the match (if legal)
