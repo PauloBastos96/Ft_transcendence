@@ -183,15 +183,15 @@ function playPong( player1_elem, player2_elem ) {
 	}
 
 	window.addEventListener('keydown', (e) => {
-		if (e.key === 'w') player1.up = true;
-		if (e.key === 's') player1.down = true;
+		if (e.key.toLowerCase() === 'w') player1.up = true;
+		if (e.key.toLowerCase() === 's') player1.down = true;
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
 	});
 
 	window.addEventListener('keyup', (e) => {
-		if (e.key === 'w') player1.up = false;
-		if (e.key === 's') player1.down = false;
+		if (e.key.toLowerCase() === 'w') player1.up = false;
+		if (e.key.toLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
 	});
