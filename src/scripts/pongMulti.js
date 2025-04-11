@@ -101,7 +101,7 @@ function waitForPlayerConnection(playerName, tourName, timeoutSeconds = 10) {
 		}, timeoutSeconds * 1000);
 
 		// Handler for when the WebSocket connection is established
-		ws.onopen = function (e) {
+		ws.onopen = async function (e) {
 			console.log("WebSocket connection established for tournament: " + tourName);
 
 			// Send a message to notify the server that we're waiting for a specific player
@@ -109,6 +109,13 @@ function waitForPlayerConnection(playerName, tourName, timeoutSeconds = 10) {
 				'typeContent': 'waiting_for_player',
 				'content': playerName
 			}));
+			const invRes = await invitePong(playerName).catch(error => {
+				console.error(error);
+			});
+			if (invRes.status === 404) {
+				console.log(invRes)
+				return;
+			}
 		};
 
 		// Handler for WebSocket messages
@@ -347,16 +354,16 @@ function game() {
 	gameLoop();
 };
 
-// this does not work and is not complete yet
+
 // Invite user to the game
-async function inviteUser(friendName) {
+async function invitePong(friendName) {
 	const userID = window.user.id;
 	if (userID === null) return;
-	const url = `/api/users/${userID}/game_invite/`;
+	const url = `/api/users/${userID}/invite_to_pong/`;
 	const response = await fetch(url, {
 		method: 'PUT',
 		body: JSON.stringify({
-			add_friend: friendName
+			user_to_invite: friendName
 		}),
 		headers: {
 			'Content-Type': 'application/json; charset=utf-8',
@@ -365,7 +372,28 @@ async function inviteUser(friendName) {
 	});
 	if (response.status === 401) {
 		await refreshLogin();
-		return await addFriendAsync(friendName);
+		return await invitePong(friendName);
+	}
+	return response;
+}
+
+async function acceptPong(friendName) {
+	const userID = window.user.id;
+	if (userID === null) return;
+	const url = `/api/users/${userID}/accept_pong_invite/`;
+	const response = await fetch(url, {
+		method: 'PUT',
+		body: JSON.stringify({
+			user_to_accept: friendName
+		}),
+		headers: {
+			'Content-Type': 'application/json; charset=utf-8',
+			Authorization: `Bearer ${sessionStorage.getItem('jwt')}`
+		}
+	});
+	if (response.status === 401) {
+		await refreshLogin();
+		return await invitePong(friendName);
 	}
 	return response;
 }
