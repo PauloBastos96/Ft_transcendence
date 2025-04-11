@@ -172,8 +172,6 @@ function changeContent(page, pushState = true) {
                 document.getElementById('signupForm').addEventListener('submit', signup, true);
                 translateAll();
                 break;
-            case 'tournament':
-                initTournament();
             default:
                 break;
         }
@@ -187,11 +185,13 @@ function updateHeaderButton(page) {
     let pongButton = document.getElementById('header-pong');
     let game2Button = document.getElementById('header-game2');
     let livechatButton = document.getElementById('header-livechat');
+    let tournamentButton = document.getElementById('header-tournament');
     let buttons = {
         'overview': overviewButton,
         'pong': pongButton,
         'game2': game2Button,
-        'livechat': livechatButton
+        'livechat': livechatButton,
+        'tournament': tournamentButton
     };
     for (let key in buttons) {
         if (key === page) {
