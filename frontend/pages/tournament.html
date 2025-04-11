@@ -17,7 +17,7 @@
 		font-size: 22px;
 		color: #ffffff60;
 	}
-	.player-buttons {
+	#player-buttons {
 		padding-left: 15%;
 		padding-right: 15%;
 		display: flex;
@@ -32,8 +32,12 @@
 			margin: 3%;
 		}
 	}
-	.player-section {
+	#player-section {
 		display: none;
+	}
+	#playerList {
+		display: flex-wrap;
+		justify-content: center;
 	}
 	.player-name {
 		margin: 8px;
@@ -53,11 +57,13 @@
 		border-radius: 10px;
 		padding: 20px;
 	}
-	.bracket {
+	#bracket {
 		display: flex;
 		flex-direction: row;
 		font-size: large;
   		padding: 10px;
+		justify-content: center;
+		margin: auto;
 	}
 	.round{
 		display: flex;
@@ -108,35 +114,116 @@
 
 		to { filter: hue-rotate(360deg); }
 	}
+	#player-titles {
+		width: 100%;
+		height: 100px;
+		display: none;
+		/* flex-direction: row; */
+	}
+	#player1-title {
+		/* justify-content: left; */
+		display: block;
+		float: left;
+	}
+	#player2-title {
+		/* justify-content: right; */
+		display: block;
+		float: right;
+	}
+	#game {
+		display: none;
+	}
+	#canvasWrapper {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+	canvas {
+		border: 2px solid black;
+		width: 60%;
+		height: auto;
+	}
+	[data-bs-theme="dark"] canvas {
+		border: 2px solid white;
+	}
+	#winnerPopup {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #202020;
+		color: white;
+		padding: 20px;
+		border-radius: 10px;
+		text-align: center;
+		display: none;
+		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+	}
+	[data-bs-theme="dark"] #winnerPopup {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: white;
+		color: black;
+		padding: 20px;
+		border-radius: 10px;
+		text-align: center;
+		display: none;
+		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+	}
+	#winnerPopup button {
+		margin: 10px;
+		padding: 10px;
+		border: none;
+		cursor: pointer;
+		font-size: 16px;
+	}
 </style>
-
+<!-- TODO: Translations -->
 <div class="page">
 	<div class="tournament-creation">
 		<h1 class="tournament.newTournament" id="newTournament">New Tournament</h1>
-		<div id="option-section" class="option-section">
-			<label class="tournament.chooseOption"">Choose an option:</label>
-			<div id="player-buttons" class="player-buttons">
+		<div id="option-section">
+			<label class="tournament.chooseOption">Choose an option:</label>
+			<div id="player-buttons">
 				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
 				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
 				<button id="16PButton" class="tournament.16Players" onClick="initTournament(16)" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
 			</div>
 		</div>
-		<div id="player-section" class="player-section">
-			<div id="playerList" class="player-list"></div>
-			<div class="button-section"> 	
-				<button id="backButton" class="tournament.backButton" onclick="goBack()">Back</button>
+		<div id="player-section">
+			<div id="playerList"></div>
+			<div class="button-section">
+				<!-- TODO: Fix buttons CSS -->
+				<button class="tournament.backButton" onclick="goBack()">Back</button>
 				<button id="createButton" class="tournament.createButton">Create Tournament</button>
 			</div>
 		</div>
 		<!-- TODO: Improve the bracket's CSS -->
-		<div id="bracket" class="bracket"> </div>
+	</div>
+	<div id="bracket"> </div>
+	<!-- TODO: player-titles CSS -->
+	<div id="player-titles">
+		<div id="player1-title"></div>
+		<div id="player2-title"></div>
+	</div>
+	<div id="game">
+		<div id="canvasWrapper">
+			<canvas id="pong" width="1000" height="500"></canvas>
+		</div>
+		<div id="winnerPopup">
+			<p id="winnerMessage"></p>
+			<button id="goBracket">Tournament</button>
+		</div>
+	</div>
 		<!-- TODO
 		<games>
 			- Before match show a "play" button
-			- maybe replace 
 			- "play" button should trigger a 3 second countdown
 			- after countdown game starts
 		</games>
 		-->
-	</div>
 </div>
+<script src="/frontend/scripts/pong_tournament.js"></script>

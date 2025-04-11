@@ -12,7 +12,7 @@ const BUBBLE_COLORS = [
 ];
 
 let players = new Set();
-let playerList, optionSection, playerSection, createButton, newTournament;
+let playerList, optionSection, playerSection, createButton, newTournament, bracket, playerTitles, game;
 
 function initTournament(playerNum) {
 	if (!playerNum)
@@ -71,6 +71,7 @@ function checkNames(playerNum) {
 	return true;
 }
 
+// Creates the tournament and its bracket
 function createTournament(playerNum) {
 	players.clear();
 	if (!checkNames(playerNum))
@@ -79,7 +80,7 @@ function createTournament(playerNum) {
 	newTournament.style.display = 'none';
 	playerSection.style.display = 'none';
 
-	const bracket = document.getElementById('bracket');
+	bracket = document.getElementById('bracket');
 
 	const rounds = Math.log2(playerNum) + 1;
 	let matches = playerNum / 2;
@@ -122,8 +123,8 @@ function createTournament(playerNum) {
 				player2.innerHTML = '<i class="tbd">TBD</i>';
 			}
 
-			player1.addEventListener('click', function() { selectWinner(this); });
-			player2.addEventListener('click', function() { selectWinner(this); });
+			player1.addEventListener('click', function() { startGame(this); });
+			player2.addEventListener('click', function() { startGame(this); });
 
 			roundElem.appendChild(player1);
 			roundElem.appendChild(matchSpacer.cloneNode(true));
@@ -148,7 +149,17 @@ function createTournament(playerNum) {
 	}
 }
 
-function selectWinner(element) {
+// Shuffles an array
+function arrayShuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+	  const j = Math.floor(Math.random() * (i + 1));
+	  [array[i], array[j]] = [array[j], array[i]];
+	}
+	return array;
+}
+
+// Starts the game of pong
+function startGame(element) {
 	// Prevent selection if clicked element is TBD
 	if (element.querySelector('i.tbd')) return;
 
@@ -157,19 +168,39 @@ function selectWinner(element) {
 
 	// Get both players in the current match
 	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
-
-	// Check if match is already decided
-	if ([...currentMatchPlayers].some(p => p.classList.contains('decided'))) {
-		alert("This match is already decided!");
-		return;
-	}
-
+	
 	// Check if opponent is still TBD
 	const opponent = [...currentMatchPlayers].find(p => p !== element);
 	if (opponent.querySelector('i.tbd')) {
 		alert("Opponent is still TBD!");
 		return;
 	}
+	game = document.getElementById('game');
+	game.style.display = 'block';
+	playerTitles = document.getElementById('player-titles');
+	playerTitles.style.display = 'block';
+
+	bracket.style.display = 'none';
+	let player1 = document.getElementById('player1-title');
+	let player2 = document.getElementById('player2-title');
+	if (element.dataset.position == 0) {
+		player1.innerText = element.innerText;
+		player2.innerText = opponent.innerText;
+		playPong(element, opponent);
+	} else if (element.dataset.position == 1) {
+		player1.innerText = opponent.innerText;
+		player2.innerText = element.innerText;
+		playPong(opponent, element);
+	}
+}
+
+// Receives an element of the bracket and sets it to the winner of the match (if legal)
+function selectWinner(element) {
+	const currentRound = parseInt(element.dataset.round);
+	const currentMatchIndex = parseInt(element.dataset.matchIndex);
+
+	// Get both players in the current match
+	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
 
 	element.classList.add('winner');
 
@@ -196,11 +227,3 @@ function selectWinner(element) {
 		p.style.pointerEvents = 'none';
 	});
 }
-
-function arrayShuffle(array) {
-	for (let i = array.length - 1; i > 0; i--) {
-	  const j = Math.floor(Math.random() * (i + 1));
-	  [array[i], array[j]] = [array[j], array[i]];
-	}
-	return array;
-  }
