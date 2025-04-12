@@ -42,12 +42,9 @@ function initTournament(playerNum) {
 		playerList.appendChild(player);
 	}
 
-	// Prevent automatic activation
-	if (playerNum) {
-		optionSection.style.display = 'none';
-		playerSection.style.display = 'block';
-		createButton.onclick = function() { createTournament(`${playerNum}`); };
-	}
+	optionSection.style.display = 'none';
+	playerSection.style.display = 'block';
+	createButton.onclick = function() { createTournament(`${playerNum}`); };
 }
 
 function goBack() {
@@ -92,9 +89,9 @@ function createTournament(playerNum) {
 	spacer.className = 'spacer';
 	spacer.innerHTML = '&nbsp;';
 
-	const matchSpacer = document.createElement('li');
-	matchSpacer.className = 'match match-spacer';
-	matchSpacer.innerHTML = '&nbsp;';
+	// const matchSpacer = document.createElement('li');
+	// matchSpacer.className = 'match match-spacer';
+	// matchSpacer.innerHTML = '&nbsp;';
 
 	// Add all rounds to the bracket
 	for (let round = 1; round <= rounds; round++) {
@@ -103,17 +100,27 @@ function createTournament(playerNum) {
 
 		roundElem.appendChild(spacer.cloneNode(true));
 		for (let match = 0; round < rounds && match < matches; match++) {
+			const matchSpacer = document.createElement('li');
+			matchSpacer.className = 'match match-spacer';
+			matchSpacer.innerHTML = '&nbsp;';
+			matchSpacer.style.cursor = 'pointer';
+			matchSpacer.dataset.round = round;
+			matchSpacer.dataset.matchIndex = match;
+
+
 			const player1 = document.createElement('li');
 			player1.className = 'match player1';
 			player1.dataset.round = round;
 			player1.dataset.matchIndex = match;
 			player1.dataset.position = 0;
+			player1.style.cursor = 'pointer';
 
 			const player2 = document.createElement('li');
 			player2.className = 'match player2';
 			player2.dataset.round = round;
 			player2.dataset.matchIndex = match;
 			player2.dataset.position = 1;
+			player2.style.cursor = 'pointer';
 
 			if (round == 1) {
 				player1.textContent = playerArr[match * 2];
@@ -125,9 +132,10 @@ function createTournament(playerNum) {
 
 			player1.addEventListener('click', function() { startGame(this); });
 			player2.addEventListener('click', function() { startGame(this); });
+			matchSpacer.addEventListener('click', function() { startGame(player1); });
 
 			roundElem.appendChild(player1);
-			roundElem.appendChild(matchSpacer.cloneNode(true));
+			roundElem.appendChild(matchSpacer);
 			roundElem.appendChild(player2);
 			roundElem.appendChild(spacer.cloneNode(true));
 		}
@@ -170,7 +178,7 @@ function startGame(element) {
 	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
 	
 	// Check if opponent is still TBD
-	const opponent = [...currentMatchPlayers].find(p => p !== element);
+	const opponent = [...currentMatchPlayers].find(p => (p !== element && p.className !== 'match match-spacer'));
 	if (opponent.querySelector('i.tbd')) {
 		alert("Opponent is still TBD!");
 		return;
