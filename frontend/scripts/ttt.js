@@ -6,6 +6,7 @@
 
 	let currentPlayer = 'X';
 	let gameActive = true;
+	let lastWon = 'O';
 	const gameState = Array(9).fill(null);
 
 	const winningCombinations = [
@@ -24,6 +25,7 @@
 		return gameState.includes(null) ? null : 'Tie';
 	}
 
+	let winner;
 	function handleClick(e) {
 		const cell = e.target;
 		const index = cell.dataset.index;
@@ -34,22 +36,28 @@
 		cell.textContent = currentPlayer;
 		cell.classList.add('taken', currentPlayer);
 
-		const winner = checkWinner();
+		winner = checkWinner();
 
 		if (winner) {
 			gameActive = false;
-			message.textContent = winner === 'Tie' ? "It's a Tie!" : `Player ${winner} Wins!`;
+			lastWon = winner;
+			message.textContent = winner === 'Tie' ? `${i18next.t('ttt.tie')}` : `${i18next.t('ttt.player')} ${winner} ${i18next.t('pong.wins')}`;
 		} else {
 			currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-			message.textContent = `Player ${currentPlayer}'s turn`;
+			if (_lang === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
+			if (_lang === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
+			if (_lang === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
 		}
 	}
 
 	function resetGame() {
 		gameState.fill(null);
-		currentPlayer = 'X';
+		if (winner == 'X') currentPlayer = 'O';
+		else currentPlayer = 'X'
 		gameActive = true;
-		message.textContent = "Player X's turn";
+		if (_lang === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
+		if (_lang === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
+		if (_lang === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
 		board.innerHTML = '';
 		createBoard();
 	}
@@ -68,3 +76,10 @@
 	createBoard();
 
 })();
+
+function translateTTT() {
+	document.querySelectorAll('[data-i18n]').forEach(element => {
+        let key = element.getAttribute('data-i18n');
+        element.innerText = i18next.t(key);
+    });
+}
