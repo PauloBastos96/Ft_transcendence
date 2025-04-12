@@ -1,5 +1,34 @@
-(async function () {
+(function () {
 
+	const startBtn = document.getElementById('startBtn');
+	let p1 = document.getElementById('player1Input')
+	p1.placeholder = _user.username;
+
+	startBtn.addEventListener('click', () => {
+		const p2 = document.getElementById('player2Input').value.trim();
+
+		if (!p2) {
+			alert("Please enter player names.");
+			return;
+		}
+
+		if (p1.value.trim() == '') p1 = _user.username;
+
+		console.log(_user.username)
+
+		document.getElementById('player1Name').textContent = p1;
+		document.getElementById('player2Name').textContent = p2;
+
+		document.getElementById('usernameForm').style.display = 'none';
+		document.getElementById('canvasWrapper').style.display = 'flex';
+
+		startGame(p1, p2);
+	});
+
+})();
+
+async function startGame(p1, p2) {
+	console.log(`Starting tournament with: ${p1} and ${p2}`);
 	_running = true;
 
 	let paused = false;
@@ -23,6 +52,7 @@
 	let paddle2Color = getColorScheme();
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
+	let color = getColorScheme();
 
 	let ball = { x: canvas.width / 2, y: canvas.height / 2, vx: BALL_SPEED || 4, vy: BALL_SPEED || 4, hits: 0, lastLoser: null };
 
@@ -40,6 +70,7 @@
 		paddle2Color = e.matches ? 'white' : 'black';
 		ballColor = e.matches ? 'white' : 'black';
 		fontText = e.matches ? 'white' : 'black';
+		color = e.matches ? 'white' : 'black';
 	});
 
 	function getColorScheme() {
@@ -194,6 +225,19 @@
 		paused = !paused;
 	});
 
+	function drawPlayerNames(ctx, canvas) {
+		ctx.font = "24px Arial";
+		ctx.fillStyle = color;
+	
+		// Player 1 (top-left)
+		const p1Width = ctx.measureText(p1).width;
+		ctx.fillText(p1, (canvas.width / 4) - (p1Width / 2), 30);
+	
+		// Player 2 (top-right)
+		const p2Width = ctx.measureText(p1).width;
+		ctx.fillText(p2, (((3 * canvas.width) - (p2Width / 2)) / 4), 30);
+	}
+
 	function draw() {
 		// Clear the canvas
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -208,6 +252,7 @@
 		// Draw scores
 		drawText(player1.score, canvas.width / 4, 50);
 		drawText(player2.score, (3 * canvas.width) / 4, 50);
+		drawPlayerNames(ctx, canvas);
 	}
 
 	function gameLoop() {
@@ -234,11 +279,4 @@
 
 	if (_running) gameLoop();
 	else return;
-
-})();
-
-function translatePong() {
-	document.getElementById('PauseBtn').innerText = `${i18next.t('pong.pause')}`;
-	document.getElementById('restartGame').innerText = `${i18next.t('pong.again')}`;
-	document.getElementById('goHome').innerText = `${i18next.t('pong.home')}`;
 }

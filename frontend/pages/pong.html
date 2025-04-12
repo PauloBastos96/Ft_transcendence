@@ -59,7 +59,7 @@
 	}
 </style>
 
-<h2>Pong</h2>
+<!-- <h2>Pong</h2>
 <div id="canvasWrapper">
 	<canvas id="pong" width="1000" height="500"></canvas>
 	<br>
@@ -71,5 +71,30 @@
 	<p id="winnerMessage"></p>
 	<button id="restartGame" data-i18n="pong.again" >Play Again</button>
 	<button id="goHome" data-i18n="pong.home" >Home</button>
+</div> -->
+
+<h2>Pong</h2>
+
+<div id="usernameForm">
+	<label class="usernameLabel">
+		Player 1: <input type="text" id="player1Input" placeholder="Player 1 Name">
+	</label>
+	<label class="usernameLabel">
+		Player 2: <input type="text" id="player2Input" placeholder="Player 2 Name">
+	</label>
+	<button id="startBtn" >Start Game</button>
 </div>
+
+<div id="canvasWrapper" style="display: none;">
+	<span class="usernameDisplay" id="player1Name"></span>
+	<canvas id="pong" width="1000" height="500"></canvas>
+	<button id="PauseBtn" type="button" data-i18n="pong.pause" >Pause</button>
+	<span class="usernameDisplay" id="player2Name"></span>
+</div>
+<div id="winnerPopup">
+	<p id="winnerMessage"></p>
+	<button id="restartGame" data-i18n="pong.again" >Play Again</button>
+	<button id="goHome" data-i18n="pong.home" >Home</button>
+</div>
+
 <script src="/frontend/scripts/pong.js"></script>

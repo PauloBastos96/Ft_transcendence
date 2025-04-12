@@ -180,7 +180,7 @@ function changeContent(page, pushState = true) {
                 document.getElementById('signupForm').addEventListener('submit', signup, true);
                 translateAll();
             case 'pong':
-                translatePong();
+                translateAll();
                 break;
             case 'game2':
                 translateAll();
