@@ -120,5 +120,11 @@
         "blockUserQuestion": "Tens a certeza que queres bloquear",
         "chatPlaceholder": "Escreve a tua mensagem aqui",
         "send": "Enviar"
+    },
+    "pong": {
+        "wins": "Ganha!",
+        "again": "Jogar de novo",
+        "home": "Início",
+        "pause": "pausa"
     }
 }
