@@ -1,3 +1,6 @@
+
+
+
 function playPong( player1_elem, player2_elem ) {
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
@@ -196,5 +199,27 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key === 'ArrowDown') player2.down = false;
 	});
 
-	gameLoop();
+	var timer;
+	var timeLeft = 4; // seconds
+
+	function updateTimer() {
+		timeLeft = timeLeft - 1;
+		if (timeLeft >= 0)
+			document.getElementById('countdown').innerText = timeLeft;
+		else {
+			document.getElementById('countdownBlock').style.display = 'none';
+			clearInterval(timer);
+			gameLoop();
+		}
+	}
+
+	function startCountdown() {
+		// every N milliseconds (1 second = 1000 ms)
+		timer = setInterval(updateTimer, 1000);
+
+		document.getElementById('countdownBlock').style.display = 'block';
+		updateTimer();
+	}
+	draw();
+	startCountdown();
 }

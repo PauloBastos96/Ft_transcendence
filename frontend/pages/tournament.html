@@ -86,7 +86,6 @@
 		padding: 0;
 
 		.spacer { flex-grow: 1; }
-		/* First and last spacer of each round are half as thick */
 		.spacer:first-child, .spacer:last-child { flex-grow: .5; }
 		.match-spacer { flex-grow: 1; }
 	}
@@ -150,10 +149,6 @@
 		float: right;
 	}
 
-	#game {
-		display: none;
-	}
-
 	#confirmPopup {
 		position: fixed;
 		top: 50%;
@@ -162,6 +157,23 @@
 		background: #202020;
 		color: white;
 		display: none;
+	}
+
+	#game {
+		display: none;
+	}
+	/* TODO: Improve CSS */
+	#countdownBlock {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		display: none
+	}
+	/* TODO: Improve CSS */
+	#countdown {
+		position: fixed;
+		top: 50%;
+		left: 50%;
 	}
 
 	#canvasWrapper {
@@ -250,7 +262,6 @@
 	<div id="confirmPopup">
 		<p id="confirmMessage"></p>
 		<button id="cancelButton" class="tournament.cancelButton">Cancel</button>
-		<!-- TODO: Add countdown after confirmation -->
 		<button id="playButton" class="tournament.playButton">Play</button>
 	</div>
 	<div id="game">
@@ -263,4 +274,5 @@
 		</div>
 	</div>
 </div>
+<div id="countdownBlock"><span id="countdown">0</span></div>
 <script src="/frontend/scripts/pong_tournament.js"></script>
