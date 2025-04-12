@@ -238,8 +238,7 @@
 })();
 
 function translatePong() {
-	document.querySelectorAll('[data-i18n]').forEach(element => {
-        let key = element.getAttribute('data-i18n');
-        element.innerText = i18next.t(key);
-    });
+	document.getElementById('PauseBtn').innerText = `${i18next.t('pong.pause')}`;
+	document.getElementById('restartGame').innerText = `${i18next.t('pong.again')}`;
+	document.getElementById('goHome').innerText = `${i18next.t('pong.home')}`;
 }
