@@ -126,5 +126,9 @@
          "again": "Volver a jugar",
          "home": "Inicio",
          "pause": "pausa"
-     }
+     },
+     "ttt": {
+        "tie": "¡Es un empate!",
+        "player": "Jugador"
+    }
 }

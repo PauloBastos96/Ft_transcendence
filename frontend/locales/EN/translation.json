@@ -126,5 +126,9 @@
         "again": "Play Again",
         "home": "Home",
         "pause": "pause"
+    },
+    "ttt": {
+        "tie": "It's a Tie!",
+        "player": "Player"
     }
 }
