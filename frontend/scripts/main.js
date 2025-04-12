@@ -2,7 +2,7 @@ let pageState = 'overview'
 let loggedIn = false;
 let _user = null;
 let _avatar = null;
-var _lang = 'EN';
+let _lang = 'EN';
 var _running = false;
 
 //Handle back and forward navigation events
@@ -183,7 +183,7 @@ function changeContent(page, pushState = true) {
                 translatePong();
                 break;
             case 'game2':
-                translateTTT();
+                translateAll();
                 break;
             default:
                 break;

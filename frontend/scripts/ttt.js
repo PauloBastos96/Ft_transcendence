@@ -15,6 +15,10 @@
 		[0, 4, 8], [2, 4, 6]
 	];
 
+	if (_user.idiom === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
+	if (_user.idiom === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
+	if (_user.idiom === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
+
 	function checkWinner() {
 		for (const combination of winningCombinations) {
 			const [a, b, c] = combination;
@@ -44,9 +48,9 @@
 			message.textContent = winner === 'Tie' ? `${i18next.t('ttt.tie')}` : `${i18next.t('ttt.player')} ${winner} ${i18next.t('pong.wins')}`;
 		} else {
 			currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-			if (_lang === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
-			if (_lang === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
-			if (_lang === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
+			if (_user.idiom === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
+			if (_user.idiom === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
+			if (_user.idiom === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
 		}
 	}
 
@@ -55,9 +59,9 @@
 		if (winner == 'X') currentPlayer = 'O';
 		else currentPlayer = 'X'
 		gameActive = true;
-		if (_lang === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
-		if (_lang === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
-		if (_lang === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
+		if (_user.idiom === 'EN') message.textContent = `Player ${currentPlayer}'s turn`;
+		if (_user.idiom === 'PT') message.textContent = `Vez do jogador ${currentPlayer}`;
+		if (_user.idiom === 'ES') message.textContent = `Turno del jugador ${currentPlayer}`;
 		board.innerHTML = '';
 		createBoard();
 	}
@@ -76,10 +80,3 @@
 	createBoard();
 
 })();
-
-function translateTTT() {
-	document.querySelectorAll('[data-i18n]').forEach(element => {
-        let key = element.getAttribute('data-i18n');
-        element.innerText = i18next.t(key);
-    });
-}

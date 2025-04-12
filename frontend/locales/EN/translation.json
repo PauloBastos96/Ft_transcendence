@@ -129,6 +129,7 @@
     },
     "ttt": {
         "tie": "It's a Tie!",
-        "player": "Player"
+        "player": "Player",
+        "reset": "Reset Game"
     }
 }

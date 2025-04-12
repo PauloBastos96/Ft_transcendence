@@ -129,6 +129,7 @@
      },
      "ttt": {
         "tie": "¡Es un empate!",
-        "player": "Jugador"
+        "player": "Jugador",
+        "reset": "Reiniciar Juego"
     }
 }
