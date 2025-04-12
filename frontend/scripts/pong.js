@@ -1,4 +1,4 @@
-(function () {
+(async function () {
 
 	_running = true;
 
@@ -11,7 +11,7 @@
 	const pauseBtn = document.getElementById('PauseBtn');
 
 	const PADDLE_SPEED = 2;
-	const BALL_SPEED = 2;
+	const BALL_SPEED = 10;
 	const SPEED_HITS = 5; //! mandatory
 
 	const paddleWidth = 10;
@@ -26,8 +26,13 @@
 
 	let ball = { x: canvas.width / 2, y: canvas.height / 2, vx: BALL_SPEED || 4, vy: BALL_SPEED || 4, hits: 0, lastLoser: null };
 
-	let player1 = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
-	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
+	let player1 = { username: 'Player 1', x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
+	let player2 = { username: 'Player 2', x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
+	if (!_user || !window.user) {
+		_user = await getUserData();
+		window.user = _user;
+		player1.username = _user.username;
+	}
 
 	let collisionCooldown = 0;
 
@@ -149,12 +154,12 @@
 
 	function checkWinner() {
 		if (player1.score >= maxPoints) {
-			winnerMessage.innerText = "Player 1 Wins!";
+			winnerMessage.innerText = `${player1.username} ${i18next.t('pong.wins')}`; //"Player 1 Wins!";
 			winnerPopup.style.display = "block";
 			return 1;
 		}
 		if (player2.score >= maxPoints) {
-			winnerMessage.innerText = "Player 2 Wins!";
+			winnerMessage.innerText = `${player2.username} ${i18next.t('pong.wins')}`;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
@@ -231,3 +236,10 @@
 	else return;
 
 })();
+
+function translatePong() {
+	document.querySelectorAll('[data-i18n]').forEach(element => {
+        let key = element.getAttribute('data-i18n');
+        element.innerText = i18next.t(key);
+    });
+}
