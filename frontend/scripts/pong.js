@@ -17,7 +17,7 @@
 	const paddleWidth = 10;
 	const paddleHeight = 80;
 	const ballSize = 10;
-	const maxPoints = 5;
+	const maxPoints = 3;
 
 	const paddle1Color = 'green';
 	let paddle2Color = getColorScheme();
