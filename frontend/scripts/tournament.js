@@ -73,8 +73,7 @@ function createTournament(playerNum) {
 	players.clear();
 	if (!checkNames(playerNum))
 		return;
-	let newTournament = document.getElementById('newTournament');
-	newTournament.style.display = 'none';
+	document.getElementById('newTournament').style.display = 'none';
 	playerSection.style.display = 'none';
 
 	bracket = document.getElementById('bracket');
@@ -198,15 +197,12 @@ function startGame(element) {
 }
 
 function confirmMatch(player1, player2) {
-	let confirmMessage = document.getElementById('confirmMessage');
 	let playButton = document.getElementById('playButton');
-	let cancelButton = document.getElementById('cancelButton');
 
 	confirmPopup = document.getElementById('confirmPopup');
-	
 	confirmPopup.style.display = 'block';
-	
-	confirmMessage.innerHTML = `${player1.innerText} <b><i>VS</i></b> ${player2.innerText}`;
+
+	document.getElementById('confirmMessage').innerHTML = `${player1.innerText} <b><i>VS</i></b> ${player2.innerText}`;
 
 	// Remove other event listeners
 	playButton.replaceWith(playButton.cloneNode(true));
@@ -223,7 +219,7 @@ function confirmMatch(player1, player2) {
 		playPong(player1, player2);
 	});
 
-	cancelButton.addEventListener('click', function() {
+	document.getElementById('cancelButton').addEventListener('click', function() {
 		confirmPopup.style.display = 'none';
 	});
 }
