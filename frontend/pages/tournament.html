@@ -27,8 +27,10 @@
 		display: flex;
 		color: white;
 		font-size: 200%;
-
+		font-family: monospace;
+		
 		button {
+			font-weight: bold;
 			padding: 8%;
 			border: none;
 			border-radius: 8%;
@@ -52,10 +54,14 @@
 		border-radius: 10px;
 		padding: 6px;
 		padding-left: 8px;
+		font-weight: 200;
+		font-family: monospace;
+		color: #e2e2e2;
+		font-size: larger;
 	}
 
 	.player-name::placeholder {
-		color: white;
+		color: #e2e2e2;
 	}
 
 	.button-section {
@@ -132,18 +138,42 @@
 	}
 
 	#player-titles {
-		width: 100%;
-		height: 100px;
+		width: 92%;
+		height: 10%;
 		display: none;
-	}
+		position: fixed;
+		left: 4%;
+		font-family: monospace;
+		font-weight: bold;
 
-	#player1-title {
-		display: block;
-		float: left;
-	}
-	#player2-title {
-		display: block;
-		float: right;
+		#player1-title, #player2-title {
+			display: table;
+			font-size: 40px;
+			width: 18%;
+			height: 100%;
+			border: 4px solid #f379df;
+			text-align: center;
+			line-height: 100%;
+
+			span {
+				display: table-cell;
+					vertical-align: middle;
+			}
+		}
+
+		#player1-title {
+			float: left;
+			background-color: #2747af;
+			border-color: #2e55d6;
+			border-radius: 15px 0px 0px 15px;
+		}
+
+		#player2-title {
+			float: right;
+			background-color: #991e1e;
+			border-color: #d62e2e;
+			border-radius: 0px 15px 15px 0px;
+		}
 	}
 
 	#confirmPopup {
@@ -164,7 +194,7 @@
 		position: fixed;
 		width: 100%;
 		height: 100%;
-		display: none
+		display: none;
 	}
 
 	#countdown {
@@ -237,7 +267,7 @@
 	<div class="tournament-creation">
 		<h1 class="tournament.newTournament" id="newTournament">New Tournament</h1>
 		<div id="option-section">
-			<label class="tournament.chooseOption">Choose an option:</label>
+		<label class="tournament.chooseOption" style="font-family: monospace">Choose an option:</label>
 			<div id="player-buttons">
 				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
 				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
@@ -256,7 +286,6 @@
 	<!-- TODO: Add hint so the user knows to click a player to start the match -->
 	<!-- TODO: Improve the bracket's CSS -->
 	<div id="bracket"> </div>
-	<!-- TODO: player-titles CSS -->
 	<div id="player-titles">
 		<div id="player1-title"></div>
 		<div id="player2-title"></div>

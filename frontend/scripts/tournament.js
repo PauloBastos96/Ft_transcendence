@@ -186,12 +186,12 @@ function startGame(element) {
 	let player1 = document.getElementById('player1-title');
 	let player2 = document.getElementById('player2-title');
 	if (element.dataset.position == 0) {
-		player1.innerText = element.innerText;
-		player2.innerText = opponent.innerText;
+		player1.innerHTML = `<span>${element.innerText}</span>`;
+		player2.innerHTML = `<span>${opponent.innerText}</span>`;
 		confirmMatch(element, opponent);
 	} else if (element.dataset.position == 1) {
-		player1.innerText = opponent.innerText;
-		player2.innerText = element.innerText;
+		player1.innerHTML = `<span>${opponent.innerText}</span>`;
+		player2.innerHTML = `<span>${element.innerText}</span>`;
 		confirmMatch(opponent, element);
 	}
 }

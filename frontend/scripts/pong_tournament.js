@@ -1,6 +1,3 @@
-
-
-
 function playPong( player1_elem, player2_elem ) {
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
