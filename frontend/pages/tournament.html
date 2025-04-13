@@ -122,9 +122,6 @@
 		font-weight: bolder;
 		background-image: linear-gradient(90deg, #983eff, #fe3afe);
 		animation: hue 10s infinite linear;
-		/* TODO: Decide if I want the color to be in the text or the background */
-		/* background-clip: text; */
-		/* -webkit-text-fill-color: transparent; */
 		color: white;
 	}
 
@@ -162,18 +159,24 @@
 	#game {
 		display: none;
 	}
-	/* TODO: Improve CSS */
+
 	#countdownBlock {
 		position: fixed;
 		width: 100%;
 		height: 100%;
 		display: none
 	}
-	/* TODO: Improve CSS */
+
 	#countdown {
+		display: block;
 		position: fixed;
 		top: 50%;
 		left: 50%;
+		transform: translate(-50%, -50%);
+		font-weight: bolder;
+		font-size: 200px;
+		color: #116920;
+		text-shadow: -2px -2px 0 #0e4e18, 2px -2px 0 #0e4e18, -2px 2px 0 #0e4e18, 2px 2px 0 #0e4e18;
 	}
 
 	#canvasWrapper {
@@ -249,9 +252,9 @@
 				<button id="createButton" class="tournament.createButton">Create Tournament</button>
 			</div>
 		</div>
-		<!-- TODO: Improve the bracket's CSS -->
 	</div>
 	<!-- TODO: Add hint so the user knows to click a player to start the match -->
+	<!-- TODO: Improve the bracket's CSS -->
 	<div id="bracket"> </div>
 	<!-- TODO: player-titles CSS -->
 	<div id="player-titles">

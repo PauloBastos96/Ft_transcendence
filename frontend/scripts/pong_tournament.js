@@ -204,8 +204,10 @@ function playPong( player1_elem, player2_elem ) {
 
 	function updateTimer() {
 		timeLeft = timeLeft - 1;
-		if (timeLeft >= 0)
+		if (timeLeft > 0)
 			document.getElementById('countdown').innerText = timeLeft;
+		else if (timeLeft == 0)
+			document.getElementById('countdown').innerText = 'Go!';
 		else {
 			document.getElementById('countdownBlock').style.display = 'none';
 			clearInterval(timer);
