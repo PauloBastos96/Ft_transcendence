@@ -26,7 +26,8 @@
           "42login": "Iniciar sesión con 42",
           "42error": "Error al iniciar sesión con 42",
           "alreadyLoggedIn": "Ya tienes una sesión iniciada en otro lugar",
-          "deactivated": "Esta cuenta ha sido desactivada"
+          "deactivated": "Esta cuenta ha sido desactivada",
+          "userTaken": "Nombre de usuario/correo electrónico ya en uso"
      },
      "header":{
           "overview": "Resumen",

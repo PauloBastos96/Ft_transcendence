@@ -37,6 +37,7 @@ async function fillFriendList() {
 
     for (let friendID of _user.friends) {
         let friend = await getUserByID(friendID);
+        console.log(friend);
         let clone = friendListTemplate.content.cloneNode(true);
         clone.querySelector('h6').textContent = friend.username;
         clone.querySelector('h6').setAttribute('data-userid', friend.id);
@@ -44,22 +45,6 @@ async function fillFriendList() {
         clone.querySelector('img').src = friend.avatar;
         friendList.appendChild(clone);
     }
-}
-
-function toggleSelectedFriend(element) {
-    const friendList = document.getElementById('friend-list');
-    for (let friend of friendList.children) {
-        friend.classList.remove('active');
-    }
-    element.classList.add('active');
-    document.getElementById('selected-friend').innerText = element.querySelector('h6').innerText;
-    let chatArea = document.getElementById('chat-area');
-    if (chatArea.classList.contains('d-none')) {
-        chatArea.classList.remove('d-none');
-    }
-    let input = document.getElementById('chat-input');
-    input?.focus();
-    input?.setAttribute('placeholder', i18next.t('livechat.chatPlaceholder'));
 }
 
 function showFriendOptions(event) {
