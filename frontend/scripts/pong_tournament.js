@@ -13,8 +13,8 @@ function playPong( player1_elem, player2_elem ) {
 	const ballSize = 10;
 	const maxPoints = 5;
 
-	const paddle1Color = 'green';
-	let paddle2Color = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	const paddle1Color = '#2e55d6';
+	let paddle2Color = '#d62e2e';
 	let ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
 	let fontText = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
 
@@ -24,7 +24,6 @@ function playPong( player1_elem, player2_elem ) {
 	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 
 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-		paddle2Color = e.matches ? 'white' : 'black';
 		ballColor = e.matches ? 'white' : 'black';
 		fontText = e.matches ? 'white' : 'black';
 	});
@@ -67,6 +66,7 @@ function playPong( player1_elem, player2_elem ) {
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			ballColor = '#7090fc';
 			checkSpeedIncrease();
 		}
 
@@ -77,6 +77,7 @@ function playPong( player1_elem, player2_elem ) {
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			ballColor = '#da6363';
 			checkSpeedIncrease();
 		}
 
@@ -112,6 +113,7 @@ function playPong( player1_elem, player2_elem ) {
 		ball.y = canvas.height / 2;
 		ball.vy = BALL_SPEED || 4;
 		ball.hits = 0;
+		ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
 	}
 
 	function checkSpeedIncrease() {
