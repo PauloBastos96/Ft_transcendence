@@ -19,12 +19,7 @@
 		margin-left: 17%;
 		font-size: 22px;
 		color: #0000007a;
-	}
-
-	[data-bs-theme="dark"] .tournament\.chooseOption {
-		margin-left: 17%;
-		font-size: 22px;
-		color: #ffffff60;
+		font-family: monospace;
 	}
 
 	#player-buttons {
@@ -42,6 +37,19 @@
 			border-radius: 8%;
 			cursor: pointer;
 			margin: 3%;
+		}
+
+		.tournament\.4Players {
+			&:enabled { background-color: #f59055; }
+			&:hover { background-color: #da7236; }
+		}
+		.tournament\.8Players {
+			&:enabled { background-color: #f379df; }
+			&:hover { background-color: #e65bce; }
+		}
+		.tournament\.16Players {
+			&:enabled { background-color: #6ed165; }
+			&:hover { background-color: #40c234; }
 		}
 	}
 
@@ -168,29 +176,6 @@
 		}
 	}
 
-	[data-bs-theme="dark"] li.player1 {
-		border-image: linear-gradient(90deg, #2e55d6, white);
-		border-image-slice: 1;
-		border-bottom: 2px solid;
-	}
-
-	[data-bs-theme="dark"] li.match-spacer {
-		border-right: 2px solid white;
-		min-height: 60px;
-	}
-
-	[data-bs-theme="dark"]  li.player2 {
-		border-image: linear-gradient(90deg, #d62e2e, white);
-		border-image-slice: 1;
-		border-top: 2px solid;
-	}
-
-	[data-bs-theme="dark"] li.finalist {
-		height: 60px;
-		align-content: center;
-		border-bottom: 2px solid white;
-	}
-
 	@keyframes hue {
 		from { filter: hue-rotate(0deg); }
 
@@ -284,10 +269,6 @@
 		height: auto;
 	}
 
-	[data-bs-theme="dark"] canvas {
-		border: 2px solid white;
-	}
-
 	#winnerPopup {
 		position: fixed;
 		top: 50%;
@@ -302,20 +283,6 @@
 		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
 	}
 
-	[data-bs-theme="dark"] #winnerPopup {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background: white;
-		color: black;
-		padding: 20px;
-		border-radius: 10px;
-		text-align: center;
-		display: none;
-		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
-	}
-
 	#winnerPopup button {
 		margin: 10px;
 		padding: 10px;
@@ -323,21 +290,76 @@
 		cursor: pointer;
 		font-size: 16px;
 	}
+
+	[data-bs-theme="dark"] {
+		.tournament\.chooseOption {
+			margin-left: 17%;
+			font-size: 22px;
+			color: #ffffff60;
+			font-family: monospace;
+		}
+
+		li {
+			&.player1 {
+				border-image: linear-gradient(90deg, #2e55d6, white);
+				border-image-slice: 1;
+				border-bottom: 2px solid;
+			}
+			
+			&.match-spacer {
+				border-right: 2px solid white;
+				min-height: 60px;
+			}
+			
+			&.player2 {
+				border-image: linear-gradient(90deg, #d62e2e, white);
+				border-image-slice: 1;
+				border-top: 2px solid;
+			}
+			
+			&.finalist {
+				height: 60px;
+				align-content: center;
+				border-bottom: 2px solid white;
+			}
+		}
+
+		canvas {
+			border: 2px solid white;
+			width: 60%;
+			height: auto;
+		}
+
+		#winnerPopup {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: white;
+			color: black;
+			padding: 20px;
+			border-radius: 10px;
+			text-align: center;
+			display: none;
+			box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+		}
+	}
 </style>
+
 <!-- TODO: Translations -->
 <div class="page">
 	<div class="tournament-creation">
 		<h1 class="tournament.newTournament" id="newTournament">New Tournament</h1>
 		<div id="option-section">
-		<label class="tournament.chooseOption" style="font-family: monospace">Choose an option:</label>
+		<label class="tournament.chooseOption">Choose an option:</label>
 			<div id="player-buttons">
-				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)" style="background-color:#f59055" onmouseout="this.style.backgroundColor='#f59055'" onmouseover="this.style.backgroundColor='#da7236'">4 Players</button>
-				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)" style="background-color:#f379df" onmouseout="this.style.backgroundColor='#f379df'" onmouseover="this.style.backgroundColor='#e65bce'">8 Players</button>
-				<button id="16PButton" class="tournament.16Players" onClick="initTournament(16)" style="background-color:#6ed165" onmouseout="this.style.backgroundColor='#6ed165'" onmouseover="this.style.backgroundColor='#40c234'">16 Players</button>
+				<button id="4PButton" class="tournament.4Players" onClick="initTournament(4)">4 Players</button>
+				<button id="8PButton" class="tournament.8Players" onClick="initTournament(8)">8 Players</button>
+				<button id="16PButton" class="tournament.16Players" onClick="initTournament(16)">16 Players</button>
 			</div>
 		</div>
 		<div id="player-section">
-			<!-- TODO: Better playerList -->
+			<!-- TODO: "There must be a matchmaking system: the tournament system organize the matchmaking of the participants, and announce the next fight." -->
 			<div id="playerList"></div>
 			<div class="button-section">
 				<!-- TODO: Fix buttons CSS -->
