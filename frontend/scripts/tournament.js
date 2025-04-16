@@ -1,3 +1,5 @@
+// TODO: Update Player tournament stats
+
 // Player bubble colors
 // TODO: change colors
 const BUBBLE_COLORS = [
@@ -142,7 +144,7 @@ function createTournament(playerNum) {
 		// This puts the winner section to the bracket
 		if (round == rounds) {
 			const winner = document.createElement('li');
-			winner.className = 'match player1';
+			winner.className = 'match finalist';
 			winner.innerHTML = '<i class="tbd">TBD</i>';
 			winner.dataset.round = round;
 			winner.dataset.matchIndex = 0;
