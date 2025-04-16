@@ -4,8 +4,8 @@ function playPong( player1_elem, player2_elem ) {
 	const winnerPopup = document.getElementById('winnerPopup');
 	const winnerMessage = document.getElementById('winnerMessage');
 
-	const PADDLE_SPEED = 2;
-	const BALL_SPEED = 2;
+	const PADDLE_SPEED = 3;
+	const BALL_SPEED = 3;
 	const SPEED_HITS = 5; //! mandatory
 
 	const paddleWidth = 10;
@@ -86,12 +86,14 @@ function playPong( player1_elem, player2_elem ) {
 			player2.score++;
 			ball.lastLoser = 1;
 			resetBall();
+			resetPaddles();
 		}
 
 		if (ball.x > canvas.width) {
 			player1.score++;
 			ball.lastLoser = 2;
 			resetBall();
+			resetPaddles();
 		}
 
 		// Player movement
@@ -114,6 +116,16 @@ function playPong( player1_elem, player2_elem ) {
 		ball.vy = BALL_SPEED || 4;
 		ball.hits = 0;
 		ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	}
+
+	function resetPaddles() {
+		// move player1 paddle to the middle again
+		player1.x = 0;
+		player1.y = canvas.height / 2 - paddleHeight / 2;
+		
+		// move player2 paddle to the middle again
+		player2.x = canvas.width - paddleWidth;
+		player2.y = canvas.height / 2 - paddleHeight / 2;
 	}
 
 	function checkSpeedIncrease() {
@@ -148,17 +160,11 @@ function playPong( player1_elem, player2_elem ) {
 		player1.score = 0;
 		player2.score = 0;
 
-		// move player1 paddle to the middle again
-		player1.x = 0;
-		player1.y = canvas.height / 2 - paddleHeight / 2;
-		
-		// move player2 paddle to the middle again
-		player2.x = canvas.width - paddleWidth;
-		player2.y = canvas.height / 2 - paddleHeight / 2;
-		
-		winnerPopup.style.display = "none";
 		ball.lastLoser = null;
 		resetBall();
+		resetPaddles();
+		
+		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
 		playerTitles.style.display = 'none';
 		const game = document.getElementById('game');
