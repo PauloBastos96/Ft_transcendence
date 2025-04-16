@@ -66,12 +66,26 @@
 
 	.button-section {
 		margin-top: 10%;
+		display: flex;
+		justify-content: center;
+
+		button {
+			border-width: 0px;
+			border-radius: 40px;
+			padding: 20px;
+			box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.25);
+		}
 	}
 
 	.tournament\.backButton {
 		color: white;
-		border-radius: 10px;
-		padding: 20px;
+		width: 120px;
+		margin-right: 10px;
+	}
+
+	#createButton {
+		width: 180px;
+
 	}
 
 	#bracket {
@@ -107,7 +121,6 @@
 	}
 
 	li.match.decided {
-		color: white;
 		pointer-events: none;
 		opacity: 0.6;
 	}
@@ -117,38 +130,57 @@
 	}
 
 	li.player1 {
+		border-image: linear-gradient(90deg, #7696ff, #aaa);
+		border-image-slice: 1;
+		border-bottom: 2px solid;
+	}
+	
+	[data-bs-theme="dark"] li.player1 {
 		border-image: linear-gradient(90deg, #2e55d6, white);
 		border-image-slice: 1;
-		border-bottom: 1px solid;
+		border-bottom: 2px solid;
 	}
 
 	li.match-spacer {
-		border-right: 1px solid white;
+		border-right: 2px solid #aaa;
+		min-height: 60px;
+	}
+
+	[data-bs-theme="dark"] li.match-spacer {
+		border-right: 2px solid white;
 		min-height: 60px;
 	}
 
 	li.player2 {
-		border-image: linear-gradient(90deg, #d62e2e, white);
+		border-image: linear-gradient(90deg, #ff7e7e, #aaa);
 		border-image-slice: 1;
-		border-top: 1px solid;
-
+		border-top: 2px solid;
 	}
 
-	li.final-winner {
-		font-weight: bolder;
-		background: linear-gradient(90deg, #983eff, #fe3afe);
-		animation: hue 10s infinite linear;
-		color: white;
+	[data-bs-theme="dark"]  li.player2 {
+		border-image: linear-gradient(90deg, #d62e2e, white);
+		border-image-slice: 1;
+		border-top: 2px solid;
 	}
 
 	li.finalist {
 		height: 60px;
-		border-bottom: 1px solid white;
 		align-content: center;
+		border-bottom: 2px solid #aaa;
 	}
 
-	li.finalist.final-winner {
-		border: 2px solid white;
+	[data-bs-theme="dark"] li.finalist {
+		height: 60px;
+		align-content: center;
+		border-bottom: 2px solid white;
+	}
+
+	li.final-winner {
+		font-weight: bolder;
+		background: linear-gradient(90deg, #983eff, #fe3afe) border-box;
+		animation: hue 5s infinite linear;
+		color: white;
+		border: 5px solid transparent;
 	}
 
 	@keyframes hue {
@@ -296,6 +328,7 @@
 			</div>
 		</div>
 		<div id="player-section">
+			<!-- TODO: Better playerList -->
 			<div id="playerList"></div>
 			<div class="button-section">
 				<!-- TODO: Fix buttons CSS -->
@@ -305,7 +338,6 @@
 		</div>
 	</div>
 	<!-- TODO: Add hint so the user knows to click a player to start the match -->
-	<!-- TODO: Improve the bracket's CSS -->
 	<div id="bracket"> </div>
 	<div id="player-titles">
 		<div id="player1-title"></div>
