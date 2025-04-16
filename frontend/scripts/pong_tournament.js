@@ -11,7 +11,7 @@ function playPong( player1_elem, player2_elem ) {
 	const paddleWidth = 10;
 	const paddleHeight = 80;
 	const ballSize = 10;
-	const maxPoints = 5;
+	const maxPoints = 7;
 
 	const paddle1Color = '#2e55d6';
 	let paddle2Color = '#d62e2e';
