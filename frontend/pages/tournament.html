@@ -112,31 +112,38 @@
 		opacity: 0.6;
 	}
 
-	li.player1 {
-		border-left: 2px solid #2e55d6;
-		border-bottom: 1px solid white;
+	li.spacer {
+		min-height: 30px;
 	}
 
-	li.match-spacer { 
+	li.player1 {
+		border-image: linear-gradient(90deg, #2e55d6, white);
+		border-image-slice: 1;
+		border-bottom: 1px solid;
+	}
+
+	li.match-spacer {
 		border-right: 1px solid white;
-		min-height: 40px;
+		min-height: 60px;
 	}
 
 	li.player2 {
-		border-left: 2px solid #d62e2e;
-		border-top: 1px solid white;
+		border-image: linear-gradient(90deg, #d62e2e, white);
+		border-image-slice: 1;
+		border-top: 1px solid;
+
 	}
 
 	li.final-winner {
 		font-weight: bolder;
-		border-left: 0px;
-		background-image: linear-gradient(90deg, #983eff, #fe3afe);
+		background: linear-gradient(90deg, #983eff, #fe3afe);
 		animation: hue 10s infinite linear;
 		color: white;
 	}
 
 	li.finalist {
 		height: 60px;
+		border-bottom: 1px solid white;
 		align-content: center;
 	}
 
