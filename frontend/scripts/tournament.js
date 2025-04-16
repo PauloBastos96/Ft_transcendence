@@ -90,10 +90,6 @@ function createTournament(playerNum) {
 	spacer.className = 'spacer';
 	spacer.innerHTML = '&nbsp;';
 
-	// const matchSpacer = document.createElement('li');
-	// matchSpacer.className = 'match match-spacer';
-	// matchSpacer.innerHTML = '&nbsp;';
-
 	// Add all rounds to the bracket
 	for (let round = 1; round <= rounds; round++) {
 		const roundElem = document.createElement('ul');
