@@ -40,10 +40,10 @@ function playPong( player1_elem, player2_elem ) {
 		ctx.fill();
 	}
 
-	function drawText(text, x, y, size = '20px') {
+	function drawText(text, x) {
 		ctx.fillStyle = fontText;
-		ctx.font = `${size} Arial`;
-		ctx.fillText(text, x, y);
+		ctx.font = `35px Arial`;
+		ctx.fillText(text, x, 60);
 	}
 
 	function update() {
@@ -183,8 +183,8 @@ function playPong( player1_elem, player2_elem ) {
 		drawBall(ball.x, ball.y, ballSize, ballColor);
 
 		// Draw scores
-		drawText(player1.score, canvas.width / 4, 50);
-		drawText(player2.score, (3 * canvas.width) / 4, 50);
+		drawText(player1.score, canvas.width / 4);
+		drawText(player2.score, (3 * canvas.width) / 4);
 	}
 
 	function gameLoop() {
