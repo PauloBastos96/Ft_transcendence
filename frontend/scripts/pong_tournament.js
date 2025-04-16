@@ -1,8 +1,11 @@
 function playPong( player1_elem, player2_elem ) {
+	let paused = false;
+
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
 	const winnerPopup = document.getElementById('winnerPopup');
 	const winnerMessage = document.getElementById('winnerMessage');
+	const pauseButton = document.getElementById('pauseButton');
 
 	const PADDLE_SPEED = 3;
 	const BALL_SPEED = 3;
@@ -15,18 +18,31 @@ function playPong( player1_elem, player2_elem ) {
 
 	const paddle1Color = '#2e55d6';
 	let paddle2Color = '#d62e2e';
-	let ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
-	let fontText = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	let ballColor = getColorScheme();
+	let fontText = getColorScheme();
 
 	let ball = { x: canvas.width / 2, y: canvas.height / 2, vx: BALL_SPEED || 4, vy: BALL_SPEED || 4, hits: 0, lastLoser: null };
 
 	let player1 = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 
+	let collisionCooldown = 0;
+
 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
 		ballColor = e.matches ? 'white' : 'black';
 		fontText = e.matches ? 'white' : 'black';
 	});
+
+	function getColorScheme() {
+		if (localStorage.getItem('theme') !== null) {
+			if (localStorage.getItem('theme') === 'dark')
+				return 'white';
+			else
+				return 'black';
+		}
+		else
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	}
 
 	function drawRect(x, y, width, height, color) {
 		ctx.fillStyle = color;
@@ -62,10 +78,12 @@ function playPong( player1_elem, player2_elem ) {
 		if (
 			ball.x <= player1.x + paddleWidth &&
 			ball.y >= player1.y &&
-			ball.y <= player1.y + paddleHeight
+			ball.y <= player1.y + paddleHeight &&
+			collisionCooldown <= 0
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			collisionCooldown = 5;
 			ballColor = '#7090fc';
 			checkSpeedIncrease();
 		}
@@ -73,10 +91,12 @@ function playPong( player1_elem, player2_elem ) {
 		if (
 			ball.x >= player2.x - ballSize &&
 			ball.y >= player2.y &&
-			ball.y <= player2.y + paddleHeight
+			ball.y <= player2.y + paddleHeight &&
+			collisionCooldown <= 0
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			collisionCooldown = 5;
 			ballColor = '#da6363';
 			checkSpeedIncrease();
 		}
@@ -102,6 +122,9 @@ function playPong( player1_elem, player2_elem ) {
 
 		if (player2.up && player2.y > 0) player2.y -= PADDLE_SPEED || 5;
 		if (player2.down && player2.y < canvas.height - paddleHeight) player2.y += PADDLE_SPEED || 5;
+
+		if (collisionCooldown > 0)
+			collisionCooldown-=0.1;
 	}
 
 	function resetBall() {
@@ -115,7 +138,7 @@ function playPong( player1_elem, player2_elem ) {
 		ball.y = canvas.height / 2;
 		ball.vy = BALL_SPEED || 4;
 		ball.hits = 0;
-		ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+		ballColor = getColorScheme();
 	}
 
 	function resetPaddles() {
@@ -171,6 +194,10 @@ function playPong( player1_elem, player2_elem ) {
 		game.style.display = 'none';
 	});
 
+	pauseButton.addEventListener('click', () => {
+		paused = !paused;
+	});
+
 	function draw() {
 		// Clear the canvas
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -188,7 +215,9 @@ function playPong( player1_elem, player2_elem ) {
 	}
 
 	function gameLoop() {
-		if (update()) return;
+		if (!paused)
+			if (update())
+				return;
 		draw();
 		requestAnimationFrame(gameLoop);
 	}
@@ -205,6 +234,7 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
+		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
 
 	var timer;

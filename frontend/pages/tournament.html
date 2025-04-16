@@ -264,6 +264,7 @@
 
 	#canvasWrapper {
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		height: 100%;
@@ -352,6 +353,7 @@
 	<div id="game">
 		<div id="canvasWrapper">
 			<canvas id="pong" width="1000" height="500"></canvas>
+			<button id="pauseButton">Pause</button>
 		</div>
 		<div id="winnerPopup">
 			<p id="winnerMessage"></p>
