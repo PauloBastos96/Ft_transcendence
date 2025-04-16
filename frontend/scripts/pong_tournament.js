@@ -125,13 +125,11 @@ function playPong( player1_elem, player2_elem ) {
 		if (player1.score >= maxPoints) {
 			winnerMessage.innerText = `${player1_elem.innerText} Wins!`;
 			winnerPopup.style.display = "block";
-			selectWinner(player1_elem);
 			return 1;
 		}
 		else if (player2.score >= maxPoints) {
 			winnerMessage.innerText = `${player2_elem.innerText} Wins!`;
 			winnerPopup.style.display = "block";
-			selectWinner(player2_elem);
 			return 1;
 		}
 		return 0;
@@ -140,6 +138,11 @@ function playPong( player1_elem, player2_elem ) {
 	const bracketBtn = document.getElementById('goBracket');
 
 	bracketBtn.addEventListener('click', () => {
+		if (player1.score >= maxPoints)
+			selectWinner(player1_elem);
+		else if (player2.score >= maxPoints)
+			selectWinner(player2_elem);
+
 		player1.score = 0;
 		player2.score = 0;
 
