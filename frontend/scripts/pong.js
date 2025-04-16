@@ -1,9 +1,14 @@
 (function () {
 
+	_running = true;
+
+	let paused = false;
+
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
 	const winnerPopup = document.getElementById('winnerPopup');
 	const winnerMessage = document.getElementById('winnerMessage');
+	const pauseBtn = document.getElementById('PauseBtn');
 
 	const PADDLE_SPEED = 2;
 	const BALL_SPEED = 2;
@@ -15,20 +20,33 @@
 	const maxPoints = 5;
 
 	const paddle1Color = 'green';
-	let paddle2Color = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
-	let ballColor = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
-	let fontText = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	let paddle2Color = getColorScheme();
+	let ballColor = getColorScheme();
+	let fontText = getColorScheme();
 
 	let ball = { x: canvas.width / 2, y: canvas.height / 2, vx: BALL_SPEED || 4, vy: BALL_SPEED || 4, hits: 0, lastLoser: null };
 
 	let player1 = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 
+	let collisionCooldown = 0;
+
 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
 		paddle2Color = e.matches ? 'white' : 'black';
 		ballColor = e.matches ? 'white' : 'black';
 		fontText = e.matches ? 'white' : 'black';
 	});
+
+	function getColorScheme() {
+		if (localStorage.getItem('theme') !== null) {
+			if (localStorage.getItem('theme') === 'dark')
+				return 'white';
+			else
+				return 'black';
+		}
+		else
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'white' : 'black';
+	}
 
 	function drawRect(x, y, width, height, color) {
 		ctx.fillStyle = color;
@@ -64,20 +82,24 @@
 		if (
 			ball.x <= player1.x + paddleWidth &&
 			ball.y >= player1.y &&
-			ball.y <= player1.y + paddleHeight
+			ball.y <= player1.y + paddleHeight &&
+			collisionCooldown <= 0
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			collisionCooldown = 5;
 			checkSpeedIncrease();
 		}
 
 		if (
 			ball.x >= player2.x - ballSize &&
 			ball.y >= player2.y &&
-			ball.y <= player2.y + paddleHeight
+			ball.y <= player2.y + paddleHeight &&
+			collisionCooldown <= 0
 		) {
 			ball.vx *= -1;
 			ball.hits++;
+			collisionCooldown = 5;
 			checkSpeedIncrease();
 		}
 
@@ -100,6 +122,9 @@
 
 		if (player2.up && player2.y > 0) player2.y -= PADDLE_SPEED || 5;
 		if (player2.down && player2.y < canvas.height - paddleHeight) player2.y += PADDLE_SPEED || 5;
+
+		if (collisionCooldown > 0)
+			collisionCooldown-=0.1;
 	}
 
 	function resetBall() {
@@ -160,6 +185,10 @@
 		changeContent('overview', 0);
 	});
 
+	pauseBtn.addEventListener('click', () => {
+		paused = !paused;
+	});
+
 	function draw() {
 		// Clear the canvas
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -177,24 +206,28 @@
 	}
 
 	function gameLoop() {
-		update();
+		if (_running === false) return;
+		if (!paused) update();
 		draw();
 		requestAnimationFrame(gameLoop);
 	}
 
 	window.addEventListener('keydown', (e) => {
-		if (e.key.toLowerCase() === 'w') player1.up = true;
-		if (e.key.toLowerCase() === 's') player1.down = true;
+		if (e.key.toLocaleLowerCase() === 'w') player1.up = true;
+		if (e.key.toLocaleLowerCase() === 's') player1.down = true;
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
+		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
 
 	window.addEventListener('keyup', (e) => {
-		if (e.key.toLowerCase() === 'w') player1.up = false;
-		if (e.key.toLowerCase() === 's') player1.down = false;
+		if (e.key.toLocaleLowerCase() === 'w') player1.up = false;
+		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
 	});
 
-	gameLoop();
+	if (_running) gameLoop();
+	else return;
+
 })();

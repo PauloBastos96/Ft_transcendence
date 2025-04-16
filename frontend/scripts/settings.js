@@ -66,7 +66,6 @@ async function updateAccountDetails() {
             return;
         }
         else if (this.status !== 200) {
-            console.log('Error updating user details', this);
             return;
         }
         showUpdatedValues();
@@ -167,8 +166,6 @@ async function updateAvatar() {
             return;
         }
         if (this.status !== 200) {
-            console.log('Error updating user avatar', this);
-            //TODO: log error
             return;
         }
         else {
@@ -238,11 +235,9 @@ async function update2FA(f2aSwitch) {
         if (this.readyState !== 4)
             return;
         if (this.status === 400) {
-            console.log('Error updating user details', this);
             return;
         }
         else if (this.status !== 200) {
-            console.log('Error updating user details', this);
             return;
         }
     }
@@ -266,11 +261,9 @@ async function updateSecurityDetails() {
         if (this.status === 400) {
             document.getElementById('InputCurrentPassword').classList.remove('is-valid');
             document.getElementById('InputCurrentPassword').classList.add('is-invalid');
-            console.warn(this);
             return;
         }
         else if (this.status !== 200) {
-            console.log('Error updating user details', this);
             return;
         }
         showSucessfulSave();
@@ -374,8 +367,6 @@ async function deleteAccountConfirmed() {
                 return;
             if (this.status !== 200) {
                 document.getElementById('inputDelAccountPassword').classList.add('is-invalid');
-                console.log('Error deleting user', this);
-                //TODO: log error
                 return;
             }
             sessionStorage.removeItem('jwt');
@@ -421,6 +412,7 @@ function loadGeneralSettings() {
         contentDiv.innerHTML = this.responseText;
         translateAll();
         languageSelector();
+        themeSelector();
     }
     xhr.send();
 }
@@ -433,9 +425,28 @@ function languageSelector() {
         _lang = langSelector.value;
         _user.idiom = _lang;
         i18next.changeLanguage(_lang);
-        translateAll();
-        updateUserLanguage();
         localStorage.setItem('lang', _lang);
+        updateUserLanguage();
+        translateAll();
+    });
+}
+
+//Theme selector
+function themeSelector(){
+    let themeSelector = document.getElementById('themeSelector');
+    let savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'auto')
+        savedTheme = 'system';
+    if (savedTheme !== null && savedTheme !== undefined)
+        themeSelector.value = savedTheme;
+    else
+        themeSelector.value = 'system';
+    themeSelector?.addEventListener('change', function () {
+        if (themeSelector.value !== 'system')
+            localStorage.setItem('theme', themeSelector.value);
+        else
+            localStorage.removeItem('theme');
+        applyColorScheme();
     });
 }
 
@@ -454,11 +465,9 @@ async function updateUserLanguage() {
         if (this.readyState !== 4)
             return;
         if (this.status === 400) {
-            console.log('Error updating user details', this);
             return;
         }
         else if (this.status !== 200) {
-            console.log('Error updating user details', this);
             return;
         }
     }

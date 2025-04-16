@@ -3,6 +3,7 @@ let loggedIn = false;
 let _user = null;
 let _avatar = null;
 let _lang = 'EN';
+var _running = false;
 
 //Handle back and forward navigation events
 window.onpopstate = function (event) {
@@ -27,7 +28,6 @@ async function initialize() {
         await new Promise(resolve => setTimeout(resolve, 100));
         if (window.sessionStorage.getItem('42error') !== null) {
             const error = window.sessionStorage.getItem('42error');
-            console.log(error);
             switch (error) {
                 case 'User already logged in.':
                     alert(i18next.t('login.alreadyLoggedIn'));
@@ -47,6 +47,11 @@ async function initialize() {
     else {
         history.replaceState(pageState, null, "");
         _user = await getUserData();
+        if (!_user) {
+            clearSession();
+            window.location.href = '/?error=session_expired';
+            return;
+        } 
         _lang = _user.idiom;
         await getNotifications();
         await getUserAvatar(_user.id).then(avatar => { _avatar = avatar; });
@@ -58,12 +63,11 @@ async function initialize() {
 //Check if the user is logged in
 async function checkLogin() {
     const jwt = sessionStorage.getItem('jwt');
-    const refresh = localStorage.getItem('refresh');
+    const refresh = localStorage.getItem('keepLoggedIn') === 'true' ? localStorage.getItem('refresh') : sessionStorage.getItem('refresh');
     if (refresh !== null) {
         await verifyRefreshToken(refresh).then(valid => {
-            if (!valid) {
+            if (valid === false) {
                 localStorage.removeItem('refresh');
-                localStorage.removeItem('keepLoggedIn');
                 return false;
             }
         });
@@ -80,18 +84,25 @@ async function checkLogin() {
 }
 //Set the color scheme based on the user's browser settings
 function applyColorScheme() {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.setAttribute('data-bs-theme', 'dark');
+    if (localStorage.getItem('theme') !== null) {
+        document.body.setAttribute('data-bs-theme', localStorage.getItem('theme'));
     }
     else {
-        document.body.setAttribute('data-bs-theme', 'light');
-    }
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        if (e.matches) {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
             document.body.setAttribute('data-bs-theme', 'dark');
         }
         else {
             document.body.setAttribute('data-bs-theme', 'light');
+        }
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+        if (localStorage.getItem('theme') === null) {
+            if (e.matches) {
+                document.body.setAttribute('data-bs-theme', 'dark');
+            }
+            else {
+                document.body.setAttribute('data-bs-theme', 'light');
+            }
         }
     });
 }
@@ -118,7 +129,7 @@ function translateAll() {
 }
 
 //Change the content of the page
-function changeContent(page, pushState = true) {
+function changeContent(page, pushState = true, params=null) {
     var contentDiv = document.getElementById('content');
     // Remove previously added scripts
     var oldScripts = document.querySelectorAll('script[data-dynamic]');
@@ -156,7 +167,7 @@ function changeContent(page, pushState = true) {
                 updateOverviewPage();
                 break;
             case 'profile':
-                updateProfilePage();
+                updateProfilePage(params);
                 break;
             case 'livechat':
                 initChatPage();
@@ -176,6 +187,11 @@ function changeContent(page, pushState = true) {
                 break;
         }
         updateHeaderButton(page);
+        if (_running !== undefined)
+        {
+            if (_running && page !== 'pong')
+                _running = false;
+        }
     }
     xhr.send();
 }
@@ -184,14 +200,14 @@ function updateHeaderButton(page) {
     let overviewButton = document.getElementById('header-overview');
     let pongButton = document.getElementById('header-pong');
     let game2Button = document.getElementById('header-game2');
-    let livechatButton = document.getElementById('header-livechat');
     let tournamentButton = document.getElementById('header-tournament');
+    let friendsButton = document.getElementById('header-friends');
     let buttons = {
         'overview': overviewButton,
         'pong': pongButton,
         'game2': game2Button,
-        'livechat': livechatButton,
-        'tournament': tournamentButton
+        'tournament': tournamentButton,
+        'friends': friendsButton
     };
     for (let key in buttons) {
         if (key === page) {

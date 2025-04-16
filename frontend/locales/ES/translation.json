@@ -30,7 +30,7 @@
      },
      "header":{
           "overview": "Resumen",
-          "livechat": "Chat",
+          "friends": "Amigos",
           "notifications": "Notificaciones",
           "profile": "Perfil",
           "settings": "Configuración",
@@ -50,10 +50,12 @@
           "friendsOnline": "Amigos Conectados",
           "playPong": "Jugar Pong",
           "playTicTacToe": "Jugar Tres en Raya",
-          "playersPlaying": "personas jugando"
+          "playersPlaying": "personas jugando",
+          "tournament": "Torneo"
      },
      "profile":{
           "addAsFriend": "Añadir como amigo",
+          "removeFriend": "Eliminar amigo",
           "message": "Enviar mensaje",
           "stats": "Estadísticas",
           "lastGames": "Últimos 5 juegos",
@@ -94,7 +96,12 @@
           "avatarTooLarge": "La imagen de perfil es demasiado grande. El tamaño máximo es de 1MB",
           "intra42Disabled": "Esta funcionalidad está desactivada para cuentas 42",
           "intra42Delete": "Atención, esta es una cuenta vinculada a 42, si la eliminas no podrás iniciar sesión con esta cuenta nuevamente.",
-          "intra42Delete2": "Esto no afecta tu cuenta en intra."
+          "intra42Delete2": "Esto no afecta tu cuenta en intra.",
+          "theme": "Tema",
+          "themeInfo": "Elige entre tema claro y oscuro",
+          "light": "⚪ Claro",
+          "dark": "⚫ Oscuro",
+          "system": "◐ Sistema"
      },
      "livechat": {
           "friends": "Amigos",
@@ -113,6 +120,7 @@
           "blockUser": "Bloquear Usuario",
           "blockUserQuestion": "¿Estás seguro de que deseas bloquear a",
           "chatPlaceholder": "Escribe tu mensaje aquí",
-          "send": "Enviar"
+          "send": "Enviar",
+          "profile": "Mostrar Perfil"
      }
 }

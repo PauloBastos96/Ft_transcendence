@@ -39,6 +39,7 @@ async function fillFriendList() {
         let friend = await getUserByID(friendID);
         let clone = friendListTemplate.content.cloneNode(true);
         clone.querySelector('h6').textContent = friend.username;
+        clone.querySelector('h6').setAttribute('data-userid', friend.id);
         clone.querySelector('small').textContent = friend.is_online === true ? '🟢' : '⚫';
         clone.querySelector('img').src = friend.avatar;
         friendList.appendChild(clone);
@@ -94,9 +95,7 @@ async function addFriend() {
             return;
         }
     }
-    let result = await addFriendAsync(friendName.value).catch(error => {
-        console.error(error);
-    });
+    let result = await addFriendAsync(friendName.value).catch();
     if (result.status === 404) {
         friendName.classList.add('is-invalid');
         document.getElementById('friend-name-error').innerText = i18next.t('livechat.unkownUserError');
@@ -141,18 +140,10 @@ async function rejectFriendRequest(button){
     fillFriendList();
 }
 
-function showBlockUserModal(button){
-    const userName = button.parentElement.parentElement.parentElement.querySelector('h6').innerText;
-    let removeUserModal = new bootstrap.Modal(document.getElementById('del-block-friend-modal'));
-    removeUserModal._element.querySelector('h1').innerText = i18next.t('livechat.blockUser');
-    removeUserModal._element.querySelector('p').innerText = `${i18next.t('livechat.blockUserQuestion')} "${userName}"?`;
-    removeUserModal._element.querySelector('.btn-danger').addEventListener('click', () => blockUser(button));
-    removeUserModal.show();
-}
-
-async function blockUser(button){
-    const userName = button.parentElement.parentElement.parentElement.querySelector('h6').innerText;
-    await blockUserAsync(userName);
-    _user = await getUserData();
-    fillFriendList();
+async function showProfile(button) {
+    const friend = button.parentElement.parentElement.parentElement.querySelector('h6');
+    const friendID = friend?.getAttribute('data-userid');
+    if (friendID !== undefined) {
+        changeContent('profile', true, friendID);
+    }
 }
