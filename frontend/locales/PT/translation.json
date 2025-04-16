@@ -15,7 +15,8 @@
         "contentNotFound": "Conteúdo não encontrado",
         "otp": "Código de Confirmação",
         "invalidOTP": "Código de confirmação inválido",
-        "tic-tac-toe": "Jogo do Galo"
+        "tic-tac-toe": "Jogo do Galo",
+        "mobileWarning": "Desculpa, este jogo não está disponível em dispositivos móveis."
     },
     "login":{
         "rememberMe": "Lembrar-me",

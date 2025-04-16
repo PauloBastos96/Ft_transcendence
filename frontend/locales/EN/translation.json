@@ -15,7 +15,8 @@
         "contentNotFound": "Content not found",
         "otp": "Confirmation code",
         "invalidOTP": "Invalid confirmation code",
-        "tic-tac-toe": "Tic Tac Toe"
+        "tic-tac-toe": "Tic Tac Toe",
+        "mobileWarning": "Sorry, this game is not available on mobile devices."
     },
     "login":{
         "rememberMe": "Remember me",

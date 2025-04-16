@@ -15,7 +15,8 @@
           "contentNotFound": "Contenido no encontrado",
           "otp": "Código de Confirmación",
           "invalidOTP": "Código de confirmación inválido",
-          "tic-tac-toe": "Tres en Raya"
+          "tic-tac-toe": "Tres en Raya",
+          "mobileWarning": "Lo sentimos, este juego no está disponible en dispositivos móviles."
      },
      "login":{
           "rememberMe": "Recuérdame",
