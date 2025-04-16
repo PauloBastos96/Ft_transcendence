@@ -29,7 +29,13 @@ async function fillFriendList() {
             let clone = friendRequestTemplate.content.cloneNode(true);
             let user = (await getUserByID(request));
             clone.querySelector('h6').textContent = user.username;
-            clone.querySelector('img').src = user.avatar;
+            if (user.avatar.includes('https%3A')){
+                let avatar = user.avatar.split('https%3A')[1];
+                clone.querySelector('img').src = `https:/${avatar}`;
+                clone.querySelector('img').style.objectFit = 'cover';
+            }
+            else
+                clone.querySelector('img').src = user.avatar;
             friendList.appendChild(clone);
         }
         friendList.appendChild(document.createElement('hr'));
@@ -42,7 +48,13 @@ async function fillFriendList() {
         clone.querySelector('h6').textContent = friend.username;
         clone.querySelector('h6').setAttribute('data-userid', friend.id);
         clone.querySelector('small').textContent = friend.is_online === true ? '🟢' : '⚫';
-        clone.querySelector('img').src = friend.avatar;
+        if (friend.avatar.includes('https%3A')){
+                let avatar = friend.avatar.split('https%3A')[1];
+                clone.querySelector('img').src = `https:/${avatar}`;
+                clone.querySelector('img').style.objectFit = 'cover';
+            }
+            else
+                clone.querySelector('img').src = friend.avatar;
         friendList.appendChild(clone);
     }
 }
