@@ -26,7 +26,6 @@
 		padding-left: 15%;
 		padding-right: 15%;
 		display: flex;
-		color: white;
 		font-size: 200%;
 		font-family: monospace;
 		
@@ -37,6 +36,7 @@
 			border-radius: 8%;
 			cursor: pointer;
 			margin: 3%;
+			color: white ;
 		}
 
 		.tournament\.4Players {
@@ -379,23 +379,24 @@
 			<!-- TODO: "There must be a matchmaking system: the tournament system organize the matchmaking of the participants, and announce the next fight." -->
 			<div id="playerList"></div>
 			<div class="button-section">
-				<!-- TODO: Fix buttons CSS -->
 				<button class="tournament.backButton" onclick="goBack()">Back</button>
 				<button id="createButton" class="tournament.createButton">Create Tournament</button>
 			</div>
 		</div>
 	</div>
 	<!-- TODO: Add hint so the user knows to click a player to start the match -->
+	<!-- TODO: Handle long player names -->
 	<div id="bracket"> </div>
-	<div id="player-titles">
-		<div id="player1-title"></div>
-		<div id="player2-title"></div>
-	</div>
 	<!-- TODO: Add CSS to confirm.Popup -->
 	<div id="confirmPopup">
 		<p id="confirmMessage"></p>
 		<button id="cancelButton" class="tournament.cancelButton">Cancel</button>
 		<button id="playButton" class="tournament.playButton">Play</button>
+	</div>
+	<div id="player-titles">
+		<!-- TODO: handle Long player names -->
+		<div id="player1-title"></div>
+		<div id="player2-title"></div>
 	</div>
 	<div id="game">
 		<div id="canvasWrapper">
