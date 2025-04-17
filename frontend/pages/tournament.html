@@ -201,24 +201,23 @@
 			border-width: 4px;
 			text-align: center;
 			line-height: 100%;
+			color: white;
 
 			span {
 				display: table-cell;
-					vertical-align: middle;
+				vertical-align: middle;
 			}
 		}
 
 		#player1-title {
 			float: left;
-			background-color: #2747af;
-			border-color: #2e55d6;
+			background-color: #355bd8;
 			border-radius: 15px 0px 0px 15px;
 		}
 
 		#player2-title {
 			float: right;
-			background-color: #991e1e;
-			border-color: #d62e2e;
+			background-color: #e03a3a;
 			border-radius: 0px 15px 15px 0px;
 		}
 	}
@@ -252,7 +251,7 @@
 		transform: translate(-50%, -50%);
 		font-weight: bolder;
 		font-size: 200px;
-		background-image: linear-gradient(90deg, #2e55d6, #d62e2e);
+		background-image: linear-gradient(90deg, #868686, #4e4e4e);
 		background-clip: text;
 		color: transparent;
 	}
@@ -341,6 +340,19 @@
 			}
 		}
 
+		#countdown {
+			display: block;
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-weight: bolder;
+			font-size: 200px;
+			background-image: linear-gradient(90deg, #dddddd, #868686);
+			background-clip: text;
+			color: transparent;
+		}
+
 		canvas {
 			border: 2px solid white;
 			width: 60%;
@@ -385,7 +397,7 @@
 		</div>
 	</div>
 	<!-- TODO: Add hint so the user knows to click a player to start the match -->
-	<!-- TODO: Handle long player names -->
+	 <!-- TODO: Handle long player names -->
 	<div id="bracket"> </div>
 	<!-- TODO: Add CSS to confirm.Popup -->
 	<div id="confirmPopup">
@@ -401,9 +413,11 @@
 	<div id="game">
 		<div id="canvasWrapper">
 			<canvas id="pong" width="1000" height="500"></canvas>
+			<!-- TODO: Pause button CSS -->
 			<button id="pauseButton">Pause</button>
 		</div>
 		<div id="winnerPopup">
+			<!-- TODO: CSS -->
 			<p id="winnerMessage"></p>
 			<button id="goBracket">Tournament</button>
 		</div>
