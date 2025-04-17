@@ -275,21 +275,24 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background: #202020;
+		background: #6B6B6B;
 		color: white;
 		padding: 20px;
 		border-radius: 10px;
 		text-align: center;
 		display: none;
 		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
-	}
+		font-weight: 500;
 
-	#winnerPopup button {
-		margin: 10px;
-		padding: 10px;
-		border: none;
-		cursor: pointer;
-		font-size: 16px;
+		button {
+			color: #3f3f3f;
+			margin: 10px;
+			padding: 10px;
+			border: none;
+			cursor: pointer;
+			font-size: 16px;
+			border-radius: 15px;
+		}
 	}
 
 	[data-bs-theme="dark"] {
@@ -371,6 +374,16 @@
 			text-align: center;
 			display: none;
 			box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+
+			button {
+				color: white;
+				margin: 10px;
+				padding: 10px;
+				border: none;
+				cursor: pointer;
+				font-size: 16px;
+				border-radius: 15px;
+			}
 		}
 	}
 </style>
@@ -417,7 +430,7 @@
 			<button id="pauseButton">Pause</button>
 		</div>
 		<div id="winnerPopup">
-			<!-- TODO: CSS -->
+			<!-- TODO: handle long names -->
 			<p id="winnerMessage"></p>
 			<button id="goBracket">Tournament</button>
 		</div>
