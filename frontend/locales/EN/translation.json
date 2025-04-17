@@ -36,7 +36,8 @@
         "notifications": "Notifications",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "tournament": "Tournament"
     },
     "notifications":{
         "empty": "No notifications",
@@ -125,7 +126,12 @@
         "send": "Send",
         "profile": "Show Profile"
     },
-    "games":{
+    "tournament": {
+        "addPlayers": "Add Participants:",
+        "newTournament": "Create New Tournament",
+        "createButton": "Create Tournament"
+    },
+    "games": {
         "wins": "wins!",
         "playAgain": "Play again",
         "home": "Home",

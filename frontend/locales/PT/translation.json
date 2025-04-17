@@ -36,7 +36,8 @@
         "notifications": "Notificações",
         "profile": "Perfil",
         "settings": "Definições",
-        "logout": "Sair"
+        "logout": "Sair",
+        "tournament": "Torneio"
     },
     "notifications":{
         "empty": "Sem notificações",
@@ -125,7 +126,12 @@
         "send": "Enviar",
         "profile": "Mostrar Perfil"
     },
-    "games":{
+    "tournament": {
+        "addPlayers": "Adiciona Jogadores:",
+        "newTournament": "Criar Novo Torneio",
+        "createButton": "Criar Torneio"
+    },
+    "games": {
         "wins": "ganhou!",
         "playAgain": "Jogar novamente",
         "home": "Início",
