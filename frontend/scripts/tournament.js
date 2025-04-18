@@ -1,5 +1,3 @@
-// TODO: Update Player tournament stats
-
 // Player bubble colors
 // TODO: change colors
 const BUBBLE_COLORS = [
@@ -14,7 +12,7 @@ const BUBBLE_COLORS = [
 ];
 
 let players = new Set();
-let optionSection, playerSection, bracket, playerTitles, game, confirmPopup;
+let optionSection, playerSection, bracket, playerTitles, game, confirmPopup, round, match, nextMatchPopup;
 
 function initTournament(playerNum) {
 	if (!playerNum)
@@ -90,34 +88,29 @@ function createTournament(playerNum) {
 	spacer.className = 'spacer';
 	spacer.innerHTML = '&nbsp;';
 
+	const matchSpacer = document.createElement('li');
+	matchSpacer.className = 'match match-spacer';
+	matchSpacer.innerHTML = '&nbsp;';
+
 	// Add all rounds to the bracket
-	for (let round = 1; round <= rounds; round++) {
+	for (round = 1; round <= rounds; round++) {
 		const roundElem = document.createElement('ul');
 		roundElem.className = 'round';
 
 		roundElem.appendChild(spacer.cloneNode(true));
-		for (let match = 0; round < rounds && match < matches; match++) {
-			const matchSpacer = document.createElement('li');
-			matchSpacer.className = 'match match-spacer';
-			matchSpacer.innerHTML = '&nbsp;';
-			matchSpacer.style.cursor = 'pointer';
-			matchSpacer.dataset.round = round;
-			matchSpacer.dataset.matchIndex = match;
-
+		for (match = 0; round < rounds && match < matches; match++) {
 
 			const player1 = document.createElement('li');
 			player1.className = 'match player1';
 			player1.dataset.round = round;
 			player1.dataset.matchIndex = match;
 			player1.dataset.position = 0;
-			player1.style.cursor = 'pointer';
 
 			const player2 = document.createElement('li');
 			player2.className = 'match player2';
 			player2.dataset.round = round;
 			player2.dataset.matchIndex = match;
 			player2.dataset.position = 1;
-			player2.style.cursor = 'pointer';
 
 			if (round == 1) {
 				player1.textContent = playerArr[match * 2];
@@ -127,12 +120,8 @@ function createTournament(playerNum) {
 				player2.innerHTML = '<i class="tbd">TBD</i>';
 			}
 
-			player1.addEventListener('click', function() { startGame(this); });
-			player2.addEventListener('click', function() { startGame(this); });
-			matchSpacer.addEventListener('click', function() { startGame(player1); });
-
 			roundElem.appendChild(player1);
-			roundElem.appendChild(matchSpacer);
+			roundElem.appendChild(matchSpacer.cloneNode(true));
 			roundElem.appendChild(player2);
 			roundElem.appendChild(spacer.cloneNode(true));
 		}
@@ -152,6 +141,11 @@ function createTournament(playerNum) {
 		bracket.appendChild(roundElem);
 		matches /= 2;
 	}
+	round = 1;
+	match = 0;
+	nextMatchPopup = document.getElementById("nextMatchPopup");
+	nextMatchPopup.style.display = 'block';
+	updateNextMatchPopup();
 }
 
 // Shuffles an array
@@ -163,95 +157,69 @@ function arrayShuffle(array) {
 	return array;
 }
 
-// Starts the game of pong if possible
-function startGame(element) {
-	// Prevent selection if clicked element is TBD
-	if (element.querySelector('i.tbd')) return;
-
-	const currentRound = parseInt(element.dataset.round);
-	const currentMatchIndex = parseInt(element.dataset.matchIndex);
-
-	// Get both players in the current match
-	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
+// Starts the game of pong
+function startGame(player1, player2) {
+	document.getElementById('player1-title').innerHTML = `<span>${player1.innerText}</span>`;
+	document.getElementById('player2-title').innerHTML = `<span>${player2.innerText}</span>`;
 	
-	// Check if opponent is still TBD
-	const opponent = [...currentMatchPlayers].find(p => (p !== element && p.className !== 'match match-spacer'));
-	if (opponent.querySelector('i.tbd')) {
-		alert("Opponent is still TBD!");
-		return;
-	}
+	bracket.style.display = 'none';
+	nextMatchPopup.style.display = 'none';
 
-	let player1 = document.getElementById('player1-title');
-	let player2 = document.getElementById('player2-title');
-	if (element.dataset.position == 0) {
-		player1.innerHTML = `<span>${element.innerText}</span>`;
-		player2.innerHTML = `<span>${opponent.innerText}</span>`;
-		confirmMatch(element, opponent);
-	} else if (element.dataset.position == 1) {
-		player1.innerHTML = `<span>${opponent.innerText}</span>`;
-		player2.innerHTML = `<span>${element.innerText}</span>`;
-		confirmMatch(opponent, element);
-	}
-}
+	game = document.getElementById('game');
+	game.style.display = 'block';
+	playerTitles = document.getElementById('player-titles');
+	playerTitles.style.display = 'block';
 
-function confirmMatch(player1, player2) {
-	let playButton = document.getElementById('playButton');
-
-	confirmPopup = document.getElementById('confirmPopup');
-	confirmPopup.style.display = 'block';
-
-	document.getElementById('confirmMessage').innerHTML = `${player1.innerText} <b><i>VS</i></b> ${player2.innerText}`;
-
-	// Remove other event listeners
-	playButton.replaceWith(playButton.cloneNode(true));
-	playButton = document.getElementById('playButton');
-
-	playButton.addEventListener('click', function() {
-		confirmPopup.style.display = 'none';
-		game = document.getElementById('game');
-		game.style.display = 'block';
-		playerTitles = document.getElementById('player-titles');
-		playerTitles.style.display = 'block';
-
-		bracket.style.display = 'none';
-		playPong(player1, player2);
-	});
-
-	document.getElementById('cancelButton').addEventListener('click', function() {
-		confirmPopup.style.display = 'none';
-	});
+	playPong(player1, player2);
 }
 
 // Receives an element of the bracket and sets it to the winner of the match (if legal)
 function selectWinner(element) {
-	const currentRound = parseInt(element.dataset.round);
-	const currentMatchIndex = parseInt(element.dataset.matchIndex);
-
-	// Get both players in the current match
-	const currentMatchPlayers = document.querySelectorAll(`li[data-round="${currentRound}"][data-match-index="${currentMatchIndex}"]`);
-
+	
 	element.classList.add('winner');
 
-	const nextRound = currentRound + 1;
-	const nextMatchIndex = Math.floor(currentMatchIndex / 2);
-	const nextPosition = currentMatchIndex % 2;
-
-	// Find next round element
-	const nextRoundElement = document.querySelector(`.round:nth-child(${nextRound})`);
-	if (!nextRoundElement) return;
-
-	const nextPlayer = nextRoundElement.querySelector(`li[data-round="${nextRound}"][data-match-index="${nextMatchIndex}"][data-position="${nextPosition}"]`);
-
+	// Mark the match as decided
+	document.querySelectorAll(`li[data-round="${round}"][data-match-index="${match}"]`).forEach(p => { p.classList.add('decided'); });
+	
+	const nextRoundElement = document.querySelector(`.round:nth-child(${round + 1})`);
+	const nextPlayer = nextRoundElement.querySelector(`li[data-round="${round + 1}"][data-match-index="${Math.floor(match / 2)}"][data-position="${match % 2}"]`);
+	
 	// Update next instance of the player
 	if (nextPlayer) {
-		nextPlayer.textContent = element.textContent;
-		nextPlayer.innerHTML = element.textContent; // Remove TBD
-		if (nextPlayer.dataset.round == Math.log2(players.size) + 1)
+		nextPlayer.innerHTML = element.textContent;
+		if (nextPlayer.dataset.round > Math.log2(players.size)) {
+			document.getElementById("tournamentWinnerPopup").style.display = 'block';
+
+			document.getElementById("tournamentWinner").innerText = `${element.innerText} `;
+			
 			nextPlayer.classList.add("final-winner");
+		}
+	}
+	
+	calcNextMatch();
+}
+
+function calcNextMatch() {
+	if (++match > ((players.size / (2 * round)) - 1)) {
+		if (++round > Math.log2(players.size))
+			return;
+
+		match = 0;
 	}
 
-	currentMatchPlayers.forEach(p => {
-		p.classList.add('decided');
-		p.style.pointerEvents = 'none';
-	});
+	nextMatchPopup.style.display = 'block';
+	updateNextMatchPopup();
+}
+
+function updateNextMatchPopup() {
+	const player1 = document.querySelector(`li[data-round="${round}"][data-match-index="${match}"][data-position="0"]`);
+	const player2 = document.querySelector(`li[data-round="${round}"][data-match-index="${match}"][data-position="1"]`);
+	
+	document.getElementById("versusMessage").innerHTML= `${player1.innerText}  <span id="versus">VS</span> ${player2.innerText}`;
+
+	// Remove previous event listeners and add the new one
+	let playButton = document.getElementById("playButton");
+	playButton.replaceWith(playButton.cloneNode(true));
+	playButton = document.getElementById("playButton");
+	playButton.addEventListener('click', function () { startGame(player1, player2); });
 }

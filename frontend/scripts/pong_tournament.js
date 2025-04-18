@@ -3,8 +3,8 @@ function playPong( player1_elem, player2_elem ) {
 
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
-	const winnerPopup = document.getElementById('winnerPopup');
-	const winnerMessage = document.getElementById('winnerMessage');
+	const winnerPopup = document.getElementById('matchWinnerPopup');
+	const matchWinner = document.getElementById('matchWinner');
 	const pauseButton = document.getElementById('pauseButton');
 
 	const PADDLE_SPEED = 3;
@@ -148,12 +148,12 @@ function playPong( player1_elem, player2_elem ) {
 
 	function checkWinner() {
 		if (player1.score >= maxPoints) {
-			winnerMessage.innerHTML = `${player1_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
+			matchWinner.innerHTML = `${player1_elem.innerText} `;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
 		else if (player2.score >= maxPoints) {
-			winnerMessage.innerHTML = `${player2_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
+			matchWinner.innerHTML = `${player2_elem.innerText} `;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
@@ -185,8 +185,7 @@ function playPong( player1_elem, player2_elem ) {
 		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
 		playerTitles.style.display = 'none';
-		const game = document.getElementById('game');
-		game.style.display = 'none';
+		document.getElementById('game').style.display = 'none';
 	});
 
 	pauseButton.addEventListener('click', () => {

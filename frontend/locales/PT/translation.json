@@ -17,7 +17,7 @@
         "invalidOTP": "Código de confirmação inválido",
         "tic-tac-toe": "Jogo do Galo",
         "mobileWarning": "Desculpa, este jogo não está disponível em dispositivos móveis.",
-        "tournament": "Tournament"
+        "tournament": "Torneio"
     },
     "login":{
         "rememberMe": "Lembrar-me",
@@ -136,7 +136,9 @@
         "back": "Voltar",
         "createTournament": "Criar Torneio",
         "play": "Jogar",
-        "wins": "Ganhou"
+        "wins": "Ganhou!",
+        "nextMatch": "Próxima Partida:",
+        "wonTournament": "ganhou o torneio!"
     },
     "games": {
         "wins": "ganhou!",
