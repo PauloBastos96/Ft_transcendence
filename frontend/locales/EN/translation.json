@@ -141,6 +141,7 @@
     "games": {
         "wins": "wins!",
         "playAgain": "Play again",
+        "play": "Play",
         "home": "Home",
         "playerTurn": "Player turn",
         "reset": "Reset Game",

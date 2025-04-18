@@ -141,6 +141,7 @@
     "games": {
         "wins": "ganhou!",
         "playAgain": "Jogar novamente",
+        "play": "Jogar",
         "home": "Início",
         "playerTurn": "É a vez do jogador",
         "reset": "Reiniciar Jogo",
