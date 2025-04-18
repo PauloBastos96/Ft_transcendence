@@ -148,12 +148,12 @@ function playPong( player1_elem, player2_elem ) {
 
 	function checkWinner() {
 		if (player1.score >= maxPoints) {
-			winnerMessage.innerText = `${player1_elem.innerText} Wins!`;
+			winnerMessage.innerHTML = `${player1_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
 		else if (player2.score >= maxPoints) {
-			winnerMessage.innerText = `${player2_elem.innerText} Wins!`;
+			winnerMessage.innerHTML = `${player2_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
 			winnerPopup.style.display = "block";
 			return 1;
 		}

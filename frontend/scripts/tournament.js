@@ -30,9 +30,9 @@ function initTournament(playerNum) {
 	const player1 = document.createElement('input');
 	player1.id = 'player1';
 	player1.className = 'player-name';
-	getUserData().then(data => { player1.value = data.username; });
+	getUserData().then(data => {  player1.value = data.username; });
 	player1.readOnly = true;
-	player1.style.backgroundColor = BUBBLE_COLORS[0];
+	player1.style.borderColor = BUBBLE_COLORS[0];
 	playerList.appendChild(player1);
 
 	for (let i = 2; i <= playerNum; i++) {
@@ -40,7 +40,7 @@ function initTournament(playerNum) {
 		player.id = `player${i}`;
 		player.className = 'player-name';
 		player.placeholder = `Player ${i}`;
-		player.style.backgroundColor = BUBBLE_COLORS[(i - 1) % BUBBLE_COLORS.length];
+		player.style.borderColor = BUBBLE_COLORS[(i - 1) % BUBBLE_COLORS.length];
 		playerList.appendChild(player);
 	}
 
