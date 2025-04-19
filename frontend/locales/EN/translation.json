@@ -16,7 +16,8 @@
         "otp": "Confirmation code",
         "invalidOTP": "Invalid confirmation code",
         "tic-tac-toe": "Tic Tac Toe",
-        "mobileWarning": "Sorry, this game is not available on mobile devices."
+        "mobileWarning": "Sorry, this game is not available on mobile devices.",
+        "tournament": "Tournament"
     },
     "login":{
         "rememberMe": "Remember me",
@@ -36,7 +37,8 @@
         "notifications": "Notifications",
         "profile": "Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "tournament": "Tournament"
     },
     "notifications":{
         "empty": "No notifications",
@@ -125,7 +127,18 @@
         "send": "Send",
         "profile": "Show Profile"
     },
-    "games":{
+    "tournament": {
+        "newTournament": "New Tournament",
+        "chooseOption": "Choose an option:",
+        "4Players": "4 Players",
+        "8Players": "8 Players",
+        "16Players": "16 Players",
+        "back": "Back",
+        "createTournament": "Create Tournament",
+        "play": "Play",
+        "wins": "Wins"
+    },
+    "games": {
         "wins": "wins!",
         "playAgain": "Play again",
         "play": "Play",

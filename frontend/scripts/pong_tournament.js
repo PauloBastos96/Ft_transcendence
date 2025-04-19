@@ -1,46 +1,34 @@
-(function () {
-
-	_running = true;
-
+function playPong( player1_elem, player2_elem ) {
 	let paused = false;
 
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
 	const winnerPopup = document.getElementById('winnerPopup');
 	const winnerMessage = document.getElementById('winnerMessage');
-	const pauseBtn = document.getElementById('PauseBtn');
-	const playButton = document.getElementById('playButton');
+	const pauseButton = document.getElementById('pauseButton');
 
-	const PADDLE_SPEED = 2;
-	const BALL_SPEED = 2;
+	const PADDLE_SPEED = 3;
+	const BALL_SPEED = 3;
 	const SPEED_HITS = 5; //! mandatory
 
 	const paddleWidth = 10;
 	const paddleHeight = 80;
 	const ballSize = 10;
-	const maxPoints = 5;
+	const maxPoints = 7;
 
-	const paddle1Color = 'green';
-	let paddle2Color = getColorScheme();
+	const paddle1Color = '#2e55d6';
+	let paddle2Color = '#d62e2e';
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
 
 	let ball = { x: canvas.width / 2, y: canvas.height / 2, vx: BALL_SPEED || 4, vy: BALL_SPEED || 4, hits: 0, lastLoser: null };
 
-	let player1 = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false, name: _user.username };
-	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false, name: "Player 2" };
+	let player1 = { x: 0, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
+	let player2 = { x: canvas.width - paddleWidth, y: canvas.height / 2 - paddleHeight / 2, score: 0, up: false, down: false };
 
 	let collisionCooldown = 0;
 
-	if(window.matchMedia("(pointer: coarse)").matches){
-		document.getElementById('mobileWarning').classList.remove('d-none');
-		document.getElementById('canvasWrapper').classList.add('d-none');
-		translateAll();
-		return;
-	}
-
 	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-		paddle2Color = e.matches ? 'white' : 'black';
 		ballColor = e.matches ? 'white' : 'black';
 		fontText = e.matches ? 'white' : 'black';
 	});
@@ -68,10 +56,10 @@
 		ctx.fill();
 	}
 
-	function drawText(text, x, y, size = '20px') {
+	function drawText(text, x) {
 		ctx.fillStyle = fontText;
-		ctx.font = `${size} Arial`;
-		ctx.fillText(text, x, y);
+		ctx.font = `35px Arial`;
+		ctx.fillText(text, x, 60);
 	}
 
 	function update() {
@@ -96,6 +84,7 @@
 			ball.vx *= -1;
 			ball.hits++;
 			collisionCooldown = 5;
+			ballColor = '#7090fc';
 			checkSpeedIncrease();
 		}
 
@@ -108,6 +97,7 @@
 			ball.vx *= -1;
 			ball.hits++;
 			collisionCooldown = 5;
+			ballColor = '#da6363';
 			checkSpeedIncrease();
 		}
 
@@ -146,6 +136,7 @@
 		ball.y = canvas.height / 2;
 		ball.vy = BALL_SPEED || 4;
 		ball.hits = 0;
+		ballColor = getColorScheme();
 	}
 
 	function checkSpeedIncrease() {
@@ -157,46 +148,48 @@
 
 	function checkWinner() {
 		if (player1.score >= maxPoints) {
-			winnerMessage.innerText = `${player1.name} ${i18next.t("games.wins")}`;
+			winnerMessage.innerHTML = `${player1_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
 			winnerPopup.style.display = "block";
-			translateAll();
 			return 1;
 		}
-		if (player2.score >= maxPoints) {
-			winnerMessage.innerText = `${player2.name} ${i18next.t("games.wins")}`;
+		else if (player2.score >= maxPoints) {
+			winnerMessage.innerHTML = `${player2_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
 			winnerPopup.style.display = "block";
-			translateAll();
 			return 1;
 		}
 		return 0;
 	}
 
-	const rrBtn = document.getElementById('restartGame');
-	const homeBtn = document.getElementById('goHome');
+	const bracketBtn = document.getElementById('goBracket');
 
-	rrBtn.addEventListener('click', () => {
+	bracketBtn.addEventListener('click', () => {
+		if (player1.score >= maxPoints)
+			selectWinner(player1_elem);
+		else if (player2.score >= maxPoints)
+			selectWinner(player2_elem);
+
 		player1.score = 0;
 		player2.score = 0;
 
 		// move player1 paddle to the middle again
 		player1.x = 0;
 		player1.y = canvas.height / 2 - paddleHeight / 2;
-
+		
 		// move player2 paddle to the middle again
 		player2.x = canvas.width - paddleWidth;
 		player2.y = canvas.height / 2 - paddleHeight / 2;
 
-		winnerPopup.style.display = "none";
 		ball.lastLoser = null;
 		resetBall();
-		startCountdown();
+		
+		winnerPopup.style.display = "none";
+		bracket.style.display = 'flex';
+		playerTitles.style.display = 'none';
+		const game = document.getElementById('game');
+		game.style.display = 'none';
 	});
 
-	homeBtn.addEventListener('click', () => {
-		changeContent('overview', 0);
-	});
-
-	pauseBtn.addEventListener('click', () => {
+	pauseButton.addEventListener('click', () => {
 		paused = !paused;
 	});
 
@@ -212,12 +205,11 @@
 		drawBall(ball.x, ball.y, ballSize, ballColor);
 
 		// Draw scores
-		drawText(player1.score, canvas.width / 4, 50);
-		drawText(player2.score, (3 * canvas.width) / 4, 50);
+		drawText(player1.score, canvas.width / 4);
+		drawText(player2.score, (3 * canvas.width) / 4);
 	}
 
 	function gameLoop() {
-		if (_running === false) return;
 		if (!paused)
 			if (update())
 				return;
@@ -230,11 +222,6 @@
 		if (e.key.toLocaleLowerCase() === 's') player1.down = true;
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
-		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
-		if (e.key.toLocaleLowerCase() == 'p' && playButton.style.display !== 'none') {
-			paused = !paused;
-			playButton.click();
-		}
 	});
 
 	window.addEventListener('keyup', (e) => {
@@ -242,15 +229,11 @@
 		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
-	});
-	
-	playButton.addEventListener('click', () => {
-		playButton.style.display = 'none';
-		startCountdown();
+		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
 
 	var timer;
-	var timeLeft; // seconds
+	var timeLeft = 4; // seconds
 
 	function updateTimer() {
 		timeLeft = timeLeft - 1;
@@ -268,11 +251,10 @@
 	function startCountdown() {
 		// every N milliseconds (1 second = 1000 ms)
 		timer = setInterval(updateTimer, 1000);
-		timeLeft = 4;
 
 		document.getElementById('countdownBlock').style.display = 'block';
 		updateTimer();
 	}
-
 	draw();
-})();
+	startCountdown();
+}
