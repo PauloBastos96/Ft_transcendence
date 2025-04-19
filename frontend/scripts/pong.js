@@ -232,8 +232,9 @@
 		if (e.key === 'ArrowDown') player2.down = true;
 		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 		if (e.key.toLocaleLowerCase() == 'p' && playButton.style.display !== 'none') {
+			paused = !paused;
 			playButton.click();
-		} 
+		}
 	});
 
 	window.addEventListener('keyup', (e) => {
