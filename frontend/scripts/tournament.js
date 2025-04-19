@@ -215,7 +215,7 @@ function updateNextMatchPopup() {
 	const player1 = document.querySelector(`li[data-round="${round}"][data-match-index="${match}"][data-position="0"]`);
 	const player2 = document.querySelector(`li[data-round="${round}"][data-match-index="${match}"][data-position="1"]`);
 	
-	document.getElementById("versusMessage").innerHTML= `${player1.innerText} &ensp; <b><i>VS</b></i> &ensp; ${player2.innerText}`;
+	document.getElementById("versusMessage").innerHTML= `${player1.innerText}&ensp;<b><i>VS</b></i>&ensp;${player2.innerText}`;
 
 	// Remove previous event listeners and add the new one
 	let playButton = document.getElementById("playButton");

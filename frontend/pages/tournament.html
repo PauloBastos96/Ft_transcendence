@@ -213,7 +213,32 @@
 	}
 
 	/* TODO: CSS and dark mode */
-	#nextMatchPopup { display: none; }
+	#nextMatchPopup {
+		padding: 30px;
+		display: none;
+		position: fixed;
+		bottom: 10%;
+		right: 5%;
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 20px;
+	}
+
+	#nextMatch {
+		font-weight: bold;
+		color: rgba(0, 0, 0, 0.5);
+	}
+
+	#versusMessage {
+		font-size: x-large;
+	}
+
+	#playButton {
+		position: relative;
+		margin-top: 20px;
+		left: 50%;
+		-ms-transform: translate(-50%);
+		transform: translate(-50%);
+	}
 
 	#game { display: none; }
 
@@ -336,6 +361,11 @@
 			}
 		}
 
+		#nextMatch {
+			font-weight: bold;
+			color:rgba(255, 255, 255, 0.5);
+		}
+
 		#countdown {
 			display: block;
 			position: fixed;
@@ -419,9 +449,9 @@
 	</div>
 </div>
 <div id="nextMatchPopup">
-	<span id="nextMatch" data-i18n="tournament.nextMatch">Next match:</span>
-	<span id="versusMessage"></span>
-	<button id="playButton" data-i18n="tournament.play"></button>
+	<p id="nextMatch" data-i18n="tournament.nextMatch">Next match:</p>
+	<p id="versusMessage"></p>
+	<button id="playButton" class="btn btn-secondary" data-i18n="tournament.play"></button>
 </div>
 <div id="tournamentWinnerPopup">
 	<span id="tournamentWinner"></span><span data-i18n="tournament.wonTournament"></span>
