@@ -6,6 +6,7 @@ function playPong( player1_elem, player2_elem ) {
 	const winnerPopup = document.getElementById('winnerPopup');
 	const winnerMessage = document.getElementById('winnerMessage');
 	const pauseButton = document.getElementById('pauseButton');
+	const playButton = document.getElementById('gamePlayButton');
 
 	const PADDLE_SPEED = 3;
 	const BALL_SPEED = 3;
@@ -222,6 +223,12 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = true;
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
+		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
+		if (e.key.toLocaleLowerCase() == 'p' && playButton.style.display !== 'none') {
+			paused = !paused;
+			playButton.click();
+		}
+
 	});
 
 	window.addEventListener('keyup', (e) => {
@@ -229,9 +236,14 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
-		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
+		// if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
-
+	
+	playButton.addEventListener('click', () => {
+		playButton.style.display = 'none';
+		startCountdown();
+	});
+	
 	var timer;
 	var timeLeft = 4; // seconds
 
@@ -256,5 +268,5 @@ function playPong( player1_elem, player2_elem ) {
 		updateTimer();
 	}
 	draw();
-	startCountdown();
+	// startCountdown();
 }
