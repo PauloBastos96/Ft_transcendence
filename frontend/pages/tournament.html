@@ -212,14 +212,32 @@
 		}
 	}
 
-	#confirmPopup {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background: #202020;
-		color: white;
+	/* TODO: CSS and dark mode */
+	#nextMatchPopup {
+		padding: 30px;
 		display: none;
+		position: fixed;
+		bottom: 10%;
+		right: 5%;
+		background-color: rgba(0, 0, 0, 0.3);
+		border-radius: 20px;
+	}
+
+	#nextMatch {
+		font-weight: bold;
+		color: rgba(0, 0, 0, 0.5);
+	}
+
+	#versusMessage {
+		font-size: x-large;
+	}
+
+	#playButton {
+		position: relative;
+		margin-top: 20px;
+		left: 50%;
+		-ms-transform: translate(-50%);
+		transform: translate(-50%);
 	}
 
 	#game { display: none; }
@@ -258,7 +276,7 @@
 		height: auto;
 	}
 
-	#winnerPopup {
+	#matchWinnerPopup {
 		position: fixed;
 		top: 50%;
 		left: 50%;
@@ -281,6 +299,11 @@
 			font-size: 16px;
 			border-radius: 15px;
 		}
+	}
+
+	/* TODO: CSS and dark mode*/
+	#tournamentWinnerPopup {
+		display: none;
 	}
 
 	[data-bs-theme="dark"] {
@@ -338,6 +361,11 @@
 			}
 		}
 
+		#nextMatch {
+			font-weight: bold;
+			color:rgba(255, 255, 255, 0.5);
+		}
+
 		#countdown {
 			display: block;
 			position: fixed;
@@ -357,7 +385,7 @@
 			height: auto;
 		}
 
-		#winnerPopup {
+		#matchWinnerPopup {
 			position: fixed;
 			top: 50%;
 			left: 50%;
@@ -383,8 +411,7 @@
 	}
 </style>
 
-<!-- TODO: Translations -->
- <!-- TODO: Handle long names -->
+<!-- TODO: Handle long names -->
 <div class="page">
 	<div class="tournament-creation">
 		<h1 id="newTournament" data-i18n="tournament.newTournament">New Tournament</h1>
@@ -397,7 +424,6 @@
 			</div>
 		</div>
 		<div id="player-section">
-			<!-- TODO: "There must be a matchmaking system: the tournament system organize the matchmaking of the participants, and announce the next fight." -->
 			<div id="playerList"></div>
 			<div class="button-section">
 				<button class="tournament.back" onclick="goBack()">Back</button>
@@ -406,12 +432,6 @@
 		</div>
 	</div>
 	<div id="bracket"> </div>
-	<!-- Ignore confirmPopup because it will be replaced by the matchmaking -->
-	<div id="confirmPopup">
-		<p id="confirmMessage"></p>
-		<button id="cancelButton" data-i18n="common.cancel">Cancel</button>
-		<button id="playButton" data-i18n="tournament.play">Play</button>
-	</div>
 	<div id="player-titles">
 		<div id="player1-title"></div>
 		<div id="player2-title"></div>
@@ -422,11 +442,19 @@
 			<!-- TODO: Pause button CSS -->
 			<button id="pauseButton" data-i18n="games.pause">Pause</button>
 		</div>
-		<div id="winnerPopup">
-			<p id="winnerMessage"></p>
+		<div id="matchWinnerPopup">
+			<p><span id="matchWinner"></span><span data-i18n="games.wins"></span></p>
 			<button id="goBracket" data-i18n="common.tournament">Tournament</button>
 		</div>
 	</div>
+</div>
+<div id="nextMatchPopup">
+	<p id="nextMatch" data-i18n="tournament.nextMatch">Next match:</p>
+	<p id="versusMessage"></p>
+	<button id="playButton" class="btn btn-secondary" data-i18n="tournament.play"></button>
+</div>
+<div id="tournamentWinnerPopup">
+	<span id="tournamentWinner"></span><span data-i18n="tournament.wonTournament"></span>
 </div>
 <div id="countdownBlock"><span id="countdown">0</span></div>
 <script src="/frontend/scripts/pong_tournament.js"></script>
