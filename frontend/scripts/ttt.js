@@ -24,6 +24,36 @@
 		return gameState.includes(null) ? null : 'Tie';
 	}
 
+	async function SaveTTTStats(winner_){
+		let winnerName = '';
+		switch (winner_) {
+			case 'X':
+				winnerName = _user.username;
+				break;
+			case 'O':
+				winnerName = i18next.t('games.player2');
+				break;
+			default:
+				winnerName = 'tie';
+		}
+		await fetch(`/api/users/${_user.id}/games/create/`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${sessionStorage.getItem('jwt')}`
+			},
+			body: JSON.stringify({
+				winner: winnerName,
+				draw: winnerName === 'tie' ? true : false,
+				owner_won: winnerName === _user.username ? true : false,
+				player1: _user.username,
+				player2: i18next.t('games.player2'),
+				result: "1x0",
+				game_type: "TTT",
+			})
+		});
+	}
+
 	function handleClick(e) {
 		const cell = e.target;
 		const index = cell.dataset.index;
@@ -38,10 +68,13 @@
 
 		if (winner) {
 			gameActive = false;
-			message.textContent = winner === 'Tie' ? i18next.t('games.tie') : `${i18next.t('games.player')} ${winner} ${i18next.t('games.wins')}`;
+			let winnerName = winner === 'X' ? _user.username : i18next.t('games.player2');
+			message.textContent = winner === 'Tie' ? i18next.t('games.tie') : `${i18next.t('games.player')} ${winnerName} ${i18next.t('games.wins')}`;
+			SaveTTTStats(winner === 'Tie' ? 'tie' : currentPlayer).then(() => {});
 		} else {
 			currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-			message.textContent = `${i18next.t('games.playerTurn')}: ${currentPlayer}`;
+			let currentPlayerName = currentPlayer === 'X' ? _user.username : i18next.t('games.player2');
+			message.textContent = `${i18next.t('games.playerTurn')}: ${currentPlayerName}`;
 		}
 	}
 
@@ -49,7 +82,8 @@
 		gameState.fill(null);
 		currentPlayer = 'X';
 		gameActive = true;
-		message.textContent = `${i18next.t('games.playerTurn')}: ${currentPlayer}`;
+		let currentPlayerName = currentPlayer === 'X' ? _user.username : i18next.t('games.player2');
+		message.textContent = `${i18next.t('games.playerTurn')}: ${currentPlayerName}`;
 		board.innerHTML = '';
 		createBoard();
 	}
