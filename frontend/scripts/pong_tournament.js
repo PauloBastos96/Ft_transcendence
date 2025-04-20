@@ -189,10 +189,17 @@ function playPong( player1_elem, player2_elem ) {
 		document.getElementById('game').style.display = 'none';
 		playButton.style.display = 'block';
 		pauseButton.style.display = 'none';
+		pauseButton.dataset.i18n = 'games.pause';
+		translateAll();
 	});
 
 	pauseButton.addEventListener('click', () => {
 		paused = !paused;
+		if (paused)
+			pauseButton.dataset.i18n = 'games.play';
+		else
+			pauseButton.dataset.i18n = 'games.pause';
+		translateAll();
 	});
 
 	function draw() {

@@ -209,7 +209,11 @@
 
 		winnerPopup.style.display = "none";
 		ball.lastLoser = null;
+		paused = false;
+		pauseBtn.dataset.i18n = 'games.pause';
+		translateAll();
 		resetBall();
+		draw();
 		startCountdown();
 	});
 
@@ -219,6 +223,11 @@
 
 	pauseBtn.addEventListener('click', () => {
 		paused = !paused;
+		if (paused)
+			pauseBtn.dataset.i18n = 'games.play';
+		else
+			pauseBtn.dataset.i18n = 'games.pause';
+		translateAll();
 	});
 
 	function draw() {
@@ -264,6 +273,7 @@
 	
 	playButton.addEventListener('click', () => {
 		playButton.style.display = 'none';
+		pauseBtn.style.display = 'block';
 		startCountdown();
 	});
 
