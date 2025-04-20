@@ -1,3 +1,4 @@
+
 function playPong( player1_elem, player2_elem ) {
 	let paused = false;
 
@@ -17,7 +18,7 @@ function playPong( player1_elem, player2_elem ) {
 	const ballSize = 10;
 	const maxPoints = 7;
 
-	const paddle1Color = '#2e55d6';
+	const paddle1Color = '#28a745';
 	let paddle2Color = '#d62e2e';
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
@@ -164,6 +165,7 @@ function playPong( player1_elem, player2_elem ) {
 	const bracketBtn = document.getElementById('goBracket');
 
 	bracketBtn.addEventListener('click', () => {
+
 		if (player1.score >= maxPoints)
 			selectWinner(player1_elem);
 		else if (player2.score >= maxPoints)
@@ -188,6 +190,8 @@ function playPong( player1_elem, player2_elem ) {
 		playerTitles.style.display = 'none';
 		const game = document.getElementById('game');
 		game.style.display = 'none';
+
+		playButton.style.display = 'block';
 	});
 
 	pauseButton.addEventListener('click', () => {
@@ -224,8 +228,7 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
 		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
-		if (e.key.toLocaleLowerCase() == 'p' && playButton.style.display !== 'none') {
-			paused = !paused;
+		if (e.key == 'Enter' && playButton.style.display !== 'none') {
 			playButton.click();
 		}
 
@@ -236,7 +239,6 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
-		// if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
 	
 	playButton.addEventListener('click', () => {
@@ -245,7 +247,7 @@ function playPong( player1_elem, player2_elem ) {
 	});
 	
 	var timer;
-	var timeLeft = 4; // seconds
+	var timeLeft;
 
 	function updateTimer() {
 		timeLeft = timeLeft - 1;
@@ -261,6 +263,7 @@ function playPong( player1_elem, player2_elem ) {
 	}
 
 	function startCountdown() {
+		timeLeft = 4;
 		// every N milliseconds (1 second = 1000 ms)
 		timer = setInterval(updateTimer, 1000);
 

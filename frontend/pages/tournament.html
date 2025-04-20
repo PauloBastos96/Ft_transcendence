@@ -174,10 +174,11 @@
 		to { filter: hue-rotate(360deg); }
 	}
 
-	.player1-title {
-    min-width: 120px;
-    height: 48px;
-    font-size: 1rem;
+	.player1-title,
+	.player2-title {
+    min-width: 130px;
+    height: 40px;
+    font-size: 0.9rem;
     padding: 0 24px;
     box-sizing: border-box;
     display: inline-flex;
@@ -186,26 +187,12 @@
     border-radius: 15px;
     font-family: monospace;
     font-weight: bold;
-    background: #e03a3a;
+    background: #28a745;
     color: #fff;
-    margin-left: -20px;
 	}
 	
 	.player2-title {
-	min-width: 120px;
-    height: 48px;
-    font-size: 1rem;
-    padding: 0 24px;
-    box-sizing: border-box;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 15px;
-    font-family: monospace;
-    font-weight: bold;
-	background: #28a745;
-    color: #fff;
-    margin: 0;
+	background: #e03a3a;
 	}
 
 	#confirmPopup {
@@ -259,9 +246,9 @@
 
 	#gamePlayButton,
 	#pauseButton {
-	min-width: 120px;
-    height: 48px;
-    font-size: 1rem;
+	min-width: 100px;
+    height: 40px;
+    font-size: 0.9rem;
     padding: 0 24px;
     box-sizing: border-box;
     display: inline-flex;
@@ -272,7 +259,6 @@
     font-weight: bold;
     background: #355bd8;
     color: #fff;
-    margin: 0;
 	}
 
 	canvas {
@@ -445,10 +431,10 @@
 			<div id="player-titles"></div>
 			<div class="canvas-buttons">
 				<div id="player1-title" class="player1-title">Player 1</div>
-				<div style="margin-right: 150px;"></div>
+				<div style="margin-right: 70px;"></div>
 			    <button id="gamePlayButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
 			    <button id="pauseButton" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
-				<div style="margin-left: 150px;"></div>
+				<div style="margin-left: 70px;"></div>
 				<div id="player2-title" class="player2-title">Player 2</div>
 			</div>
 			<canvas id="pong" width="1000" height="500"></canvas>
