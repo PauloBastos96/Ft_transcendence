@@ -137,7 +137,8 @@
         "createTournament": "Create Tournament",
         "play": "Play",
         "nextMatch": "Next Match:",
-        "wonTournament": "won the tournament!"
+        "wonTournament": "won the tournament!",
+        "exit": "Exit"
     },
     "games": {
         "wins": "wins!",

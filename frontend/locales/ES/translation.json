@@ -136,7 +136,8 @@
         "createTournament": "Crear Torneo",
         "play": "Jugar",
         "nextMatch": "Próximo partido",
-        "wonTournament": "ganó el torneo!"
+        "wonTournament": "ganó el torneo!",
+        "salir": "Salir"
     },
      "games":{
           "wins": "ganó!",

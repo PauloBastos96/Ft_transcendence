@@ -5,22 +5,22 @@ const BUBBLE_COLORS = [
 	'#ee940c',	// Orange
 	'#1ca11c',	// Green
 	'#0bb970',	// Teal
-	'#1a70c0',  // Blue
+	'#1a70c0',	// Blue
 	'#093875',	// Dark Blue
 	'#502772',	// Purple
 	'#e23ac6',	// Pink
 ];
 
 let players = new Set();
-let optionSection, playerSection, bracket, playerTitles, game, confirmPopup, round, match, nextMatchPopup;
+let bracket, round, match, nextMatchPopup;
 
 function initTournament(playerNum) {
 	if (!playerNum)
 		return;
 	let playerList = document.getElementById('playerList');
 	let createButton = document.getElementById('createButton');
-	optionSection = document.getElementById('option-section');
-	playerSection = document.getElementById('player-section');
+	let optionSection = document.getElementById('option-section');
+	let playerSection = document.getElementById('player-section');
 
 	playerList.textContent = '';
 
@@ -47,11 +47,6 @@ function initTournament(playerNum) {
 	createButton.onclick = function() { createTournament(`${playerNum}`); };
 }
 
-function goBack() {
-	optionSection.style.display = 'block';
-	playerSection.style.display = 'none';
-}
-
 function checkNames(playerNum) {
 	for (let i = 1; i <= playerNum; i++) {
 		let username = document.getElementById(`player${i}`).value;
@@ -64,7 +59,6 @@ function checkNames(playerNum) {
 		}
 		players.add(username);
 	}
-	console.log("players: ", players);
 	return true;
 }
 
@@ -74,7 +68,7 @@ function createTournament(playerNum) {
 	if (!checkNames(playerNum))
 		return;
 	document.getElementById('newTournament').style.display = 'none';
-	playerSection.style.display = 'none';
+	document.getElementById('player-section').style.display = 'none';
 
 	bracket = document.getElementById('bracket');
 
@@ -165,10 +159,8 @@ function startGame(player1, player2) {
 	bracket.style.display = 'none';
 	nextMatchPopup.style.display = 'none';
 
-	game = document.getElementById('game');
-	game.style.display = 'block';
-	playerTitles = document.getElementById('player-titles');
-	playerTitles.style.display = 'block';
+	document.getElementById('game').style.display = 'block';
+	document.getElementById('player-titles').style.display = 'block';
 
 	playPong(player1, player2);
 }

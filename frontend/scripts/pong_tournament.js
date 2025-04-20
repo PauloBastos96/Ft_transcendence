@@ -184,7 +184,7 @@ function playPong( player1_elem, player2_elem ) {
 		
 		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
-		playerTitles.style.display = 'none';
+		document.getElementById('player-titles').style.display = 'none';
 		document.getElementById('game').style.display = 'none';
 	});
 
