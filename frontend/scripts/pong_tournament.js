@@ -1,13 +1,12 @@
-
 function playPong( player1_elem, player2_elem ) {
 	let paused = false;
 
 	const canvas = document.getElementById('pong');
 	const ctx = canvas.getContext('2d');
-	const winnerPopup = document.getElementById('winnerPopup');
-	const winnerMessage = document.getElementById('winnerMessage');
+	const winnerPopup = document.getElementById('matchWinnerPopup');
+	const matchWinner = document.getElementById('matchWinner');
 	const pauseButton = document.getElementById('pauseButton');
-	const playButton = document.getElementById('gamePlayButton');
+	let playButton = document.getElementById('gamePlayButton');
 
 	const PADDLE_SPEED = 3;
 	const BALL_SPEED = 3;
@@ -150,12 +149,12 @@ function playPong( player1_elem, player2_elem ) {
 
 	function checkWinner() {
 		if (player1.score >= maxPoints) {
-			winnerMessage.innerHTML = `${player1_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
+			matchWinner.innerHTML = `${player1_elem.innerText} `;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
 		else if (player2.score >= maxPoints) {
-			winnerMessage.innerHTML = `${player2_elem.innerText} <span data-i18n="tournament.wins">Wins</span>!`;
+			matchWinner.innerHTML = `${player2_elem.innerText} `;
 			winnerPopup.style.display = "block";
 			return 1;
 		}
@@ -165,7 +164,6 @@ function playPong( player1_elem, player2_elem ) {
 	const bracketBtn = document.getElementById('goBracket');
 
 	bracketBtn.addEventListener('click', () => {
-
 		if (player1.score >= maxPoints)
 			selectWinner(player1_elem);
 		else if (player2.score >= maxPoints)
@@ -187,11 +185,10 @@ function playPong( player1_elem, player2_elem ) {
 		
 		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
-		playerTitles.style.display = 'none';
-		const game = document.getElementById('game');
-		game.style.display = 'none';
-
+		document.getElementById('player-titles').style.display = 'none';
+		document.getElementById('game').style.display = 'none';
 		playButton.style.display = 'block';
+		pauseButton.style.display = 'none';
 	});
 
 	pauseButton.addEventListener('click', () => {
@@ -228,10 +225,7 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
 		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
-		if (e.key == 'Enter' && playButton.style.display !== 'none') {
-			playButton.click();
-		}
-
+		if (e.key == 'Enter' && playButton.style.display !== 'none') playButton.click();
 	});
 
 	window.addEventListener('keyup', (e) => {
@@ -241,8 +235,12 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key === 'ArrowDown') player2.down = false;
 	});
 	
+	// Make sure there's only one event listener on gamePlayButton at a time
+	playButton.replaceWith(playButton.cloneNode(true));
+	playButton = document.getElementById("gamePlayButton");
 	playButton.addEventListener('click', () => {
 		playButton.style.display = 'none';
+		pauseButton.style.display = 'block';
 		startCountdown();
 	});
 	
