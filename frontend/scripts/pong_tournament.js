@@ -6,6 +6,7 @@ function playPong( player1_elem, player2_elem ) {
 	const winnerPopup = document.getElementById('matchWinnerPopup');
 	const matchWinner = document.getElementById('matchWinner');
 	const pauseButton = document.getElementById('pauseButton');
+	let playButton = document.getElementById('gamePlayButton');
 
 	const PADDLE_SPEED = 3;
 	const BALL_SPEED = 3;
@@ -16,7 +17,7 @@ function playPong( player1_elem, player2_elem ) {
 	const ballSize = 10;
 	const maxPoints = 7;
 
-	const paddle1Color = '#2e55d6';
+	const paddle1Color = '#28a745';
 	let paddle2Color = '#d62e2e';
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
@@ -186,6 +187,8 @@ function playPong( player1_elem, player2_elem ) {
 		bracket.style.display = 'flex';
 		document.getElementById('player-titles').style.display = 'none';
 		document.getElementById('game').style.display = 'none';
+		playButton.style.display = 'block';
+		pauseButton.style.display = 'none';
 	});
 
 	pauseButton.addEventListener('click', () => {
@@ -221,6 +224,8 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = true;
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
+		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
+		if (e.key == 'Enter' && playButton.style.display !== 'none') playButton.click();
 	});
 
 	window.addEventListener('keyup', (e) => {
@@ -228,11 +233,19 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key.toLocaleLowerCase() === 's') player1.down = false;
 		if (e.key === 'ArrowUp') player2.up = false;
 		if (e.key === 'ArrowDown') player2.down = false;
-		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
 	});
-
+	
+	// Make sure there's only one event listener on gamePlayButton at a time
+	playButton.replaceWith(playButton.cloneNode(true));
+	playButton = document.getElementById("gamePlayButton");
+	playButton.addEventListener('click', () => {
+		playButton.style.display = 'none';
+		pauseButton.style.display = 'block';
+		startCountdown();
+	});
+	
 	var timer;
-	var timeLeft = 4; // seconds
+	var timeLeft;
 
 	function updateTimer() {
 		timeLeft = timeLeft - 1;
@@ -248,6 +261,7 @@ function playPong( player1_elem, player2_elem ) {
 	}
 
 	function startCountdown() {
+		timeLeft = 4;
 		// every N milliseconds (1 second = 1000 ms)
 		timer = setInterval(updateTimer, 1000);
 
@@ -255,5 +269,5 @@ function playPong( player1_elem, player2_elem ) {
 		updateTimer();
 	}
 	draw();
-	startCountdown();
+	// startCountdown();
 }

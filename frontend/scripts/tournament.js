@@ -39,6 +39,13 @@ function initTournament(playerNum) {
 		player.className = 'player-name';
 		player.placeholder = `Player ${i}`;
 		player.style.borderColor = BUBBLE_COLORS[(i - 1) % BUBBLE_COLORS.length];
+		
+		// Limit name length to 10 characters
+        player.addEventListener('input', function () {
+            if (player.value.length > 10)
+                player.value = player.value.slice(0, 10);
+        });
+		
 		playerList.appendChild(player);
 	}
 
@@ -195,7 +202,6 @@ function calcNextMatch() {
 	if (++match > ((players.size / (2 * round)) - 1)) {
 		if (++round > Math.log2(players.size))
 			return;
-
 		match = 0;
 	}
 

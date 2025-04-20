@@ -7,13 +7,13 @@
 		color: #555;
 		text-align: center;
 		font-size: 400%;
-		margin-bottom: 80px;
+		margin-bottom: 10vh;
 	}
 
 	#chooseOption {
 		display: flex;
 		justify-content: center;
-		margin-bottom: 5%;
+		margin-bottom: 5vh;
 		font-size: 22px;
 		color: #00000081;
 		font-family: monospace;
@@ -67,16 +67,16 @@
 		border-radius: 10px;
 		padding: 6px;
 		padding-left: 8px;
-		font-weight: 200;
-		font-family: monospace;
-		color: #e2e2e2;
+		font-weight: 500;
+		color: #333;
 		font-size: larger;
+		background-color: #f7f7f7;
 
-		&::placeholder { color: #969696; }
+		&::placeholder { color: #777; }
 	}
 
 	.button-section {
-		margin-top: 100px;
+		margin-top: 10%;
 		display: flex;
 		justify-content: center;
 
@@ -89,6 +89,7 @@
 			color: #f1f1f1;
 			font-weight: 500;
 		}
+
 		.tournament\.back {
 			width: 120px;
 			margin-right: 20px;
@@ -177,43 +178,24 @@
 		to { filter: hue-rotate(360deg); }
 	}
 
-	#player-titles {
-		width: 92%;
-		height: 10%;
-		display: none;
-		position: fixed;
-		left: 4%;
+	.player-title {
+		min-width: 130px;
+		height: 40px;
+		font-size: 0.9rem;
+		padding: 0 24px;
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 15px;
 		font-family: monospace;
 		font-weight: bold;
-
-		#player1-title, #player2-title {
-			display: table;
-			font-size: 40px;
-			width: 18%;
-			height: 100%;
-			border-width: 4px;
-			text-align: center;
-			line-height: 100%;
-			color: white;
-
-			span {
-				display: table-cell;
-				vertical-align: middle;
-			}
-		}
-
-		#player1-title {
-			float: left;
-			background-color: #355bd8;
-			border-radius: 15px 0px 0px 15px;
-		}
-
-		#player2-title {
-			float: right;
-			background-color: #e03a3a;
-			border-radius: 0px 15px 15px 0px;
-		}
+		color: #fff;
 	}
+
+	#player1-title { background: #28a745; }
+	
+	#player2-title { background: #e03a3a; }
 
 	#nextMatchPopup {
 		padding: 30px;
@@ -263,15 +245,43 @@
 		background-image: linear-gradient(90deg, #868686, #4e4e4e);
 		background-clip: text;
 		color: transparent;
+		display: block;
 	}
 
 	#canvasWrapper {
+		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
-		height: 100%;
 	}
+
+	.canvas-buttons {
+		position: absolute;
+		top: -50px;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+		gap: 1px;
+		z-index: 2;
+	}
+
+	.game-button {
+		min-width: 100px;
+		height: 40px;
+		font-size: 0.9rem;
+		padding: 0 24px;
+		box-sizing: border-box;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 15px;
+		font-family: monospace;
+		font-weight: bold;
+		background: #355bd8;
+		color: #fff;
+	}
+
+	#pauseButton { display: none; }
 
 	canvas {
 		border: 2px solid black;
@@ -329,108 +339,51 @@
 	}
 
 	[data-bs-theme="dark"] {
-		h1 {
+		h1 { color: #ddd; }
+
+		#chooseOption { color: #ffffff83; }
+
+		.player-name {
+			background-color: #000;
+			color: #e2e2e2;
+
+			&::placeholder { color: #969696; }
+		}
+
+		.button-section button {
+			box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
+			background-color: #757575;
 			color: #ddd;
-			text-align: center;
-			font-size: 400%;
-			margin-bottom: 10vh;
-		}
-
-		#chooseOption {
-			display: flex;
-			justify-content: center;
-			margin-bottom: 5vh;
-			font-size: 22px;
-			color: #ffffff83;
-			font-family: monospace;
-		}
-
-		.button-section {
-			margin-top: 10%;
-			display: flex;
-			justify-content: center;
-
-			button {
-				border-width: 0px;
-				border-radius: 40px;
-				padding: 20px;
-				box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.5);
-				background-color: #757575;
-				color: #ddd;
-			}
 		}
 
 		li {
 			&.player1 {
 				border-image: linear-gradient(90deg, #2e55d6, white);
 				border-image-slice: 1;
-				border-bottom: 2px solid;
 			}
 			
-			&.match-spacer {
-				border-right: 2px solid white;
-				min-height: 60px;
-			}
+			&.match-spacer { border-right: 2px solid white; }
 			
 			&.player2 {
 				border-image: linear-gradient(90deg, #d62e2e, white);
 				border-image-slice: 1;
-				border-top: 2px solid;
 			}
 			
-			&.finalist {
-				height: 60px;
-				align-content: center;
-				border-bottom: 2px solid white;
-			}
+			&.finalist { border-bottom: 2px solid white; }
 		}
 
-		#nextMatch {
-			font-weight: bold;
-			color:rgba(255, 255, 255, 0.5);
-		}
+		#nextMatch { color:#ffffff80; }
 
-		#countdown {
-			display: block;
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			font-weight: bolder;
-			font-size: 200px;
-			background-image: linear-gradient(90deg, #dddddd, #868686);
-			background-clip: text;
-			color: transparent;
-		}
+		#countdown { background-image: linear-gradient(90deg, #dddddd, #868686); }
 
-		canvas {
-			border: 2px solid white;
-			width: 60%;
-			height: auto;
-		}
+		canvas { border: 2px solid white; }
 
 		#matchWinnerPopup {
-			position: fixed;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
 			background: white;
 			color: black;
-			padding: 20px;
-			border-radius: 10px;
-			text-align: center;
-			display: none;
 			box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
 
-			button {
-				color: white;
-				margin: 10px;
-				padding: 10px;
-				border: none;
-				cursor: pointer;
-				font-size: 16px;
-				border-radius: 15px;
-			}
+			button { color: white; }
 		}
 	}
 </style>
@@ -456,15 +409,18 @@
 		</div>
 	</div>
 	<div id="bracket"> </div>
-	<div id="player-titles">
-		<div id="player1-title"></div>
-		<div id="player2-title"></div>
-	</div>
 	<div id="game">
 		<div id="canvasWrapper">
+			<div id="player-titles"></div>
+			<div class="canvas-buttons">
+				<div id="player1-title" class="player-title">Player 1</div>
+				<div style="margin-right: 70px;"></div>
+			    <button id="gamePlayButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
+			    <button id="pauseButton" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
+				<div style="margin-left: 70px;"></div>
+				<div id="player2-title" class="player-title">Player 2</div>
+			</div>
 			<canvas id="pong" width="1000" height="500"></canvas>
-			<!-- TODO: Pause button CSS -->
-			<button id="pauseButton" data-i18n="games.pause">Pause</button>
 		</div>
 		<div id="matchWinnerPopup">
 			<p><span id="matchWinner"></span><span data-i18n="games.wins"></span></p>
