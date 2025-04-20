@@ -178,25 +178,6 @@
 		to { filter: hue-rotate(360deg); }
 	}
 
-	.player-title {
-		min-width: 130px;
-		height: 40px;
-		font-size: 0.9rem;
-		padding: 0 24px;
-		box-sizing: border-box;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 15px;
-		font-family: monospace;
-		font-weight: bold;
-		color: #fff;
-	}
-
-	#player1-title { background: #28a745; }
-	
-	#player2-title { background: #e03a3a; }
-
 	#nextMatchPopup {
 		padding: 30px;
 		display: none;
@@ -227,16 +208,11 @@
 
 	#game { display: none; }
 
-	#countdownBlock {
-		position: fixed;
-		width: 100%;
-		height: 100%;
-		display: none;
-	}
+	#countdownBlock { display: none; }
 
 	#countdown {
 		display: block;
-		position: fixed;
+		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -261,27 +237,54 @@
 		left: 50%;
 		transform: translateX(-50%);
 		display: flex;
-		gap: 1px;
-		z-index: 2;
+		width: 60%;
 	}
 
-	.game-button {
-		min-width: 100px;
+	.player-title, .game-button {
 		height: 40px;
-		font-size: 0.9rem;
-		padding: 0 24px;
 		box-sizing: border-box;
-		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		border-radius: 15px;
 		font-family: monospace;
 		font-weight: bold;
-		background: #355bd8;
 		color: #fff;
+		font-size: 2rem;
+		display: inline-flex;
+		padding: 24px;
 	}
 
-	#pauseButton { display: none; }
+	.player-title {
+		min-width: 130px;
+	}
+
+	#player1-title {
+		background: #28a745;
+		position: absolute;
+		left: 25%;
+		transform: translate(-50%);
+	}
+	
+	#player2-title {
+		background: #e03a3a;
+		position: absolute;
+		left: 75%;
+		transform: translate(-50%);
+	}
+
+	.game-button {
+		min-width: 130px;
+		padding:inherit;
+		position: absolute;
+		left: 50%;
+		transform: translate(-50%);
+		background: #355bd8;
+	}
+
+	#pauseButton { 
+		position: absolute;
+		display: none;
+	}
 
 	canvas {
 		border: 2px solid black;
@@ -410,13 +413,12 @@
 	<div id="bracket"> </div>
 	<div id="game">
 		<div id="canvasWrapper">
+			<div id="countdownBlock"><span id="countdown">0</span></div>
 			<div id="player-titles"></div>
 			<div class="canvas-buttons">
 				<div id="player1-title" class="player-title">Player 1</div>
-				<div style="margin-right: 70px;"></div>
 			    <button id="gamePlayButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
-			    <button id="pauseButton" class="btn btn-primary game-button" data-i18n="games.pause"><span id="pauseText" data-i18n="games.pause">Pause</span><span id="playText" data-i18n="games.play">Play</span></button>
-				<div style="margin-left: 70px;"></div>
+			    <button id="pauseButton" class="btn btn-primary me-2 game-button" data-i18n="games.pause"></button>
 				<div id="player2-title" class="player-title">Player 2</div>
 			</div>
 			<canvas id="pong" width="1000" height="500"></canvas>
@@ -430,11 +432,10 @@
 <div id="nextMatchPopup">
 	<p id="nextMatch" data-i18n="tournament.nextMatch">Next match:</p>
 	<p id="versusMessage"></p>
-	<button id="playButton" class="btn btn-secondary" data-i18n="tournament.play"></button>
+	<button id="playButton" class="btn btn-secondary" data-i18n="games.play"></button>
 </div>
 <div id="tournamentWinnerPopup">
 	<p><span id="tournamentWinner"></span><span data-i18n="tournament.wonTournament"></span></p>
 	<button id="exitTournament" class="btn btn-secondary" data-i18n="tournament.exit" onclick="changeContent('tournament')"></button>
 </div>
-<div id="countdownBlock"><span id="countdown">0</span></div>
 <script src="/frontend/scripts/pong_tournament.js"></script>

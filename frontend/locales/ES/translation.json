@@ -133,10 +133,9 @@
         "16Players": "16 Jugadores",
         "back": "Volver",
         "createTournament": "Crear Torneo",
-        "play": "Jugar",
         "nextMatch": "Próximo partido",
         "wonTournament": "ganó el torneo!",
-        "salir": "Salir"
+        "exit": "Salir"
     },
      "games":{
           "wins": "ganó!",
