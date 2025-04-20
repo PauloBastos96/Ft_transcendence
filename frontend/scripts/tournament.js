@@ -1,5 +1,4 @@
 // Player bubble colors
-// TODO: change colors
 const BUBBLE_COLORS = [
 	'#c70b0b',	// Red
 	'#ee940c',	// Orange
