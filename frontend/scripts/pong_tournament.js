@@ -17,7 +17,7 @@ function playPong( player1_elem, player2_elem ) {
 	const ballSize = 10;
 	const maxPoints = 7;
 
-	const paddle1Color = '#28a745';
+	const paddle1Color = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
 	let paddle2Color = '#d62e2e';
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
@@ -85,7 +85,6 @@ function playPong( player1_elem, player2_elem ) {
 			ball.vx *= -1;
 			ball.hits++;
 			collisionCooldown = 5;
-			ballColor = '#5ac569';
 			checkSpeedIncrease();
 		}
 
@@ -98,7 +97,6 @@ function playPong( player1_elem, player2_elem ) {
 			ball.vx *= -1;
 			ball.hits++;
 			collisionCooldown = 5;
-			ballColor = '#da6363';
 			checkSpeedIncrease();
 		}
 
