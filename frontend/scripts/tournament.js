@@ -226,4 +226,8 @@ function updateNextMatchPopup() {
 	playButton = document.getElementById("playButton");
 	playButton.addEventListener('click', function () { startGame(player1, player2); });
 }
+
+window.initTournament = initTournament;
+window.selectWinner = selectWinner;
+
 })();

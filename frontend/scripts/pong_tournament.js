@@ -232,7 +232,6 @@ function playPong( player1_elem, player2_elem ) {
 		if (e.key === 'ArrowUp') player2.up = true;
 		if (e.key === 'ArrowDown') player2.down = true;
 		if (e.key.toLocaleLowerCase() == 'p') paused = !paused;
-		if (e.key == 'Enter' && playButton.style.display !== 'none') playButton.click();
 	});
 
 	window.addEventListener('keyup', (e) => {
