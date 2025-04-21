@@ -11,8 +11,8 @@
 	const pauseBtn = document.getElementById('PauseBtn');
 	const playButton = document.getElementById('playButton');
 
-	const PADDLE_SPEED = 2;
-	const BALL_SPEED = 2;
+	const PADDLE_SPEED = 4;
+	const BALL_SPEED = 4;
 	const SPEED_HITS = 5; //! mandatory
 
 	const paddleWidth = 10;

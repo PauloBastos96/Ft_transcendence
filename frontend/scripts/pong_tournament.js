@@ -8,14 +8,14 @@ function playPong( player1_elem, player2_elem ) {
 	const pauseButton = document.getElementById('pauseButton');
 	let playButton = document.getElementById('gamePlayButton');
 
-	const PADDLE_SPEED = 3;
-	const BALL_SPEED = 3;
+	const PADDLE_SPEED = 4;
+	const BALL_SPEED = 4;
 	const SPEED_HITS = 5; //! mandatory
 
 	const paddleWidth = 10;
 	const paddleHeight = 80;
 	const ballSize = 10;
-	const maxPoints = 7;
+	const maxPoints = 5;
 
 	const paddle1Color = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
 	let paddle2Color = '#d62e2e';
