@@ -85,7 +85,7 @@ function playPong( player1_elem, player2_elem ) {
 			ball.vx *= -1;
 			ball.hits++;
 			collisionCooldown = 5;
-			ballColor = '#7090fc';
+			ballColor = '#5ac569';
 			checkSpeedIncrease();
 		}
 
@@ -189,10 +189,17 @@ function playPong( player1_elem, player2_elem ) {
 		document.getElementById('game').style.display = 'none';
 		playButton.style.display = 'block';
 		pauseButton.style.display = 'none';
+		pauseButton.dataset.i18n = 'games.pause';
+		translateAll();
 	});
 
 	pauseButton.addEventListener('click', () => {
 		paused = !paused;
+		if (paused)
+			pauseButton.dataset.i18n = 'games.play';
+		else
+			pauseButton.dataset.i18n = 'games.pause';
+		translateAll();
 	});
 
 	function draw() {
@@ -240,7 +247,7 @@ function playPong( player1_elem, player2_elem ) {
 	playButton = document.getElementById("gamePlayButton");
 	playButton.addEventListener('click', () => {
 		playButton.style.display = 'none';
-		pauseButton.style.display = 'block';
+		pauseButton.style.display = 'flex';
 		startCountdown();
 	});
 	
@@ -269,5 +276,4 @@ function playPong( player1_elem, player2_elem ) {
 		updateTimer();
 	}
 	draw();
-	// startCountdown();
 }

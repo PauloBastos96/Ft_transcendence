@@ -1,6 +1,8 @@
 <style>
 	#canvasWrapper {
+		position: relative;
 		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		height: 100%;
@@ -57,11 +59,14 @@
 		margin-top: 20px;
 		margin-bottom: 0px;
 	}
-
+	
 	.game-button {
-        width: 100px;
-        text-align: center;
-    }
+		width: 100px;
+		text-align: center;
+		margin-right: 0px !important;
+	}
+	
+	#PauseBtn { display: none; }
 
 	#countdownBlock {
 		position: fixed;
@@ -70,9 +75,11 @@
 		display: none;
 	}
 
+	#countdownBlock { display: none; }
+
 	#countdown {
 		display: block;
-		position: fixed;
+		position: absolute;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
@@ -102,13 +109,13 @@
 	<h4 class="m-5" data-i18n="common.mobileWarning">Sorry, this game is not available on mobile devices.</h4>
 </div>
 <div id="canvasWrapper" class="d-flex flex-column">
-	<div class="d-flex justify-content-center mb-3">
-	  <button id="playButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
-	  <button id="PauseBtn" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
+	<div id="countdownBlock"><span id="countdown">0</span></div>
+	<div id="canvas-buttons" class="d-flex justify-content-center mb-3">
+	<button id="playButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
+	<button id="PauseBtn" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
 	</div>
 	<canvas id="pong" width="1000" height="500"></canvas>
-  </div>
-  <div id="countdownBlock"><span id="countdown">0</span></div>
+</div>
 <div id="winnerPopup">
 	<p id="winnerMessage"></p>
 	<button id="restartGame" data-i18n="games.playAgain">Play Again</button>
