@@ -172,7 +172,6 @@ function startGame(player1, player2) {
 	nextMatchPopup.style.display = 'none';
 
 	document.getElementById('game').style.display = 'block';
-	document.getElementById('player-titles').style.display = 'block';
 
 	playPong(player1, player2);
 }
