@@ -10,13 +10,11 @@
 
 	canvas {
 		border: 2px solid black;
-		width: 55%;
+		width: 60%;
 		height: auto;
 	}
 
-	[data-bs-theme="dark"] canvas {
-		border: 2px solid white;
-	}
+	[data-bs-theme="dark"] canvas { border: 2px solid white; }
 
 	#winnerPopup {
 		position: fixed;
@@ -30,28 +28,20 @@
 		text-align: center;
 		display: none;
 		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+
+		button {
+			margin: 10px;
+			padding: 10px;
+			border: none;
+			cursor: pointer;
+			font-size: 16px;
+		}
 	}
 
 	[data-bs-theme="dark"] #winnerPopup {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
 		background: white;
 		color: black;
-		padding: 20px;
-		border-radius: 10px;
-		text-align: center;
-		display: none;
 		box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
-	}
-
-	#winnerPopup button {
-		margin: 10px;
-		padding: 10px;
-		border: none;
-		cursor: pointer;
-		font-size: 16px;
 	}
 
 	h2 {
@@ -75,8 +65,6 @@
 		display: none;
 	}
 
-	#countdownBlock { display: none; }
-
 	#countdown {
 		display: block;
 		position: absolute;
@@ -90,18 +78,7 @@
 		color: transparent;
 	}
 
-	[data-bs-theme="dark"] #countdown {
-		display: block;
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		font-weight: bolder;
-		font-size: 200px;
-		background-image: linear-gradient(90deg, #cacaca, #818181);
-		background-clip: text;
-		color: transparent;
-	}
+	[data-bs-theme="dark"] #countdown { background-image: linear-gradient(90deg, #cacaca, #818181); }
 
 	.player-title, .game-button {
 		height: 30px;
@@ -119,20 +96,18 @@
 
 	.player-title {
 		min-width: 130px;
+		position: absolute;
+		transform: translate(-50%);
 	}
 
 	#player1-title {
 		background: var(--bs-primary);
-		position: absolute;
 		left: 25%;
-		transform: translate(-50%);
 	}
 	
 	#player2-title {
 		background: #e03a3a;
-		position: absolute;
 		left: 75%;
-		transform: translate(-50%);
 	}
 </style>
 
