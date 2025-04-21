@@ -208,7 +208,21 @@
 
 	#game { display: none; }
 
-	#countdownBlock { display: none; }
+	#canvasWrapper {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+	}
+
+	#countdownBlock { 
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		display: none;
+	}
 
 	#countdown {
 		display: block;
@@ -221,27 +235,21 @@
 		background-image: linear-gradient(90deg, #868686, #4e4e4e);
 		background-clip: text;
 		color: transparent;
-		display: block;
+	}
+	
+	.game-button {
+		width: 100px;
+		text-align: center;
+		margin-right: 0px !important;
+		left: 50%
 	}
 
-	#canvasWrapper {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.canvas-buttons {
-		position: absolute;
-		top: -50px;
-		left: 50%;
-		transform: translateX(-50%);
-		display: flex;
-		width: 60%;
-	}
+	#pauseButton { display: none; }
 
 	.player-title, .game-button {
-		height: 40px;
+		top:-50px;
+		position: absolute;
+		height: 30px;
 		box-sizing: border-box;
 		align-items: center;
 		justify-content: center;
@@ -249,39 +257,22 @@
 		font-family: monospace;
 		font-weight: bold;
 		color: #fff;
-		font-size: 2rem;
+		font-size: auto;
 		display: inline-flex;
-		padding: 24px;
+		padding: 20px;
+		transform: translate(-50%);
 	}
 
-	.player-title { min-width: 130px;}
-
+	.player-title { min-width: 130px; }
+	
 	#player1-title {
 		background: var(--bs-primary);
-		position: absolute;
 		left: 25%;
-		transform: translate(-50%);
 	}
 	
 	#player2-title {
 		background: #e03a3a;
-		position: absolute;
 		left: 75%;
-		transform: translate(-50%);
-	}
-
-	.game-button {
-		min-width: 130px;
-		padding:inherit;
-		position: absolute;
-		left: 50%;
-		transform: translate(-50%);
-		background: #355bd8;
-	}
-
-	#pauseButton { 
-		position: absolute;
-		display: none;
 	}
 
 	canvas {

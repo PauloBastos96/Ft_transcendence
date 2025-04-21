@@ -184,7 +184,7 @@ function playPong( player1_elem, player2_elem ) {
 		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
 		document.getElementById('game').style.display = 'none';
-		playButton.style.display = 'block';
+		playButton.style.display = 'flex';
 		pauseButton.style.display = 'none';
 		pauseButton.dataset.i18n = 'games.pause';
 		translateAll();
