@@ -185,7 +185,6 @@ function playPong( player1_elem, player2_elem ) {
 		
 		winnerPopup.style.display = "none";
 		bracket.style.display = 'flex';
-		document.getElementById('player-titles').style.display = 'none';
 		document.getElementById('game').style.display = 'none';
 		playButton.style.display = 'block';
 		pauseButton.style.display = 'none';
