@@ -57,7 +57,8 @@
         "playPong": "Play Pong",
         "playTicTacToe": "Play Tic Tac Toe",
         "playersPlaying": "people playing",
-        "tournament": "Tournament"
+        "tournament": "Tournament",
+        "newTournament": "Create a new tournament"
     },
     "profile":{
         "addAsFriend": "Add as friend",

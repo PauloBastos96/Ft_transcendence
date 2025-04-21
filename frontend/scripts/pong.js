@@ -20,8 +20,8 @@
 	const ballSize = 10;
 	const maxPoints = 5;
 
-	const paddle1Color = 'green';
-	let paddle2Color = getColorScheme();
+	const paddle1Color = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
+	let paddle2Color = '#e03a3a';
 	let ballColor = getColorScheme();
 	let fontText = getColorScheme();
 
@@ -229,6 +229,9 @@
 			pauseBtn.dataset.i18n = 'games.pause';
 		translateAll();
 	});
+
+	document.getElementById('player1-title').innerText = player1.name;
+	document.getElementById('player2-title').innerText = player2.name;
 
 	function draw() {
 		// Clear the canvas

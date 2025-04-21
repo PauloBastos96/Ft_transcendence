@@ -56,7 +56,8 @@
           "playPong": "Jugar Pong",
           "playTicTacToe": "Jugar Tres en Raya",
           "playersPlaying": "personas jugando",
-          "tournament": "Torneo"
+          "tournament": "Torneo",
+          "newTournament": "Crear un nuevo torneo"
      },
      "profile":{
           "addAsFriend": "Añadir como amigo",

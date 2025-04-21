@@ -1,3 +1,4 @@
+(function () {
 // Player bubble colors
 const BUBBLE_COLORS = [
 	'#c70b0b',	// Red
@@ -12,6 +13,11 @@ const BUBBLE_COLORS = [
 
 let players = new Set();
 let bracket, round, match, nextMatchPopup;
+
+if(window.matchMedia("(pointer: coarse)").matches){
+	document.getElementById('mobileWarning').classList.remove('d-none');
+	document.getElementById('tournamentPage').classList.add('d-none');
+}
 
 function initTournament(playerNum) {
 	if (!playerNum)
@@ -220,3 +226,4 @@ function updateNextMatchPopup() {
 	playButton = document.getElementById("playButton");
 	playButton.addEventListener('click', function () { startGame(player1, player2); });
 }
+})();

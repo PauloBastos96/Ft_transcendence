@@ -389,9 +389,18 @@
 			button { color: white; }
 		}
 	}
+
+	@media (max-width: 900px) {
+		#newTournament {
+			font-size: 200%;
+		}
+	}
 </style>
 
-<div class="page">
+<div id="mobileWarning" class="w-100 h-100 d-none justify-content-center align-items-center">
+	<h4 class="m-5" data-i18n="common.mobileWarning">Sorry, this game is not available on mobile devices.</h4>
+</div>
+<div id="tournamentPage" class="page">
 	<div class="tournament-creation">
 		<h1 id="newTournament" data-i18n="tournament.newTournament">New Tournament</h1>
 		<div id="option-section">
@@ -438,4 +447,5 @@
 	<p><span id="tournamentWinner"></span><span data-i18n="tournament.wonTournament"></span></p>
 	<button id="exitTournament" class="btn btn-secondary" data-i18n="tournament.exit" onclick="changeContent('tournament')"></button>
 </div>
+<script src="/frontend/scripts/tournament.js"></script>
 <script src="/frontend/scripts/pong_tournament.js"></script>

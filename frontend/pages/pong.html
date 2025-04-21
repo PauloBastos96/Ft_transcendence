@@ -102,17 +102,51 @@
 		background-clip: text;
 		color: transparent;
 	}
+
+	.player-title, .game-button {
+		height: 30px;
+		box-sizing: border-box;
+		align-items: center;
+		justify-content: center;
+		border-radius: 15px;
+		font-family: monospace;
+		font-weight: bold;
+		color: #fff;
+		font-size: auto;
+		display: inline-flex;
+		padding: 20px;
+	}
+
+	.player-title {
+		min-width: 130px;
+	}
+
+	#player1-title {
+		background: var(--bs-primary);
+		position: absolute;
+		left: 25%;
+		transform: translate(-50%);
+	}
+	
+	#player2-title {
+		background: #e03a3a;
+		position: absolute;
+		left: 75%;
+		transform: translate(-50%);
+	}
 </style>
 
-<h2>Pong</h2>
+<h2 class="mb-0">Pong</h2>
 <div id="mobileWarning" class="w-100 h-100 d-none justify-content-center align-items-center">
 	<h4 class="m-5" data-i18n="common.mobileWarning">Sorry, this game is not available on mobile devices.</h4>
 </div>
 <div id="canvasWrapper" class="d-flex flex-column">
 	<div id="countdownBlock"><span id="countdown">0</span></div>
 	<div id="canvas-buttons" class="d-flex justify-content-center mb-3">
-	<button id="playButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
-	<button id="PauseBtn" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
+		<div id="player1-title" class="player-title">Player 1</div>
+		<button id="playButton" class="btn btn-primary me-2 game-button" data-i18n="games.play">Play</button>
+		<button id="PauseBtn" class="btn btn-primary game-button" data-i18n="games.pause" type="button">Pause</button>
+		<div id="player2-title" class="player-title">Player 2</div>
 	</div>
 	<canvas id="pong" width="1000" height="500"></canvas>
 </div>
